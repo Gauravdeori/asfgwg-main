@@ -1,4 +1,4 @@
-import GitHubCalendar from 'react-github-calendar';
+import { GitHubCalendar } from 'react-github-calendar';
 import { motion } from 'framer-motion';
 import profileData from '../data/profile.json';
 
