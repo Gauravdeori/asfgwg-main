@@ -175,66 +175,66 @@ const Projects = () => {
               variants={cardVariants}
               custom={index}
             >
-              <TiltCard className="glass-card p-8 flex flex-col h-full group relative overflow-hidden">
-                {/* 3D Parallax Layers */}
-                <div className="flex items-start justify-between mb-6" style={{ transform: "translateZ(50px)" }}>
-                  <motion.div
-                    whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Folder className="text-primary" size={44} />
-                  </motion.div>
-                  <motion.a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors relative z-20 cursor-pointer"
-                    aria-label={`Visit ${project.title}`}
-                    whileHover={{ scale: 1.2, rotate: 15 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <ExternalLink size={22} />
-                  </motion.a>
-                </div>
-
-                <div style={{ transform: "translateZ(40px)" }}>
-                  <h3 className="text-2xl font-bold mb-1 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-primary/80 mb-4 font-medium">{project.role}</p>
-                </div>
-                
-                <p 
-                  className="text-muted-foreground text-base leading-relaxed flex-1 mb-6"
-                  style={{ transform: "translateZ(30px)" }}
-                >
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mt-auto" style={{ transform: "translateZ(20px)" }}>
-                  {project.tech.map((t, i) => (
-                    <motion.span
-                      key={t}
-                      className="text-xs text-muted-foreground font-mono px-3 py-1.5 rounded-md bg-secondary/50 border border-border/50"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 * i }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        backgroundColor: "hsl(174 72% 56% / 0.15)",
-                        color: "hsl(174 72% 56%)",
-                        borderColor: "hsl(174 72% 56% / 0.3)"
-                      }}
+              <a 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block h-full group outline-none"
+              >
+                <TiltCard className="glass-card p-8 flex flex-col h-full relative overflow-hidden transition-all duration-500 group-hover:bg-primary/5">
+                  {/* 3D Parallax Layers */}
+                  <div className="flex items-start justify-between mb-6" style={{ transform: "translateZ(50px)" }}>
+                    <motion.div
+                      whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
                     >
-                      {t}
-                    </motion.span>
-                  ))}
-                </div>
+                      <Folder className="text-primary group-hover:scale-110 transition-transform duration-300" size={44} />
+                    </motion.div>
+                    <div 
+                      className="text-muted-foreground group-hover:text-primary transition-colors relative z-20"
+                    >
+                      <ExternalLink size={22} className="group-hover:scale-125 transition-transform duration-300" />
+                    </div>
+                  </div>
 
-                {/* Ambient card glow */}
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
-              </TiltCard>
+                  <div style={{ transform: "translateZ(40px)" }}>
+                    <h3 className="text-2xl font-bold mb-1 group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-primary/80 mb-4 font-medium">{project.role}</p>
+                  </div>
+                  
+                  <p 
+                    className="text-muted-foreground text-base leading-relaxed flex-1 mb-6"
+                    style={{ transform: "translateZ(30px)" }}
+                  >
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-auto" style={{ transform: "translateZ(20px)" }}>
+                    {project.tech.map((t, i) => (
+                      <motion.span
+                        key={t}
+                        className="text-xs text-foreground font-mono px-3 py-1.5 rounded-md bg-secondary/30 border border-border/50 backdrop-blur-sm"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 * i }}
+                        whileHover={{ 
+                          scale: 1.1, 
+                          backgroundColor: "hsl(174 72% 56% / 0.15)",
+                          color: "hsl(174 72% 56%)",
+                          borderColor: "hsl(174 72% 56% / 0.3)"
+                        }}
+                      >
+                        {t}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  {/* Ambient card glow */}
+                  <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/15 transition-colors" />
+                </TiltCard>
+              </a>
             </motion.div>
           ))}
         </motion.div>

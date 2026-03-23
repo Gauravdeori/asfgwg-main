@@ -37,6 +37,20 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+const skillIcons: Record<string, string> = {
+  "HTML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+  "CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+  "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  "Express": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  "Git": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+  "GitHub": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  "Figma": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+  "Vercel": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg",
+};
+
 const Skills = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -66,22 +80,40 @@ const Skills = () => {
             <motion.div
               key={category.title}
               variants={itemVariants}
-              className="glass-card p-6 relative overflow-hidden"
+              className="glass-card p-8 relative overflow-hidden group hover:shadow-glow transition-all duration-500"
             >
               <PixelCorner position="top-left" />
               <PixelCorner position="top-right" />
               <PixelCorner position="bottom-left" />
               <PixelCorner position="bottom-right" />
-              <h3 className="text-lg font-semibold mb-4 text-primary">
+              
+              <h3 className="text-xl font-bold mb-6 text-primary flex items-center gap-2">
+                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                 {category.title}
               </h3>
-              <div className="flex flex-wrap gap-3">
+
+              <div className="flex flex-wrap gap-4">
                 {category.skills.map((skill) => (
-                  <span key={skill} className="skill-pill">
-                    {skill}
-                  </span>
+                  <motion.div
+                    key={skill}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="skill-pill flex items-center gap-3 cursor-default"
+                  >
+                    {skillIcons[skill] && (
+                      <img 
+                        src={skillIcons[skill]} 
+                        alt={skill} 
+                        className={`w-6 h-6 object-contain ${skill === "GitHub" ? "dark:invert" : ""}`}
+                        onError={(e) => (e.currentTarget.style.display = 'none')}
+                      />
+                    )}
+                    <span className="font-semibold">{skill}</span>
+                  </motion.div>
                 ))}
               </div>
+
+              {/* Decorative accent */}
+              <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/20 transition-colors" />
             </motion.div>
           ))}
         </motion.div>

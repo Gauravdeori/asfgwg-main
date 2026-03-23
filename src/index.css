@@ -285,15 +285,17 @@
   }
 
   .skill-pill {
-    @apply px-4 py-2 rounded-full text-sm font-medium;
-    background: hsl(220 20% 12%);
-    border: 1px solid hsl(220 20% 20%);
-    transition: all 0.3s ease;
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-300;
+    background: hsl(var(--secondary) / 0.8);
+    color: hsl(var(--secondary-foreground));
+    border: 1px solid hsl(var(--border));
+    backdrop-filter: blur(4px);
   }
 
   .skill-pill:hover {
     background: hsl(174 72% 56% / 0.15);
     border-color: hsl(174 72% 56% / 0.4);
+    color: hsl(174 72% 56%);
     box-shadow: 0 0 20px -5px hsl(174 72% 56% / 0.3);
   }
 
