@@ -18,6 +18,13 @@
   ],
   "projects": [
     {
+      "title": "TapPlay",
+      "role": "Developer",
+      "description": "A collection of fun, addictive mini games including Tic Tac Toe, Snake, and Memory, designed for a quick and engaging gaming experience.",
+      "tech": ["React", "Vite", "Tailwind CSS", "Game Dev"],
+      "link": "https://tapplayhub.vercel.app/"
+    },
+    {
       "title": "AttendanceHub",
       "role": "Developer",
       "description": "An advanced AI-powered attendance tracker for students to manage subject-wise attendance and percentage with seamless routine integration.",
