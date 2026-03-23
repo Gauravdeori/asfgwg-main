@@ -32,8 +32,9 @@ const GithubCalendarComponent = () => {
                 blockSize={12}
                 blockMargin={4}
                 fontSize={14}
+                colorScheme="dark"
                 theme={{
-                  dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
+                  dark: ['#1e293b', '#0d9488', '#14b8a6', '#2dd4bf', '#5eead4'],
                 }}
               />
             </div>
