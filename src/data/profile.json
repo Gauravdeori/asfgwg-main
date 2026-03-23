@@ -1,0 +1,64 @@
+{
+  "name": "Gaurav Deori",
+  "role": "Web Developer | Founder – Theposterzz",
+  "bio": "I build clean, modern, user-friendly websites through real-world projects and creative leadership.",
+  "about": {
+    "title": "Building the web, one project at a time.",
+    "paragraphs": [
+      "I'm an aspiring Web Developer focused on crafting clean, modern, and responsive websites. My core stack includes HTML, CSS, JavaScript, React, and Tailwind CSS—tools I use to bring ideas to life.",
+      "I believe in learning by doing. Every project is an opportunity to grow, experiment, and push my skills further. From simple landing pages to more complex web applications, I approach each challenge with curiosity and determination.",
+      "Beyond coding, I'm the Founder of Theposterzz—a creative initiative where we design and sell high-quality posters, social media content, and visual identities for individuals and student communities. This blend of design and development gives me a unique perspective on building user-centric digital experiences."
+    ]
+  },
+  "socials": [
+    { "icon": "Github", "href": "https://github.com/Gauravdeori", "label": "GitHub" },
+    { "icon": "Instagram", "href": "https://www.instagram.com/_gauravdeori__/?utm_source=ig_web_button_share_sheet", "label": "Instagram" },
+    { "icon": "Linkedin", "href": "https://www.linkedin.com/in/gaurav-deori-759214304", "label": "LinkedIn" },
+    { "icon": "Mail", "href": "mailto:deorigaurav1400@gmail.com", "label": "Email" }
+  ],
+  "projects": [
+    {
+      "title": "AttendanceHub",
+      "role": "Developer",
+      "description": "An advanced AI-powered attendance tracker for students to manage subject-wise attendance and percentage with seamless routine integration.",
+      "tech": ["React", "Tailwind CSS", "AI/ML", "Vite"],
+      "link": "https://www.attendancehub.space/"
+    },
+    {
+      "title": "Amar Adda",
+      "role": "Developer",
+      "description": "A modern street food ordering platform designed to bring traditional tastes to the digital age with a seamless ordering experience.",
+      "tech": ["React", "Tailwind CSS", "E-commerce", "UI/UX"],
+      "link": "https://www.amaaradda.shop/"
+    },
+    {
+      "title": "QR Shield AI",
+      "role": "Developer",
+      "description": "An AI-powered security tool that scans and detects malicious QR codes, ensuring safer browsing and digital payments by analyzing URL patterns and potential threats.",
+      "tech": ["React", "AI/ML", "Cybersecurity", "Tailwind CSS"],
+      "link": "https://qr-shield-ai.vercel.app/"
+    },
+    {
+      "title": "Theposterzz",
+      "role": "Founder",
+      "description": "A creative branding initiative where we design and sell high-quality posters for individuals and student communities. Building visual identities that stand out.",
+      "tech": ["Branding", "Poster Design", "E-commerce"],
+      "link": "https://theposterzz.in/"
+    },
+    {
+      "title": "Echoes of Poba",
+      "role": "Developer",
+      "description": "A student-led initiative documenting and showcasing the beauty of the Poba rainforest. Built to raise awareness and inspire conservation.",
+      "tech": ["React", "Tailwind CSS", "Responsive Design"],
+      "link": "https://echoesofpoba.in/"
+    },
+    {
+      "title": "Personal Portfolio (v1)",
+      "role": "Developer",
+      "description": "My first portfolio website, built from scratch using pure HTML, CSS, and JavaScript. A milestone project that marked my journey into web development.",
+      "tech": ["HTML", "CSS", "JavaScript"],
+      "link": "https://www.gauravdeori.online/"
+    }
+  ],
+  "githubUsername": "Gauravdeori"
+}
