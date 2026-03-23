@@ -47,6 +47,7 @@ const skillIcons: Record<string, string> = {
   "Express": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
   "Git": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
   "GitHub": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  "Canva": "https://cdn.jsdelivr.net/npm/simple-icons@v11.16.0/icons/canva.svg",
   "Figma": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
   "Vercel": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg",
 };
