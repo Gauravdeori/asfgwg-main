@@ -224,11 +224,14 @@ const Hero = () => {
             </motion.div>
 
             {/* Floating Tech Badges */}
-            <div className="absolute -right-4 lg:-right-16 top-8 flex flex-col gap-3 z-30 hidden lg:flex">
+            <div className="absolute -right-4 lg:-right-16 top-36 flex flex-col gap-3 items-center z-30 hidden lg:flex">
+              {/* Vertical connector line */}
+              <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] bg-border/50 z-0" />
+              
               {techBadges.map((badge, i) => (
                 <motion.div
                   key={badge.name}
-                  className="tech-badge"
+                  className="tech-badge relative z-10 w-36"
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.4 + i * 0.15 }}
