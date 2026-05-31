@@ -22,52 +22,47 @@ const Skills = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-24 relative" ref={ref}>
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <p className="section-heading">Skills & Tools</p>
-          <h2 className="section-title">
-            Technologies I work with
-          </h2>
-        </motion.div>
+    <div id="skills" className="relative scroll-mt-24" ref={ref}>
+      <motion.h2 
+        className="text-2xl font-bold flex items-center gap-1.5 text-foreground mb-6"
+        initial={{ opacity: 0, y: 15 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5 }}
+      >
+        Skills <span className="text-primary">•</span>
+      </motion.h2>
 
-        {/* Skills Grid - Horizontal icon display */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center lg:justify-start gap-8 md:gap-10 max-w-5xl"
-        >
-          {skills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3 + index * 0.06 }}
-              whileHover={{ scale: 1.15, y: -8 }}
-              className="flex flex-col items-center gap-3 cursor-default group"
-            >
-              <div className="w-14 h-14 rounded-xl bg-secondary/80 border border-border flex items-center justify-center transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:shadow-lg group-hover:shadow-primary/10">
-                <img
-                  src={skill.icon}
-                  alt={skill.name}
-                  className={`w-8 h-8 object-contain transition-transform duration-300 ${skill.invert ? "dark:invert" : ""}`}
-                  onError={(e) => (e.currentTarget.style.display = 'none')}
-                />
-              </div>
-              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                {skill.name}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
+      {/* Skills Grid - Horizontal raw icon display matching the mockup */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="flex flex-wrap gap-8 sm:gap-10"
+      >
+        {skills.map((skill, index) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1 + index * 0.04 }}
+            whileHover={{ scale: 1.15, y: -4 }}
+            className="flex flex-col items-center gap-2 cursor-default group"
+          >
+            <div className="w-10 h-10 flex items-center justify-center transition-all duration-300">
+              <img
+                src={skill.icon}
+                alt={skill.name}
+                className={`w-8 h-8 object-contain transition-transform duration-300 group-hover:drop-shadow-[0_0_8px_${skill.color}50] ${skill.invert ? "dark:invert" : ""}`}
+                onError={(e) => (e.currentTarget.style.display = 'none')}
+              />
+            </div>
+            <span className="text-[11px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+              {skill.name}
+            </span>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 

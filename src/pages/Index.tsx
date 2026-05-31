@@ -197,17 +197,32 @@ const Index = () => {
         <motion.div variants={sectionVariants}>
           <Hero />
         </motion.div>
-        <motion.div variants={sectionVariants}>
-          <About />
-        </motion.div>
+        
+        {/* Main Grid: Skills, Projects, and About Sidebar */}
+        <div className="container mx-auto px-6 py-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            {/* Left Column (Skills & Projects) */}
+            <div className="lg:col-span-8 space-y-16">
+              <motion.div variants={sectionVariants}>
+                <Skills />
+              </motion.div>
+              <motion.div variants={sectionVariants}>
+                <Projects />
+              </motion.div>
+            </div>
+            
+            {/* Right Column (About Sidebar Card) */}
+            <div className="lg:col-span-4 lg:sticky lg:top-24">
+              <motion.div variants={sectionVariants}>
+                <About />
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Other Sections */}
         <motion.div variants={sectionVariants}>
           <GithubCalendar />
-        </motion.div>
-        <motion.div variants={sectionVariants}>
-          <Skills />
-        </motion.div>
-        <motion.div variants={sectionVariants}>
-          <Projects />
         </motion.div>
         <motion.div variants={sectionVariants}>
           <Experience />
