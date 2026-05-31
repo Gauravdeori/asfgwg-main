@@ -1,120 +1,68 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { PixelCorner } from "./PixelDecorations";
 
-const skillCategories = [
-  {
-    title: "Frontend",
-    skills: ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS"],
-  },
-  {
-    title: "Backend (Learning)",
-    skills: ["Node.js", "Express"],
-  },
-  {
-    title: "Tools",
-    skills: ["Git", "GitHub", "Canva", "Figma", "Vercel"],
-  },
-  {
-    title: "Design & Creative",
-    skills: ["Branding", "Poster Design", "Social Media Creatives"],
-  },
+const skills = [
+  { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", color: "#61DAFB" },
+  { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg", color: "#ffffff", invert: true },
+  { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", color: "#339933" },
+  { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", color: "#ffffff", invert: true },
+  { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg", color: "#47A248" },
+  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", color: "#3178C6" },
+  { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", color: "#F7DF1E" },
+  { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg", color: "#E34F26" },
+  { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg", color: "#1572B6" },
+  { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg", color: "#06B6D4" },
+  { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", color: "#F05032" },
+  { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", color: "#ffffff", invert: true },
 ];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const skillIcons: Record<string, string> = {
-  "HTML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
-  "CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
-  "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-  "React": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-  "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-  "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-  "Express": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-  "Git": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
-  "GitHub": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
-  "Canva": "https://cdn.jsdelivr.net/npm/simple-icons@v11.16.0/icons/canva.svg",
-  "Figma": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-  "Vercel": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg",
-};
 
 const Skills = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-32 relative" ref={ref}>
+    <section id="skills" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
           <p className="section-heading">Skills & Tools</p>
-          <h2 className="text-3xl md:text-4xl font-bold">
+          <h2 className="section-title">
             Technologies I work with
           </h2>
         </motion.div>
 
+        {/* Skills Grid - Horizontal icon display */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap justify-center lg:justify-start gap-8 md:gap-10 max-w-5xl"
         >
-          {skillCategories.map((category) => (
+          {skills.map((skill, index) => (
             <motion.div
-              key={category.title}
-              variants={itemVariants}
-              className="glass-card p-8 relative overflow-hidden group hover:shadow-glow transition-all duration-500"
+              key={skill.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.3 + index * 0.06 }}
+              whileHover={{ scale: 1.15, y: -8 }}
+              className="flex flex-col items-center gap-3 cursor-default group"
             >
-              <PixelCorner position="top-left" />
-              <PixelCorner position="top-right" />
-              <PixelCorner position="bottom-left" />
-              <PixelCorner position="bottom-right" />
-              
-              <h3 className="text-xl font-bold mb-6 text-primary flex items-center gap-2">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                {category.title}
-              </h3>
-
-              <div className="flex flex-wrap gap-4">
-                {category.skills.map((skill) => (
-                  <motion.div
-                    key={skill}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="skill-pill flex items-center gap-3 cursor-default"
-                  >
-                    {skillIcons[skill] && (
-                      <img 
-                        src={skillIcons[skill]} 
-                        alt={skill} 
-                        className={`w-6 h-6 object-contain ${skill === "GitHub" ? "dark:invert" : ""}`}
-                        onError={(e) => (e.currentTarget.style.display = 'none')}
-                      />
-                    )}
-                    <span className="font-semibold">{skill}</span>
-                  </motion.div>
-                ))}
+              <div className="w-14 h-14 rounded-xl bg-secondary/80 border border-border flex items-center justify-center transition-all duration-300 group-hover:border-primary/40 group-hover:bg-primary/10 group-hover:shadow-lg group-hover:shadow-primary/10">
+                <img
+                  src={skill.icon}
+                  alt={skill.name}
+                  className={`w-8 h-8 object-contain transition-transform duration-300 ${skill.invert ? "dark:invert" : ""}`}
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
               </div>
-
-              {/* Decorative accent */}
-              <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/20 transition-colors" />
+              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                {skill.name}
+              </span>
             </motion.div>
           ))}
         </motion.div>

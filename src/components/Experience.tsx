@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Briefcase } from "lucide-react";
-import { PixelCorner } from "./PixelDecorations";
 
 const experiences = [
   {
@@ -42,16 +41,16 @@ const Experience = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="experience" className="py-32 relative" ref={ref}>
+    <section id="experience" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
           <p className="section-heading">Experience</p>
-          <h2 className="text-3xl md:text-4xl font-bold">
+          <h2 className="section-title">
             Roles & Responsibilities
           </h2>
         </motion.div>
@@ -60,18 +59,14 @@ const Experience = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="max-w-2xl mx-auto space-y-6"
+          className="max-w-2xl space-y-5"
         >
           {experiences.map((exp, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="glass-card p-6 flex gap-4 relative overflow-hidden"
+              className="glass-card p-6 flex gap-4"
             >
-              <PixelCorner position="top-left" />
-              <PixelCorner position="top-right" />
-              <PixelCorner position="bottom-left" />
-              <PixelCorner position="bottom-right" />
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Briefcase className="text-primary" size={22} />
@@ -79,7 +74,7 @@ const Experience = () => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold">{exp.title}</h3>
-                <p className="text-primary text-sm mb-2">{exp.company}</p>
+                <p className="text-primary text-sm mb-2 font-medium">{exp.company}</p>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {exp.description}
                 </p>

@@ -15,14 +15,13 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Open mailto with form data
     const subject = encodeURIComponent(`Message from ${formData.name}`);
     const body = encodeURIComponent(`From: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
     window.location.href = `mailto:deorigaurav1400@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
-    <section id="contact" className="py-32 relative" ref={ref}>
+    <section id="contact" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -30,8 +29,8 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="max-w-2xl mx-auto text-center"
         >
-          <p className="section-heading">Get In Touch</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <p className="section-heading justify-center">Get In Touch</p>
+          <h2 className="section-title mb-6">
             Let's build something <span className="text-gradient">meaningful</span> together.
           </h2>
           <p className="text-muted-foreground mb-10">
@@ -41,7 +40,7 @@ const Contact = () => {
           {/* Direct email CTA */}
           <motion.a
             href="mailto:deorigaurav1400@gmail.com"
-            className="inline-flex items-center gap-2 text-lg text-primary hover:text-primary/80 transition-colors mb-12 group"
+            className="inline-flex items-center gap-2 text-lg text-primary hover:text-primary/80 transition-colors mb-12 group font-medium"
             whileHover={{ scale: 1.02 }}
           >
             <Mail size={20} />
@@ -59,57 +58,59 @@ const Contact = () => {
           >
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
+                <label htmlFor="contact-name" className="block text-sm font-medium mb-2">
                   Name
                 </label>
                 <input
                   type="text"
-                  id="name"
+                  id="contact-name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
+                <label htmlFor="contact-email" className="block text-sm font-medium mb-2">
                   Email
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="contact-email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   placeholder="your@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium mb-2">
+              <label htmlFor="contact-message" className="block text-sm font-medium mb-2">
                 Message
               </label>
               <textarea
-                id="message"
+                id="contact-message"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
                 rows={5}
-                className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
                 placeholder="Tell me about your project..."
               />
             </div>
 
-            <button
+            <motion.button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 hover:shadow-[0_0_30px_-5px_hsl(174_72%_56%_/_0.5)]"
+              className="w-full btn-primary flex items-center justify-center gap-2 py-4 rounded-xl"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
             >
               <Send size={18} />
               Send Message
-            </button>
+            </motion.button>
           </motion.form>
         </motion.div>
       </div>

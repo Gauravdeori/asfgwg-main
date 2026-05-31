@@ -1,4 +1,5 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -11,9 +12,6 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GithubCalendar from "@/components/GithubCalendar";
 import ScrollRobot from "@/components/ScrollRobot";
-import PixelCursor from "@/components/PixelCursor";
-import { FloatingSprites } from "@/components/PixelDecorations";
-import PixelLoadingScreen from "@/components/PixelLoadingScreen";
 
 // Initial loading animation
 const pageVariants: Variants = {
@@ -55,10 +53,91 @@ const sectionVariants: Variants = {
   }
 };
 
-// Floating particles for background
+// Premium loading screen
+const PremiumLoadingScreen = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setIsLoading(false), 300);
+          return 100;
+        }
+        return prev + 4;
+      });
+    }, 40);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isLoading && (
+        <motion.div
+          className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center gap-8"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+          {/* Animated logo */}
+          <motion.div
+            className="relative"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <motion.span
+              className="text-5xl font-bold"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              G<span className="text-gradient">.</span>
+            </motion.span>
+          </motion.div>
+
+          {/* Progress bar */}
+          <div className="w-48 h-1 rounded-full bg-secondary overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{
+                background: "linear-gradient(90deg, hsl(217 91% 60%), hsl(190 95% 55%))",
+              }}
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.1 }}
+            />
+          </div>
+
+          {/* Loading text */}
+          <motion.p
+            className="text-sm text-muted-foreground font-mono"
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            Loading portfolio...
+          </motion.p>
+
+          {/* Background glow */}
+          <motion.div
+            className="absolute w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, hsl(217 91% 60% / 0.08), transparent 70%)",
+            }}
+            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Floating ambient particles
 const FloatingParticle = ({ delay, size, left, duration }: { delay: number; size: number; left: string; duration: number }) => (
   <motion.div
-    className="absolute rounded-full bg-primary/20 pointer-events-none"
+    className="absolute rounded-full bg-primary/10 pointer-events-none"
     style={{
       width: size,
       height: size,
@@ -68,7 +147,7 @@ const FloatingParticle = ({ delay, size, left, duration }: { delay: number; size
     initial={{ y: 0, opacity: 0 }}
     animate={{ 
       y: [0, -window.innerHeight - 100],
-      opacity: [0, 0.6, 0.6, 0]
+      opacity: [0, 0.4, 0.4, 0]
     }}
     transition={{
       duration,
@@ -88,18 +167,17 @@ const Index = () => {
       animate="animate"
       exit="exit"
     >
-      {/* Animated background particles */}
+      {/* Ambient particles */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <FloatingParticle delay={0} size={6} left="10%" duration={15} />
-        <FloatingParticle delay={2} size={4} left="20%" duration={18} />
-        <FloatingParticle delay={4} size={8} left="35%" duration={12} />
-        <FloatingParticle delay={1} size={5} left="50%" duration={20} />
-        <FloatingParticle delay={3} size={7} left="65%" duration={14} />
-        <FloatingParticle delay={5} size={4} left="80%" duration={16} />
-        <FloatingParticle delay={2} size={6} left="90%" duration={17} />
+        <FloatingParticle delay={0} size={4} left="10%" duration={18} />
+        <FloatingParticle delay={3} size={3} left="25%" duration={22} />
+        <FloatingParticle delay={5} size={5} left="40%" duration={16} />
+        <FloatingParticle delay={2} size={3} left="55%" duration={24} />
+        <FloatingParticle delay={4} size={4} left="70%" duration={19} />
+        <FloatingParticle delay={1} size={3} left="85%" duration={21} />
       </div>
 
-      {/* Initial page load overlay animation */}
+      {/* Page load overlay */}
       <motion.div
         className="fixed inset-0 z-50 bg-background pointer-events-none"
         initial={{ scaleY: 1 }}
@@ -112,9 +190,7 @@ const Index = () => {
         style={{ transformOrigin: "top" }}
       />
 
-      <PixelLoadingScreen />
-      <PixelCursor />
-      <FloatingSprites />
+      <PremiumLoadingScreen />
       <Navbar />
       <ScrollRobot />
       <main className="relative z-10">

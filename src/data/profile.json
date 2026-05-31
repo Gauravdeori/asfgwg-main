@@ -18,6 +18,13 @@
   ],
   "projects": [
     {
+      "title": "PresentIQ",
+      "role": "Developer",
+      "description": "A role-based attendance management platform for educational institutions with Admin, Teacher, and Student dashboards, active tracking sessions, and institutional analytics.",
+      "tech": ["React", "Vite", "Tailwind CSS", "Role-Based Auth"],
+      "link": "https://present-iq1.vercel.app/"
+    },
+    {
       "title": "TapPlay",
       "role": "Developer",
       "description": "A collection of fun, addictive mini games including Tic Tac Toe, Snake, and Memory, designed for a quick and engaging gaming experience.",

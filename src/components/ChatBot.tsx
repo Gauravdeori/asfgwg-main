@@ -127,7 +127,7 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
           className="fixed bottom-4 right-4 sm:right-8 w-[calc(100vw-2rem)] sm:w-96 max-h-[70vh] z-50 flex flex-col rounded-2xl border border-border bg-card shadow-2xl overflow-hidden"
           style={{
-            boxShadow: "0 25px 60px -12px hsl(174 72% 56% / 0.25), 0 0 0 1px hsl(174 72% 56% / 0.1)",
+            boxShadow: "var(--shadow-glow), 0 0 0 1px var(--glass-border)",
           }}
         >
           {/* Header */}

@@ -50,16 +50,16 @@ const Education = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="education" className="py-32 relative" ref={ref}>
+    <section id="education" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
           <p className="section-heading">Education</p>
-          <h2 className="text-3xl md:text-4xl font-bold">
+          <h2 className="section-title">
             Academic Journey
           </h2>
         </motion.div>
@@ -68,12 +68,12 @@ const Education = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="max-w-3xl mx-auto relative"
+          className="max-w-3xl relative"
         >
           {/* Timeline line */}
           <div className="absolute left-6 top-0 bottom-0 w-px bg-border hidden md:block" />
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {education.map((edu, index) => (
               <motion.div
                 key={index}
