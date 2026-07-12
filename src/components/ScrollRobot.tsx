@@ -2,320 +2,224 @@ import { motion, useScroll, useVelocity, useTransform, useSpring } from "framer-
 import { useState, useEffect } from "react";
 import ChatBot from "./ChatBot";
 
-// Section-specific messages for context awareness
+// Section-aware idle messages
 const sectionMessages: Record<string, string[]> = {
-  hero: ["Welcome! 👋", "Scroll down! ⬇️", "Hey there! 🙌"],
-  about: ["Learn more! 📖", "Cool story! 📝", "Nice bio! ✨"],
-  skills: ["So skilled! 💪", "Tech stack! 🛠️", "Impressive! 🔥"],
-  projects: ["Cool work! 🚀", "Nice builds! 💻", "Creative! 🎨"],
-  experience: ["Journey! 🛤️", "Experience! 📈", "Growth! 🌱"],
-  education: ["Learning! 📚", "Knowledge! 🎓", "Smart! 🧠"],
-  contact: ["Say hi! 💬", "Connect! 🤝", "Reach out! 📧"],
+  hero: ["Hey there! 👋", "Scroll down ⬇️", "Chat with me 💬"],
+  skills: ["So skilled! 💪", "Nice stack 🛠️", "Impressive 🔥"],
+  projects: ["Cool work! 🚀", "Nice builds 💻", "Creative 🎨"],
+  about: ["Nice bio ✨", "Cool story 📝"],
+  experience: ["Big journey 🛤️", "Growth 🌱"],
+  education: ["Smart 🧠", "Learning 📚"],
+  contact: ["Say hi! 💬", "Let's talk 🤝"],
 };
 
 const ScrollRobot = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [isWaving, setIsWaving] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
-  const [isBouncing, setIsBouncing] = useState(false);
   const [currentSection, setCurrentSection] = useState("hero");
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
-  // Scroll tracking
-  const { scrollY, scrollYProgress } = useScroll();
+  const [scrollState, setScrollState] = useState<"idle" | "fast" | "veryfast">("idle");
+
+  const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
-  
   const smoothVelocity = useSpring(scrollVelocity, { stiffness: 100, damping: 30 });
-  
-  const robotY = useTransform(scrollY, [0, 1000], [100, 600]);
-  const smoothRobotY = useSpring(robotY, { stiffness: 50, damping: 20 });
-  
-  const eyeSize = useTransform(smoothVelocity, [-0.01, 0, 0.01], [1.5, 1, 1.5]);
-  const mouthWidth = useTransform(smoothVelocity, [-0.02, 0, 0.02], [1.5, 1, 1.5]);
-  const robotRotate = useTransform(smoothVelocity, [-0.02, 0, 0.02], [-15, 0, 15]);
-  
-  const [scrollState, setScrollState] = useState<'idle' | 'slow' | 'fast' | 'veryfast'>('idle');
-  
+
+  // Tilt the robot with scroll direction/speed
+  const robotRotate = useTransform(smoothVelocity, [-0.03, 0, 0.03], [-14, 0, 14]);
+  const smoothRotate = useSpring(robotRotate, { stiffness: 120, damping: 18 });
+
   useEffect(() => {
-    const unsubscribe = smoothVelocity.on("change", (v) => {
-      const absV = Math.abs(v);
-      if (absV < 0.001) setScrollState('idle');
-      else if (absV < 0.005) setScrollState('slow');
-      else if (absV < 0.015) setScrollState('fast');
-      else setScrollState('veryfast');
+    const unsub = smoothVelocity.on("change", (v) => {
+      const a = Math.abs(v);
+      if (a < 0.004) setScrollState("idle");
+      else if (a < 0.015) setScrollState("fast");
+      else setScrollState("veryfast");
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, [smoothVelocity]);
 
   useEffect(() => {
-    const sections = ['hero', 'about', 'skills', 'projects', 'experience', 'education', 'contact'];
-    
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-      
+    const sections = ["hero", "skills", "projects", "about", "experience", "education", "contact"];
+    const onScroll = () => {
+      const pos = window.scrollY + window.innerHeight / 3;
       for (const section of sections) {
-        const element = document.getElementById(section) || 
-          (section === 'hero' ? document.querySelector('section') : null);
-        
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+        const el =
+          document.getElementById(section) ||
+          (section === "hero" ? document.querySelector("section") : null);
+        if (el instanceof HTMLElement) {
+          const { offsetTop, offsetHeight } = el;
+          if (pos >= offsetTop && pos < offsetTop + offsetHeight) {
             setCurrentSection(section);
             break;
           }
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 1500);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setIsVisible(true), 1500);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    const onMove = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  const handleRobotClick = () => {
-    setClickCount(prev => prev + 1);
-    
-    if (clickCount % 3 === 0) {
-      setIsChatOpen(prev => !prev);
-      setIsWaving(true);
-      setTimeout(() => setIsWaving(false), 1000);
-    } else if (clickCount % 3 === 1) {
-      setIsBouncing(true);
-      setTimeout(() => setIsBouncing(false), 600);
-    } else {
-      setIsChatOpen(prev => !prev);
-    }
+  const handleClick = () => {
+    setIsChatOpen((o) => !o);
+    setIsWaving(true);
+    setTimeout(() => setIsWaving(false), 1000);
   };
 
-  const getEyeOffset = () => {
-    const maxMove = 4;
-    const dx = (mousePos.x - window.innerWidth * 0.9) / window.innerWidth;
-    const dy = (mousePos.y - window.innerHeight * 0.5) / window.innerHeight;
+  // Pupils follow the cursor (robot lives bottom-right)
+  const eyeOffset = (() => {
+    const max = 3;
+    const dx = (mousePos.x - window.innerWidth * 0.92) / window.innerWidth;
+    const dy = (mousePos.y - window.innerHeight * 0.85) / window.innerHeight;
     return {
-      x: Math.max(-maxMove, Math.min(maxMove, dx * 20)),
-      y: Math.max(-maxMove, Math.min(maxMove, dy * 20)),
+      x: Math.max(-max, Math.min(max, dx * 24)),
+      y: Math.max(-max, Math.min(max, dy * 24)),
     };
-  };
+  })();
 
-  const eyeOffset = getEyeOffset();
-
-  const getExpressionText = () => {
+  const message = (() => {
     if (isWaving) return "Hi there! 👋";
-    if (isBouncing) return "Wheee! 🎉";
-    
-    switch (scrollState) {
-      case 'veryfast': return "Woah! 🚀";
-      case 'fast': return "Speedy! ⚡";
-      case 'slow': 
-      case 'idle': {
-        if (isChatOpen) return "Chatting! 💬";
-        const messages = sectionMessages[currentSection] || sectionMessages.hero;
-        const randomIndex = Math.floor(Date.now() / 3000) % messages.length;
-        if (Math.floor(Date.now() / 6000) % 3 === 0) return "Chat with me! 💬";
-        return messages[randomIndex];
-      }
-    }
-  };
+    if (isChatOpen) return "Chatting! 💬";
+    if (scrollState === "veryfast") return "Woah! 🚀";
+    if (scrollState === "fast") return "Speedy! ⚡";
+    const msgs = sectionMessages[currentSection] || sectionMessages.hero;
+    return msgs[Math.floor(Date.now() / 3500) % msgs.length];
+  })();
 
   if (!isVisible) return null;
 
   return (
     <motion.div
-      className="fixed right-2 sm:right-4 lg:right-8 z-40 pointer-events-auto cursor-pointer"
-      style={{ top: smoothRobotY }}
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ 
-        opacity: 1, 
-        x: 0,
-        y: isBouncing ? [0, -20, 0, -10, 0] : 0
-      }}
-      transition={{ duration: 0.5 }}
-      onClick={handleRobotClick}
+      className="fixed bottom-6 right-4 sm:right-6 z-40 pointer-events-auto cursor-pointer"
+      initial={{ opacity: 0, y: 40, scale: 0.8 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: "spring", stiffness: 180, damping: 18 }}
+      onClick={handleClick}
+      role="button"
+      aria-label="Open chat assistant"
     >
+      {/* Gentle idle bob */}
       <motion.div
-        className="relative"
-        style={{ rotate: robotRotate }}
-        animate={{ 
-          scale: isBouncing ? [1, 1.1, 1] : 1
-        }}
+        animate={{ y: [0, -7, 0] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
       >
-        {/* Waving Arm */}
-        <motion.div
-          className="absolute -left-4 top-16 w-3 h-8 rounded-full border origin-top"
-          style={{ background: "hsl(var(--secondary))", borderColor: "hsl(var(--border))" }}
-          animate={{ 
-            rotate: isWaving ? [0, -30, 20, -30, 20, 0] : 0,
-            opacity: isWaving ? 1 : 0
-          }}
-          transition={{ duration: 1 }}
-        />
-
-        {/* Robot Head */}
-        <motion.div 
-          className="w-14 h-16 sm:w-20 sm:h-24 rounded-2xl border relative shadow-lg"
-          style={{ 
-            background: "hsl(var(--secondary))", 
-            borderColor: "hsl(var(--border))"
-          }}
-          animate={{ 
-            borderColor: scrollState === 'veryfast' ? 'hsl(217 91% 60%)' : 'hsl(var(--border))',
-            boxShadow: scrollState === 'veryfast' 
-              ? '0 0 20px hsl(217 91% 60% / 0.4)' 
-              : 'var(--shadow-card)'
-          }}
-          transition={{ duration: 0.3 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {/* Antenna */}
-          <motion.div 
-            className="absolute -top-2 sm:-top-3 left-1/2 -translate-x-1/2 w-0.5 sm:w-1 h-2 sm:h-3 bg-primary rounded-full"
-            animate={{ 
-              scaleY: scrollState === 'veryfast' ? [1, 1.5, 1] : [1, 1.2, 1],
-            }}
-            transition={{ duration: scrollState === 'veryfast' ? 0.2 : 1, repeat: Infinity }}
-          />
-          <motion.div 
-            className="absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-2 sm:w-2.5 h-2 sm:h-2.5 bg-primary rounded-full"
-            animate={{ 
-              scale: isWaving ? [1, 2, 1] : scrollState === 'veryfast' ? [1, 1.5, 1] : [1, 1.2, 1],
-              opacity: [0.6, 1, 0.6]
-            }}
-            transition={{ duration: scrollState === 'veryfast' ? 0.15 : 1, repeat: Infinity }}
-          />
-          
-          {/* Eyes */}
-          <div className="flex gap-2 sm:gap-3 justify-center pt-3 sm:pt-5">
-            <motion.div 
-              className="w-4 sm:w-5 h-4 sm:h-5 bg-background rounded-full flex items-center justify-center overflow-hidden"
-              style={{ scale: eyeSize }}
-            >
-              <motion.div 
-                className="w-2 sm:w-2.5 h-2 sm:h-2.5 bg-primary rounded-full"
-                animate={{ 
-                  x: eyeOffset.x, 
-                  y: eyeOffset.y,
-                  scale: scrollState === 'veryfast' ? 0.5 : 1
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            </motion.div>
-            <motion.div 
-              className="w-4 sm:w-5 h-4 sm:h-5 bg-background rounded-full flex items-center justify-center overflow-hidden"
-              style={{ scale: eyeSize }}
-            >
-              <motion.div 
-                className="w-2 sm:w-2.5 h-2 sm:h-2.5 bg-primary rounded-full"
-                animate={{ 
-                  x: eyeOffset.x, 
-                  y: eyeOffset.y,
-                  scale: scrollState === 'veryfast' ? 0.5 : 1
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            </motion.div>
-          </div>
-          
-          {/* Eyebrows */}
-          <motion.div 
-            className="absolute top-2 sm:top-3 left-2 sm:left-4 w-2 sm:w-3 h-0.5 bg-muted-foreground rounded-full origin-right"
-            animate={{ 
-              rotate: scrollState === 'veryfast' ? 20 : scrollState === 'fast' ? 10 : 0 
-            }}
-          />
-          <motion.div 
-            className="absolute top-2 sm:top-3 right-2 sm:right-4 w-2 sm:w-3 h-0.5 bg-muted-foreground rounded-full origin-left"
-            animate={{ 
-              rotate: scrollState === 'veryfast' ? -20 : scrollState === 'fast' ? -10 : 0 
-            }}
-          />
-          
-          {/* Mouth */}
-          <motion.div 
-            className="mx-auto mt-2 sm:mt-3 bg-primary/50 rounded-full"
-            style={{ scaleX: mouthWidth }}
-            animate={{ 
-              width: isWaving || isBouncing ? 16 : scrollState === 'veryfast' ? 10 : 18,
-              height: isWaving || isBouncing ? 8 : scrollState === 'veryfast' ? 6 : 4,
-              borderRadius: isWaving || isBouncing || scrollState === 'veryfast' ? '50%' : '9999px'
-            }}
-            transition={{ duration: 0.2 }}
-          />
-          
-          {/* LEDs */}
-          <div className="flex gap-1 sm:gap-1.5 justify-center mt-1.5 sm:mt-2">
-            <motion.div 
-              className="w-1 sm:w-1.5 h-1 sm:h-1.5 bg-green-400 rounded-full"
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: scrollState === 'veryfast' ? 0.1 : 1, repeat: Infinity }}
-            />
-            <motion.div 
-              className="w-1 sm:w-1.5 h-1 sm:h-1.5 bg-primary rounded-full"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: scrollState === 'veryfast' ? 0.15 : 1.5, repeat: Infinity }}
-            />
-            <motion.div 
-              className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full"
-              animate={{ 
-                opacity: [0.5, 1, 0.5],
-                backgroundColor: scrollState === 'veryfast' ? '#ff6b6b' : '#facc15'
-              }}
-              transition={{ duration: scrollState === 'veryfast' ? 0.08 : 0.8, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
-        
-        {/* Robot Body */}
-        <div 
-          className="w-10 sm:w-14 h-4 sm:h-6 rounded-b-xl mx-auto border-x border-b"
-          style={{ 
-            background: "hsl(var(--secondary) / 0.5)", 
-            borderColor: "hsl(var(--border))"
-          }}
-        />
-        
-        {/* Speech bubble */}
-        <motion.div
-          className="absolute -left-20 sm:-left-28 top-1 sm:top-2 rounded-xl px-2 sm:px-3 py-1 sm:py-2 text-xs max-w-20 sm:max-w-24"
-          style={{
-            background: "hsl(var(--card))",
-            border: "1px solid hsl(var(--border))",
-          }}
-          animate={{ 
-            scale: scrollState !== 'idle' || isWaving || isBouncing ? [1, 1.05, 1] : 1,
-            borderColor: scrollState === 'veryfast' ? 'hsl(217 91% 60%)' : 'hsl(var(--border))'
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <span className="text-muted-foreground leading-tight block text-[10px] sm:text-xs">
-            {getExpressionText()}
-          </span>
-          <div 
-            className="absolute right-0 top-2 sm:top-3 translate-x-1/2 w-1.5 sm:w-2 h-1.5 sm:h-2 border-r border-t rotate-45" 
+        <motion.div className="relative" style={{ rotate: smoothRotate }}>
+          {/* Speech bubble */}
+          <motion.div
+            key={message}
+            className="absolute right-full mr-3 top-2 whitespace-nowrap rounded-2xl rounded-br-sm px-3 py-1.5 text-xs font-medium shadow-lg"
             style={{
               background: "hsl(var(--card))",
-              borderColor: "hsl(var(--border))",
+              border: "1px solid hsl(var(--border))",
+              color: "hsl(var(--foreground))",
             }}
+            initial={{ opacity: 0, scale: 0.9, x: 6 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            {message}
+          </motion.div>
+
+          {/* Antenna */}
+          <motion.div
+            className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 rounded-full"
+            style={{ background: "hsl(var(--border))" }}
+          />
+          <motion.div
+            className="absolute -top-[18px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-primary"
+            animate={{
+              scale: scrollState === "veryfast" ? [1, 1.5, 1] : [1, 1.25, 1],
+              opacity: [0.6, 1, 0.6],
+              boxShadow: [
+                "0 0 0px hsl(var(--primary) / 0.6)",
+                "0 0 12px hsl(var(--primary) / 0.9)",
+                "0 0 0px hsl(var(--primary) / 0.6)",
+              ],
+            }}
+            transition={{ duration: scrollState === "veryfast" ? 0.4 : 1.4, repeat: Infinity }}
+          />
+
+          {/* Robot head */}
+          <motion.div
+            className="w-16 h-16 sm:w-[74px] sm:h-[74px] rounded-[20px] border p-2.5 shadow-xl"
+            style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
+            animate={{
+              borderColor:
+                scrollState === "veryfast" ? "hsl(var(--primary))" : "hsl(var(--border))",
+              boxShadow:
+                scrollState === "veryfast"
+                  ? "0 0 24px hsl(var(--primary) / 0.35)"
+                  : "0 12px 28px -12px hsl(220 25% 12% / 0.4)",
+            }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+          >
+            {/* Dark face screen */}
+            <div
+              className="w-full h-full rounded-xl flex flex-col items-center justify-center gap-1.5 relative overflow-hidden"
+              style={{ background: "linear-gradient(160deg, #10192b, #0a0f1a)" }}
+            >
+              {/* Eyes */}
+              <div className="flex gap-2.5">
+                {[0, 1].map((i) => (
+                  <div
+                    key={i}
+                    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
+                  >
+                    <motion.div
+                      className="w-2.5 h-2.5 rounded-full bg-primary"
+                      style={{ boxShadow: "0 0 8px hsl(var(--primary) / 0.9)" }}
+                      animate={{
+                        x: eyeOffset.x,
+                        y: eyeOffset.y,
+                        scaleY: isWaving ? [1, 0.15, 1] : scrollState === "veryfast" ? 0.5 : 1,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* Mouth */}
+              <motion.div
+                className="rounded-full bg-primary/70"
+                animate={{
+                  width: isWaving ? 8 : scrollState === "veryfast" ? 6 : 12,
+                  height: isWaving ? 8 : 3,
+                  borderRadius: isWaving ? "50%" : "9999px",
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              {/* Screen sheen */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(120deg, transparent 40%, hsl(0 0% 100% / 0.06) 50%, transparent 60%)",
+                }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Little base */}
+          <div
+            className="w-9 h-2 rounded-b-lg mx-auto border-x border-b"
+            style={{ background: "hsl(var(--muted))", borderColor: "hsl(var(--border))" }}
           />
         </motion.div>
       </motion.div>
-      
-      {/* Chatbot Panel */}
+
       <ChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </motion.div>
   );

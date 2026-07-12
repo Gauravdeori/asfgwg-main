@@ -190,7 +190,7 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                   Submit another project 🔄
                 </button>
                 <a
-                  href={`mailto:gauravdeori87@gmail.com?subject=Project Request from ${formData.name}&body=Name: ${formData.name}%0AEmail: ${formData.email}%0AProject: ${formData.project}%0ABudget: ${formData.budget}%0ATimeline: ${formData.timeline}`}
+                  href={`mailto:deorigaurav1400@gmail.com?subject=Project Request from ${formData.name}&body=Name: ${formData.name}%0AEmail: ${formData.email}%0AProject: ${formData.project}%0ABudget: ${formData.budget}%0ATimeline: ${formData.timeline}`}
                   className="py-2 px-4 rounded-xl bg-secondary text-foreground text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   Send via Email 📧

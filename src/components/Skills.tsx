@@ -115,7 +115,7 @@ const Skills = () => {
   }, []);
 
   return (
-    <section id="skills" className="scroll-mt-24 bg-white">
+    <section id="skills" className="scroll-mt-24 bg-background">
       {/* Pinned scroll-scrub statement (tall track, sticky viewport) */}
       <div ref={scrubRef} className="relative h-[260vh]">
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
@@ -136,9 +136,9 @@ const Skills = () => {
         </div>
       </div>
 
-      {/* Stats + toolbelt */}
-      <div className="container mx-auto px-6 pb-24 md:pb-32" ref={statsRef}>
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 mb-20 border-t border-border pt-12">
+      {/* Stats */}
+      <div className="container mx-auto px-6 pb-16" ref={statsRef}>
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 border-t border-border pt-12">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.title}
@@ -152,31 +152,29 @@ const Skills = () => {
             </motion.div>
           ))}
         </div>
+      </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={statsInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap gap-3"
-        >
-          {skills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, y: 10 }}
-              animate={statsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 + index * 0.04 }}
-              className="tech-badge"
-            >
-              <img
-                src={skill.icon}
-                alt=""
-                className="w-4 h-4 object-contain"
-                onError={(e) => (e.currentTarget.style.display = "none")}
-              />
-              {skill.name}
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Tech stack — infinite right-to-left marquee */}
+      <div className="pb-24 md:pb-32">
+        <div className="container mx-auto px-6 mb-8">
+          <p className="section-label">My Toolbelt</p>
+        </div>
+
+        <div className="marquee-mask group relative flex overflow-hidden">
+          <div className="flex w-max shrink-0 gap-3 pr-3 animate-marquee group-hover:[animation-play-state:paused]">
+            {[...skills, ...skills].map((skill, index) => (
+              <div key={index} className="tech-badge shrink-0" aria-hidden={index >= skills.length}>
+                <img
+                  src={skill.icon}
+                  alt=""
+                  className="w-4 h-4 object-contain"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+                {skill.name}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

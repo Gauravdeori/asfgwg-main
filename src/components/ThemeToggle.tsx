@@ -30,11 +30,11 @@ const ThemeToggle = () => {
     <>
       <motion.button
         onClick={handleThemeChange}
-        className="relative p-2.5 rounded-xl bg-secondary/50 hover:bg-secondary border border-transparent hover:border-border transition-all duration-300"
-        aria-label="Toggle theme"
+        className="relative p-2.5 rounded-full bg-secondary hover:bg-muted border border-border transition-all duration-300"
+        aria-label="Toggle light and dark theme"
         disabled={isTransitioning}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.08, rotate: 12 }}
+        whileTap={{ scale: 0.9 }}
       >
         <AnimatePresence mode="wait">
           {resolvedTheme === "dark" ? (

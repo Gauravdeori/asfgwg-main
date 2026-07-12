@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { href: "#projects", label: "Work" },
@@ -27,7 +28,7 @@ const Navbar = () => {
         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-white/85 backdrop-blur-xl border-b border-border"
+            ? "bg-background/85 backdrop-blur-xl border-b border-border"
             : "bg-transparent"
         }`}
       >
@@ -52,16 +53,20 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              <ThemeToggle />
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 md:hidden text-foreground rounded-lg hover:bg-secondary transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            {/* Mobile controls */}
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-foreground rounded-lg hover:bg-secondary transition-colors"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
       </motion.nav>
@@ -74,7 +79,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white pt-20 md:hidden"
+            className="fixed inset-0 z-40 bg-background pt-20 md:hidden"
           >
             <div className="container mx-auto px-6">
               <div className="flex flex-col py-8">

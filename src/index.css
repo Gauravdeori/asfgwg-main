@@ -41,8 +41,11 @@
 
     --radius: 1.5rem;
 
-    /* Ink (near-black) used for buttons and display type */
+    /* Ink used for solid buttons: bg + its text color */
     --ink: 0 0% 12%;
+    --ink-foreground: 0 0% 100%;
+    /* Hero readability wash is driven by the page background so it flips with theme */
+    --wash: 0 0% 100%;
 
     --chart-1: 204 100% 50%;
     --chart-2: 204 89% 45%;
@@ -64,26 +67,44 @@
     --font-script: 'Caveat', cursive;
   }
 
-  /* Site is white-only; keep .dark aliased to the light palette so any
-     stray dark class can't flip the page */
+  /* Dark theme — deep navy-charcoal with the same electric blue accent */
   .dark {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 12%;
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
-    --primary: 204 100% 50%;
+    --background: 222 24% 8%;
+    --foreground: 0 0% 96%;
+
+    --card: 222 20% 12%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 222 22% 11%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 204 100% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 98%;
-    --secondary-foreground: 0 0% 12%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 240 0% 50%;
-    --accent: 204 100% 50%;
+
+    --secondary: 222 18% 15%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 222 16% 16%;
+    --muted-foreground: 220 12% 62%;
+
+    --accent: 204 100% 55%;
     --accent-foreground: 0 0% 100%;
-    --border: 0 0% 92%;
-    --input: 0 0% 92%;
-    --ring: 204 100% 50%;
+
+    --border: 220 14% 20%;
+    --input: 220 14% 20%;
+    --ring: 204 100% 55%;
+
+    /* light "ink" button on dark bg */
+    --ink: 0 0% 96%;
+    --ink-foreground: 222 24% 8%;
+    /* wash flips to the dark background so the hero scrim darkens */
+    --wash: 222 24% 8%;
+
+    --sidebar: 222 22% 10%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-accent: 222 18% 15%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 220 14% 20%;
   }
 }
 
@@ -189,7 +210,7 @@
   .btn-primary {
     @apply inline-flex items-center justify-center px-7 py-3 rounded-full font-medium text-sm transition-all duration-300;
     background: hsl(var(--ink));
-    color: hsl(0 0% 100%);
+    color: hsl(var(--ink-foreground));
   }
 
   .btn-primary:hover {
@@ -216,12 +237,12 @@
   .stack-card {
     /* per-card accent set inline as an HSL triplet, e.g. --accent: 204 100% 50% */
     --accent: 204 100% 50%;
-    @apply sticky p-7 md:p-10;
+    @apply sticky p-7 md:p-10 overflow-hidden;
     border-radius: 24px;
-    /* translucent tint layered over solid white so stacked cards stay opaque */
+    /* translucent tint layered over the card surface so stacked cards stay opaque */
     background:
       linear-gradient(135deg, hsl(var(--accent) / 0.09) 0%, transparent 55%),
-      hsl(0 0% 100%);
+      hsl(var(--card));
     border: 1px solid hsl(var(--border));
     border-top: 3px solid hsl(var(--accent));
     box-shadow: 0 -4px 24px -4px #4e6e8040;
@@ -276,7 +297,7 @@
 
   .work-tag {
     font-family: var(--font-mono);
-    @apply text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full border border-border text-muted-foreground bg-white;
+    @apply text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full border border-border text-muted-foreground bg-card;
   }
 
   /* ===== Misc ===== */
@@ -299,7 +320,7 @@
   }
 
   .skill-pill {
-    @apply px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-white text-foreground;
+    @apply px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-card text-foreground;
     border: 1px solid hsl(var(--border));
   }
 
@@ -308,7 +329,7 @@
   }
 
   .tech-badge {
-    @apply flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-white;
+    @apply flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-card;
     border: 1px solid hsl(var(--border));
     transition: all 0.25s ease;
   }
@@ -321,6 +342,13 @@
 
   .hero-gradient {
     background: hsl(var(--background));
+  }
+
+  /* Soft halo so hero copy stays legible over the visible illustration */
+  .hero-legible {
+    text-shadow:
+      0 1px 2px hsl(var(--wash) / 0.7),
+      0 0 24px hsl(var(--wash) / 0.55);
   }
 }
 
@@ -369,7 +397,13 @@
   }
 
   .animate-marquee {
-    animation: marquee 24s linear infinite;
+    animation: marquee 28s linear infinite;
+  }
+
+  /* Fade the marquee edges so badges dissolve in/out at the sides */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
 
   /* Respect users who prefer less motion */

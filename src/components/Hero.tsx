@@ -10,7 +10,7 @@ const line2 = "developer";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex flex-col justify-center relative overflow-hidden bg-white">
+    <section className="min-h-screen flex flex-col justify-center relative overflow-hidden bg-background">
       {/* Full-bleed illustration background — landscape art on desktop, portrait art on mobile */}
       <motion.img
         src={heroIllustration}
@@ -30,30 +30,30 @@ const Hero = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
       />
-      {/* Desktop overlay: light wash from the left, image stays clear on the right */}
+      {/* Desktop overlay: minimal left scrim so the illustration stays fully visible */}
       <div
         className="hidden sm:block absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, hsl(0 0% 100% / 0.82) 0%, hsl(0 0% 100% / 0.55) 30%, hsl(0 0% 100% / 0.12) 52%, hsl(0 0% 100% / 0) 72%)",
+            "linear-gradient(to right, hsl(var(--wash) / 0.6) 0%, hsl(var(--wash) / 0.28) 22%, hsl(var(--wash) / 0) 46%)",
         }}
       />
-      {/* Mobile overlay: wash from the top, character stays clear below */}
+      {/* Mobile overlay: light wash from the top, character stays clear below */}
       <div
         className="sm:hidden absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to bottom, hsl(0 0% 100% / 0.94) 0%, hsl(0 0% 100% / 0.85) 34%, hsl(0 0% 100% / 0.45) 58%, hsl(0 0% 100% / 0.05) 82%)",
+            "linear-gradient(to bottom, hsl(var(--wash) / 0.78) 0%, hsl(var(--wash) / 0.45) 30%, hsl(var(--wash) / 0.08) 55%, hsl(var(--wash) / 0) 78%)",
         }}
       />
       <div
         className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, hsl(0 0% 100%))" }}
+        style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--wash)))" }}
       />
       {/* Top wash keeps the transparent navbar readable over the sky */}
       <div
         className="absolute inset-x-0 top-0 h-28 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.9), transparent)" }}
+        style={{ background: "linear-gradient(to bottom, hsl(var(--wash) / 0.85), transparent)" }}
       />
 
       <div className="container mx-auto px-6 pt-28 pb-16 relative z-10">
@@ -68,7 +68,7 @@ const Hero = () => {
         </motion.p>
 
         {/* Giant display headline with 3D letter flips */}
-        <h1 className="display-giant mb-10 md:max-w-[60%]">
+        <h1 className="display-giant hero-legible mb-10 md:max-w-[60%]">
           <span className="sr-only">Full Stack Developer</span>
           <span className="block" aria-hidden="true">
             <FlipText text={line1} delay={0.6} immediate />
@@ -88,7 +88,7 @@ const Hero = () => {
           <div>
             {/* Tagline */}
             <motion.p
-              className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-14"
+              className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-14 hero-legible"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.6 }}

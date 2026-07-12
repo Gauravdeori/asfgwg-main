@@ -55,25 +55,56 @@ const Projects = () => {
                 "--accent": accents[index % accents.length],
               } as React.CSSProperties}
             >
+              {/* Giant watermark number */}
+              <span
+                className="pointer-events-none absolute top-0 right-4 md:right-8 font-display font-black leading-none select-none"
+                style={{
+                  fontSize: "clamp(5rem, 12vw, 9rem)",
+                  color: "hsl(var(--accent) / 0.09)",
+                }}
+                aria-hidden="true"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
               <motion.div
-                className="grid gap-6 md:grid-cols-[5rem_1fr_auto]"
+                className="relative grid gap-6 md:grid-cols-[4rem_1fr_auto]"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
               >
-                {/* Number */}
-                <span className="work-num pt-1.5">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+                {/* Accent number badge */}
+                <div
+                  className="hidden md:flex items-start justify-center pt-2"
+                  aria-hidden="true"
+                >
+                  <span
+                    className="w-11 h-11 rounded-full flex items-center justify-center font-mono text-sm font-semibold border"
+                    style={{
+                      color: "hsl(var(--accent))",
+                      borderColor: "hsl(var(--accent) / 0.35)",
+                      background: "hsl(var(--accent) / 0.08)",
+                    }}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
                 {/* Content */}
                 <div className="max-w-2xl">
-                  <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground block mb-3">
+                  <span
+                    className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider mb-3"
+                    style={{ color: "hsl(var(--accent))" }}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ background: "hsl(var(--accent))" }}
+                    />
                     {project.role}
                   </span>
 
-                  <h3 className="text-2xl md:text-4xl font-bold tracking-tight mb-4">
+                  <h3 className="text-2xl md:text-4xl font-bold tracking-tight mb-4 transition-colors duration-300">
                     {project.title}
                   </h3>
 
