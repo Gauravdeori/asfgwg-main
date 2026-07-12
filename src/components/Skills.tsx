@@ -71,10 +71,10 @@ const CountUp = ({ to, suffix, started }: { to: number; suffix: string; started:
 
 const stats = [
   {
-    to: 8,
+    to: 9,
     suffix: "+",
     title: "Projects shipped",
-    sub: "from landing pages to AI-powered web apps, all live in production",
+    sub: "from landing pages to AI and IoT-powered web apps, all live in production",
   },
   {
     to: 3,

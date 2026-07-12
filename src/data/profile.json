@@ -25,6 +25,13 @@
       "link": "https://present-iq1.vercel.app/"
     },
     {
+      "title": "WasteWise",
+      "role": "Developer",
+      "description": "An IoT-powered food waste monitoring platform for hostels — live weight data from ESP32 + load cell hardware streams to a real-time dashboard with per-hostel analytics, alerts, and CSV reports.",
+      "tech": ["IoT", "ESP32", "ThingSpeak", "JavaScript"],
+      "link": "https://waste-wise-psi.vercel.app/"
+    },
+    {
       "title": "TapPlay",
       "role": "Developer",
       "description": "A collection of fun, addictive mini games including Tic Tac Toe, Snake, and Memory, designed for a quick and engaging gaming experience.",

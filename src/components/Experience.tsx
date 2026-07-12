@@ -6,26 +6,31 @@ const experiences = [
   {
     title: "Founder & CEO",
     company: "PresentIQ",
+    url: "https://present-iq1.vercel.app/",
     description: "Building PresentIQ — a role-based attendance management SaaS, funded and incubated by CTII, Dibrugarh University.",
   },
   {
     title: "Founder & CEO",
     company: "Webro Studios",
+    url: "https://www.webrostudios.space/",
     description: "Running a web development agency, building websites and digital experiences for clients.",
   },
   {
     title: "Founder & CEO",
     company: "Theposterzz",
+    url: "https://theposterzz.in/",
     description: "Leading a creative branding initiative, designing visual identities for individuals and student communities.",
   },
   {
     title: "Freelance Web & Design Work",
     company: "Self-Employed",
+    url: null,
     description: "Building websites and creating design assets for various clients and personal projects.",
   },
   {
     title: "Student Web Developer",
     company: "Independent",
+    url: null,
     description: "Continuously learning and building projects to strengthen web development skills.",
   },
 ];
@@ -58,9 +63,20 @@ const Experience = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 + index * 0.12 }}
             >
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground md:col-span-3 pt-1">
-                {exp.company}
-              </span>
+              {exp.url ? (
+                <a
+                  href={exp.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-primary underline-offset-4 hover:underline transition-colors md:col-span-3 pt-1 self-start"
+                >
+                  {exp.company} ↗
+                </a>
+              ) : (
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground md:col-span-3 pt-1">
+                  {exp.company}
+                </span>
+              )}
               <div className="md:col-span-9">
                 <h3 className="text-xl md:text-2xl font-bold mb-2">{exp.title}</h3>
                 <p className="text-muted-foreground leading-relaxed max-w-xl">
