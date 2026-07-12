@@ -41,7 +41,7 @@ const Footer = () => {
           {[0, 1].map((copy) => (
             <span
               key={copy}
-              className="display-md text-[18vw] leading-[0.8] text-foreground/[0.06] pr-[0.5em]"
+              className="display-md text-[18vw] leading-[0.8] text-foreground/[0.09] pr-[0.5em]"
             >
               GAURAV DEORI&nbsp;GAURAV DEORI&nbsp;
             </span>

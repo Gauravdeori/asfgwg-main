@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import profileData from "../data/profile.json";
 import FlipText from "./FlipText";
-import heroIllustration from "@/assets/hero-dev.png";
+import heroIllustration from "@/assets/hero-dev.jpg";
 
 const line1 = "full stack";
 const line2 = "developer";
@@ -31,6 +31,11 @@ const Hero = () => {
       <div
         className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
         style={{ background: "linear-gradient(to bottom, transparent, hsl(0 0% 100%))" }}
+      />
+      {/* Top wash keeps the transparent navbar readable over the sky */}
+      <div
+        className="absolute inset-x-0 top-0 h-28 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.9), transparent)" }}
       />
 
       <div className="container mx-auto px-6 pt-28 pb-16 relative z-10">

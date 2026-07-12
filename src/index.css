@@ -225,7 +225,12 @@
     border: 1px solid hsl(var(--border));
     border-top: 3px solid hsl(var(--accent));
     box-shadow: 0 -4px 24px -4px #4e6e8040;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .stack-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 -4px 24px -4px #4e6e8040, 0 20px 40px -20px hsl(var(--accent) / 0.3);
   }
 
   .stack-card .work-num {
@@ -365,5 +370,19 @@
 
   .animate-marquee {
     animation: marquee 24s linear infinite;
+  }
+
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee,
+    .animate-float,
+    .animate-fade-up,
+    .animate-fade-in {
+      animation: none !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
   }
 }

@@ -73,7 +73,7 @@ const Projects = () => {
                     {project.role}
                   </span>
 
-                  <h3 className="text-2xl md:text-4xl font-bold tracking-tight mb-4 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-2xl md:text-4xl font-bold tracking-tight mb-4">
                     {project.title}
                   </h3>
 
