@@ -1,7 +1,6 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Briefcase } from "lucide-react";
+import FlipText from "./FlipText";
 
 const experiences = [
   {
@@ -21,67 +20,46 @@ const experiences = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0 },
-};
-
 const Experience = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="experience" className="py-24 relative" ref={ref}>
+    <section id="experience" className="py-24 md:py-32 scroll-mt-24" ref={ref}>
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+        <motion.p
+          className="section-label mb-4"
+          initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
+          transition={{ duration: 0.5 }}
         >
-          <p className="section-heading">Experience</p>
-          <h2 className="section-title">
-            Roles & Responsibilities
-          </h2>
-        </motion.div>
+          Experience
+        </motion.p>
+        <h2 className="script-sub mb-16">
+          <FlipText text="the journey so far" />
+        </h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="max-w-2xl space-y-5"
-        >
+        <div className="border-b border-border max-w-4xl">
           {experiences.map((exp, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              className="glass-card p-6 flex gap-4"
+              className="border-t border-border py-8 md:py-10 grid md:grid-cols-12 gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2 + index * 0.12 }}
             >
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Briefcase className="text-primary" size={22} />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">{exp.title}</h3>
-                <p className="text-primary text-sm mb-2 font-medium">{exp.company}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground md:col-span-3 pt-1">
+                {exp.company}
+              </span>
+              <div className="md:col-span-9">
+                <h3 className="text-xl md:text-2xl font-bold mb-2">{exp.title}</h3>
+                <p className="text-muted-foreground leading-relaxed max-w-xl">
                   {exp.description}
                 </p>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

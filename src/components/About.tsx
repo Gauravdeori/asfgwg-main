@@ -1,91 +1,91 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { User, MapPin, Mail, Sparkles } from "lucide-react";
 import profileData from "../data/profile.json";
+import FlipText from "./FlipText";
+
+const email =
+  profileData.socials.find((s) => s.label === "Email")?.href.replace("mailto:", "") ||
+  "deorigaurav1400@gmail.com";
 
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div id="about" className="relative scroll-mt-24" ref={ref}>
-      <motion.h2 
-        className="text-2xl font-bold flex items-center gap-1.5 text-foreground mb-6"
-        initial={{ opacity: 0, y: 15 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5 }}
-      >
-        About Me <span className="text-primary">•</span>
-      </motion.h2>
+    <section id="about" className="py-24 md:py-32 scroll-mt-24 bg-white" ref={ref}>
+      <div className="container mx-auto px-6">
+        <motion.p
+          className="section-label mb-4"
+          initial={{ opacity: 0, y: 15 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+        >
+          About Me
+        </motion.p>
+        <h2 className="script-sub mb-12">
+          <FlipText text="a little about myself" />
+        </h2>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="w-full"
-      >
-        <div className="glass-card p-6">
-          <div className="space-y-5">
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              I'm a passionate Full Stack Developer who loves building web applications that are fast, accessible and visually appealing.
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              I enjoy turning ideas into reality using modern technologies.
-            </p>
+        <div className="grid lg:grid-cols-12 gap-12">
+          {/* Paragraphs + signature */}
+          <motion.div
+            className="lg:col-span-8 space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {profileData.about.paragraphs.map((para, i) => (
+              <p
+                key={i}
+                className="text-lg md:text-xl leading-relaxed text-foreground/85"
+              >
+                {para}
+              </p>
+            ))}
 
-            {/* Info items */}
-            <div className="space-y-4 pt-4 border-t border-border/30">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                  <User size={14} />
-                </div>
-                <div>
-                  <span className="text-[10px] text-muted-foreground block">Name</span>
-                  <p className="text-xs font-semibold text-foreground">{profileData.name}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                  <MapPin size={14} />
-                </div>
-                <div>
-                  <span className="text-[10px] text-muted-foreground block">Location</span>
-                  <p className="text-xs font-semibold text-foreground">Assam, India</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                  <Mail size={14} />
-                </div>
-                <div>
-                  <span className="text-[10px] text-muted-foreground block">Email</span>
-                  <p className="text-xs font-semibold text-foreground">{profileData.socials.find(s => s.label === "Email")?.href.replace("mailto:", "") || "deorigaurav1400@gmail.com"}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                  <Sparkles size={14} />
-                </div>
-                <div>
-                  <span className="text-[10px] text-muted-foreground block">Availability</span>
-                  <p className="text-xs font-semibold text-emerald-500">Open to work</p>
-                </div>
-              </div>
+            <p className="font-script text-5xl pt-6 text-foreground">Gaurav.</p>
+          </motion.div>
+
+          {/* Meta */}
+          <motion.div
+            className="lg:col-span-4 space-y-6 lg:border-l lg:border-border lg:pl-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.35 }}
+          >
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                Name
+              </p>
+              <p className="font-semibold">{profileData.name}</p>
             </div>
-
-            {/* CTA Link to connect */}
-            <motion.a
-              href="#contact"
-              className="btn-primary w-full flex items-center justify-center gap-2 text-xs py-2.5 mt-4"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Let's Connect →
-            </motion.a>
-          </div>
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                Location
+              </p>
+              <p className="font-semibold">Assam, India</p>
+            </div>
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                Email
+              </p>
+              <a
+                href={`mailto:${email}`}
+                className="font-semibold hover:text-primary transition-colors break-all"
+              >
+                {email}
+              </a>
+            </div>
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                Availability
+              </p>
+              <p className="font-semibold text-emerald-600">Open to work</p>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 };
 

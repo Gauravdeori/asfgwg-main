@@ -15,7 +15,7 @@ export default {
   	extend: {
   		fontFamily: {
   			sans: [
-  				'Roboto',
+  				'Inter Tight',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
@@ -24,17 +24,18 @@ export default {
   				'Segoe UI Symbol',
   				'Noto Color Emoji'
   			],
-  			serif: [
-  				'EB Garamond',
-  				'ui-serif',
-  				'Georgia',
-  				'Cambria',
-  				'Times New Roman',
-  				'Times',
-  				'serif'
+  			display: [
+  				'Zalando Sans Expanded',
+  				'Inter Tight',
+  				'ui-sans-serif',
+  				'sans-serif'
+  			],
+  			script: [
+  				'Caveat',
+  				'cursive'
   			],
   			mono: [
-  				'Fira Code',
+  				'Geist Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',

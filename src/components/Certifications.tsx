@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Award, ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import udemyCertificate from "@/assets/udemy-certificate.png";
+import FlipText from "./FlipText";
 
 const certifications = [
   {
@@ -16,113 +16,77 @@ const certifications = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
 const Certifications = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="certifications" className="py-24 relative" ref={ref}>
+    <section id="certifications" className="py-24 md:py-32 scroll-mt-24" ref={ref}>
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+        <motion.p
+          className="section-label mb-4"
+          initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
+          transition={{ duration: 0.5 }}
         >
-          <p className="section-heading">Certifications</p>
-          <h2 className="section-title">
-            Professional <span className="text-gradient">Credentials</span>
-          </h2>
-        </motion.div>
+          Certifications
+        </motion.p>
+        <h2 className="script-sub mb-16">
+          <FlipText text="proof I put in the hours" />
+        </h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="max-w-4xl"
-        >
-          {certifications.map((cert, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="glass-card p-6 md:p-8"
-            >
-              <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-                {/* Certificate Image */}
-                <motion.div 
-                  className="lg:w-1/2 relative group"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="rounded-xl overflow-hidden border border-border/50 shadow-lg">
-                    <img
-                      src={cert.image}
-                      alt={`${cert.title} Certificate`}
-                      className="w-full h-auto object-cover"
-                    />
-                  </div>
-                  <div className="absolute inset-0 rounded-xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                </motion.div>
-
-                {/* Certificate Details */}
-                <div className="lg:w-1/2 flex flex-col justify-center">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Award className="text-primary" size={24} />
-                    </div>
-                    <span className="text-primary font-medium">{cert.issuer}</span>
-                  </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-bold mb-3 leading-tight">
-                    {cert.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-4">
-                    Instructor: <span className="text-foreground">{cert.instructor}</span>
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
-                    <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-primary" />
-                      Completed: {cert.date}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-primary/60" />
-                      Duration: {cert.duration}
-                    </span>
-                  </div>
-
-                  <motion.a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 w-fit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span className="font-medium">View Credential</span>
-                    <ExternalLink size={16} />
-                  </motion.a>
+        {certifications.map((cert, index) => (
+          <motion.div
+            key={index}
+            className="glass-card p-6 md:p-10 max-w-4xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.25 }}
+          >
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Certificate Image */}
+              <div className="lg:w-1/2">
+                <div className="rounded-2xl overflow-hidden border border-border">
+                  <img
+                    src={cert.image}
+                    alt={`${cert.title} Certificate`}
+                    className="w-full h-auto object-cover"
+                  />
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+
+              {/* Certificate Details */}
+              <div className="lg:w-1/2 flex flex-col justify-center">
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                  {cert.issuer}
+                </span>
+
+                <h3 className="text-xl md:text-2xl font-bold mb-3 leading-tight">
+                  {cert.title}
+                </h3>
+
+                <p className="text-muted-foreground mb-5">
+                  Instructor: <span className="text-foreground">{cert.instructor}</span>
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-8">
+                  <span className="work-tag">Completed {cert.date}</span>
+                  <span className="work-tag">{cert.duration}</span>
+                </div>
+
+                <a
+                  href={cert.credentialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline gap-2 w-fit"
+                >
+                  View Credential
+                  <ArrowUpRight size={15} />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
