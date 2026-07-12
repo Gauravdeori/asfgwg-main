@@ -4,7 +4,12 @@ import FlipText from "./FlipText";
 
 const experiences = [
   {
-    title: "Founder",
+    title: "Founder & CEO",
+    company: "PresentIQ",
+    description: "Building PresentIQ — a role-based attendance management SaaS, funded and incubated by CTII, Dibrugarh University.",
+  },
+  {
+    title: "Founder & CEO",
     company: "Theposterzz",
     description: "Leading a creative branding initiative, designing visual identities for individuals and student communities.",
   },

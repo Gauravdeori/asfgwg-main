@@ -1,6 +1,6 @@
 {
   "name": "Gaurav Deori",
-  "role": "Web Developer | Founder – Theposterzz",
+  "role": "Web Developer | Founder & CEO – Theposterzz & PresentIQ",
   "bio": "I build clean, modern, user-friendly websites through real-world projects and creative leadership.",
   "about": {
     "title": "Building the web, one project at a time.",
@@ -19,8 +19,8 @@
   "projects": [
     {
       "title": "PresentIQ",
-      "role": "Developer",
-      "description": "A role-based attendance management platform for educational institutions with Admin, Teacher, and Student dashboards, active tracking sessions, and institutional analytics.",
+      "role": "Founder & CEO",
+      "description": "A role-based attendance management SaaS for educational institutions with Admin, Teacher, and Student dashboards, active tracking sessions, and institutional analytics. Funded and incubated by CTII, Dibrugarh University.",
       "tech": ["React", "Vite", "Tailwind CSS", "Role-Based Auth"],
       "link": "https://present-iq1.vercel.app/"
     },
@@ -54,7 +54,7 @@
     },
     {
       "title": "Theposterzz",
-      "role": "Founder",
+      "role": "Founder & CEO",
       "description": "A creative branding initiative where we design and sell high-quality posters for individuals and student communities. Building visual identities that stand out.",
       "tech": ["Branding", "Poster Design", "E-commerce"],
       "link": "https://theposterzz.in/"

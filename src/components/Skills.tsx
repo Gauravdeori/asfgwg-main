@@ -77,10 +77,10 @@ const stats = [
     sub: "from landing pages to AI-powered web apps, all live in production",
   },
   {
-    to: 1,
+    to: 2,
     suffix: "",
-    title: "Brand founded",
-    sub: "Theposterzz — posters, social content & visual identities for student communities",
+    title: "Ventures founded",
+    sub: "PresentIQ — a CTII Dibrugarh University funded & incubated SaaS — and Theposterzz, a creative branding studio",
   },
 ];
 
