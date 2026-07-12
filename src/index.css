@@ -146,7 +146,7 @@
   .display-giant {
     font-family: var(--font-display);
     @apply font-black uppercase leading-[0.95] tracking-tight text-foreground;
-    font-size: clamp(2.75rem, 11vw, 9.5rem);
+    font-size: clamp(1.9rem, 6.5vw, 5.75rem);
   }
 
   .display-md {

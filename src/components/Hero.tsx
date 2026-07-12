@@ -3,6 +3,7 @@ import { ArrowDown } from "lucide-react";
 import profileData from "../data/profile.json";
 import FlipText from "./FlipText";
 import heroIllustration from "@/assets/hero-dev.jpg";
+import heroIllustrationMobile from "@/assets/hero-dev-mobile.jpg";
 
 const line1 = "full stack";
 const line2 = "developer";
@@ -10,22 +11,39 @@ const line2 = "developer";
 const Hero = () => {
   return (
     <section className="min-h-screen flex flex-col justify-center relative overflow-hidden bg-white">
-      {/* Full-bleed illustration background */}
+      {/* Full-bleed illustration background — landscape art on desktop, portrait art on mobile */}
       <motion.img
         src={heroIllustration}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-[100%_center] pointer-events-none"
-        initial={{ scale: 1.08, opacity: 0 }}
+        className="hidden sm:block absolute inset-0 w-full h-full object-cover object-[100%_center] pointer-events-none"
+        initial={{ scale: 1.06, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
       />
-      {/* Readability overlays: white wash from the left + fade into the page below */}
+      <motion.img
+        src={heroIllustrationMobile}
+        alt=""
+        aria-hidden="true"
+        className="sm:hidden absolute inset-0 w-full h-full object-cover object-[center_70%] pointer-events-none"
+        initial={{ scale: 1.06, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
+      />
+      {/* Desktop overlay: light wash from the left, image stays clear on the right */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="hidden sm:block absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, hsl(0 0% 100% / 0.97) 0%, hsl(0 0% 100% / 0.92) 45%, hsl(0 0% 100% / 0.55) 68%, hsl(0 0% 100% / 0.1) 100%)",
+            "linear-gradient(to right, hsl(0 0% 100% / 0.82) 0%, hsl(0 0% 100% / 0.55) 30%, hsl(0 0% 100% / 0.12) 52%, hsl(0 0% 100% / 0) 72%)",
+        }}
+      />
+      {/* Mobile overlay: wash from the top, character stays clear below */}
+      <div
+        className="sm:hidden absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, hsl(0 0% 100% / 0.94) 0%, hsl(0 0% 100% / 0.85) 34%, hsl(0 0% 100% / 0.45) 58%, hsl(0 0% 100% / 0.05) 82%)",
         }}
       />
       <div
@@ -50,7 +68,7 @@ const Hero = () => {
         </motion.p>
 
         {/* Giant display headline with 3D letter flips */}
-        <h1 className="display-giant mb-10">
+        <h1 className="display-giant mb-10 md:max-w-[60%]">
           <span className="sr-only">Full Stack Developer</span>
           <span className="block" aria-hidden="true">
             <FlipText text={line1} delay={0.6} immediate />
