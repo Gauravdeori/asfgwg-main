@@ -24,7 +24,9 @@ const FlipText = ({ text, stagger = 0.035, delay = 0, immediate = false, letterC
     ? { animate: { opacity: 1, rotateX: 0 } }
     : {
         whileInView: { opacity: 1, rotateX: 0 },
-        viewport: { once: true, margin: "-60px" },
+        // vertical-only margin: a horizontal margin would exclude letters near
+        // the left viewport edge, leaving leading characters invisible
+        viewport: { once: true, margin: "-60px 0px -60px 0px" },
       };
 
   return (

@@ -10,6 +10,11 @@ const experiences = [
   },
   {
     title: "Founder & CEO",
+    company: "Webro Studios",
+    description: "Running a web development agency, building websites and digital experiences for clients.",
+  },
+  {
+    title: "Founder & CEO",
     company: "Theposterzz",
     description: "Leading a creative branding initiative, designing visual identities for individuals and student communities.",
   },

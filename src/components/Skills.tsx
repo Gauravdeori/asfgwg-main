@@ -77,10 +77,10 @@ const stats = [
     sub: "from landing pages to AI-powered web apps, all live in production",
   },
   {
-    to: 2,
+    to: 3,
     suffix: "",
     title: "Ventures founded",
-    sub: "PresentIQ — a CTII Dibrugarh University funded & incubated SaaS — and Theposterzz, a creative branding studio",
+    sub: "PresentIQ (CTII Dibrugarh University funded & incubated SaaS), Webro Studios (web dev agency) & Theposterzz (branding studio)",
   },
 ];
 
