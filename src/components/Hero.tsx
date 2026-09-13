@@ -1,161 +1,156 @@
-import { motion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { Suspense, lazy } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useTheme } from "next-themes";
 import profileData from "../data/profile.json";
+import { system } from "../data/system";
+import { useIsLite, useMounted } from "@/lib/use-client";
 import FlipText from "./FlipText";
-import heroIllustration from "@/assets/hero-dev.jpg";
-import heroIllustrationMobile from "@/assets/hero-dev-mobile.jpg";
+import MagneticButton from "./ui-kit/MagneticButton";
 
-const line1 = "full stack";
-const line2 = "developer";
+const CoreScene = lazy(() => import("./three/CoreScene"));
 
-const Hero = () => {
+export default function Hero() {
+  const mounted = useMounted();
+  const lite = useIsLite();
+  const { resolvedTheme } = useTheme();
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 800], [0, 160]);
+  const opacity = useTransform(scrollY, [0, 520], [1, 0]);
+  const scale = useTransform(scrollY, [0, 800], [1, 1.18]);
+
+  const socials = profileData.socials.filter((s) => s.label !== "Email");
+
   return (
-    <section className="min-h-screen flex flex-col justify-center relative overflow-hidden bg-background">
-      {/* Full-bleed illustration background — landscape art on desktop, portrait art on mobile */}
-      <motion.img
-        src={heroIllustration}
-        alt=""
-        aria-hidden="true"
-        className="hidden sm:block absolute inset-0 w-full h-full object-cover object-[100%_center] pointer-events-none"
-        initial={{ scale: 1.06, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
-      />
-      <motion.img
-        src={heroIllustrationMobile}
-        alt=""
-        aria-hidden="true"
-        className="sm:hidden absolute inset-0 w-full h-full object-cover object-[center_70%] pointer-events-none"
-        initial={{ scale: 1.06, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
-      />
-      {/* Desktop overlay: minimal left scrim so the illustration stays fully visible */}
-      <div
-        className="hidden sm:block absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to right, hsl(var(--wash) / 0.6) 0%, hsl(var(--wash) / 0.28) 22%, hsl(var(--wash) / 0) 46%)",
-        }}
-      />
-      {/* Mobile overlay: light wash from the top, character stays clear below */}
-      <div
-        className="sm:hidden absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, hsl(var(--wash) / 0.78) 0%, hsl(var(--wash) / 0.45) 30%, hsl(var(--wash) / 0.08) 55%, hsl(var(--wash) / 0) 78%)",
-        }}
-      />
-      <div
-        className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--wash)))" }}
-      />
-      {/* Top wash keeps the transparent navbar readable over the sky */}
-      <div
-        className="absolute inset-x-0 top-0 h-28 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, hsl(var(--wash) / 0.85), transparent)" }}
-      />
+    <section id="home" className="relative min-h-[100svh] overflow-hidden">
+      <div className="tech-grid absolute inset-0 opacity-60" />
+      <div className="scanlines absolute inset-0 opacity-40" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,hsl(var(--foreground)/0.08),transparent_60%)]" />
 
-      <div className="container mx-auto px-6 pt-28 pb-16 relative z-10">
-        {/* Script intro */}
-        <motion.p
-          className="font-script text-4xl md:text-5xl mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
-          👋 Hey, I'm <span className="text-primary">Gaurav</span>
-        </motion.p>
+      {/* 3D core */}
+      <motion.div style={{ scale, opacity }} className="absolute inset-0">
+        {mounted && (
+          <Suspense fallback={null}>
+            <CoreScene lite={lite} dark={resolvedTheme !== "light"} />
+          </Suspense>
+        )}
+      </motion.div>
 
-        {/* Giant display headline with 3D letter flips */}
-        <h1 className="display-giant hero-legible mb-10 md:max-w-[60%]">
-          <span className="sr-only">Full Stack Developer</span>
-          <span className="block" aria-hidden="true">
-            <FlipText text={line1} delay={0.6} immediate />
-          </span>
-          <span className="block" aria-hidden="true">
-            <FlipText
-              text={line2}
-              delay={0.6 + line1.length * 0.035}
-              immediate
-              letterClassName="text-gradient-brand"
-            />
-          </span>
-        </h1>
+      {/* Focus vignette so the type stays legible over the core */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_28%_at_50%_52%,hsl(var(--background)/0.88),transparent_70%)]" />
 
-        {/* Bottom row: tagline + meta */}
-        <div className="max-w-3xl">
-          <div>
-            {/* Tagline */}
-            <motion.p
-              className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-14 hero-legible"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5, duration: 0.6 }}
-            >
-              Building clean, modern web experiences @{" "}
-              <a
-                href="https://theposterzz.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground font-semibold underline underline-offset-4 decoration-2 hover:text-primary transition-colors"
-              >
-                theposterzz
-              </a>
-            </motion.p>
-
-            {/* Mono meta row */}
-            <motion.div
-              className="flex flex-wrap items-end justify-between gap-6 border-t border-border pt-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.8, duration: 0.6 }}
-            >
-              <div className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                <span className="block mb-1">Based in</span>
-                <span className="text-foreground">Assam, IN</span>
-              </div>
-
-              <div className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                create &gt; consume
-              </div>
-
-              {/* Socials */}
-              <div className="flex gap-5">
-                {profileData.socials.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link-hover font-mono text-xs md:text-sm uppercase tracking-[0.2em]"
-                  >
-                    {social.label}
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
+      {/* HUD rings */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="h-[68vmin] w-[68vmin] animate-spin-slow rounded-full border border-border" />
+        <div className="absolute h-[86vmin] w-[86vmin] animate-spin-slow-reverse rounded-full border border-dashed border-border" />
       </div>
 
-      {/* Scroll indicator */}
-      <motion.a
-        href="#skills"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 mx-auto flex min-h-[100svh] max-w-frame flex-col justify-between px-6 pb-10 pt-32 md:px-10"
       >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ArrowDown size={16} />
-        </motion.div>
-      </motion.a>
+        <div className="flex items-center justify-between">
+          <span className="label-mono flex items-center gap-2">
+            <span className="h-1.5 w-1.5 animate-pulse-dot bg-foreground" />
+            CORE / ONLINE
+          </span>
+          <span className="label-mono hidden sm:block">{system.location}</span>
+        </div>
+
+        <div className="py-10 text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="label-mono"
+          >
+            Hey — I&apos;m {profileData.name}
+            <span className="hidden sm:inline"> · {system.role}</span>
+          </motion.p>
+
+          <h1 className="display-xl text-glow mt-6 text-[15vw] leading-[0.85] text-foreground sm:text-[12vw] lg:text-[9rem]">
+            <span className="sr-only">{profileData.name}, Full Stack Developer</span>
+            <span aria-hidden="true">
+              <FlipText text={profileData.name.toUpperCase()} delay={0.35} stagger={0.045} immediate />
+            </span>
+          </h1>
+
+          {/* Outlined second line: the brutalist two-tone largetype */}
+          <p
+            aria-hidden="true"
+            className="display-xl text-stroke mt-2 text-[8.5vw] leading-[0.95] sm:text-[6vw] lg:text-[4.75rem]"
+          >
+            <FlipText text="Full Stack Developer" delay={0.9} stagger={0.025} immediate />
+          </p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.3, duration: 0.9 }}
+            className="mx-auto mt-8 max-w-2xl font-display text-base uppercase tracking-[0.12em] text-muted-foreground sm:text-lg"
+          >
+            {system.tagline}
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.45, duration: 0.8 }}
+            className="mt-3 text-sm text-muted-foreground"
+          >
+            Building clean, modern web experiences @{" "}
+            <a
+              href="https://theposterzz.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-0.5 font-semibold text-foreground underline decoration-1 underline-offset-4 transition-colors hover:bg-foreground hover:text-background hover:no-underline"
+            >
+              theposterzz
+            </a>
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.6, duration: 0.9 }}
+            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          >
+            <MagneticButton href="#projects" variant="solid">
+              EXPLORE MY WORK
+            </MagneticButton>
+            <MagneticButton href="#about">ABOUT ME</MagneticButton>
+          </motion.div>
+        </div>
+
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-1 sm:grid-cols-4">
+            {system.readout.map((r) => (
+              <div key={r.k} className="label-mono flex gap-2">
+                <span className="opacity-50">{r.k}</span>
+                <span className="text-foreground">{r.v}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden gap-5 md:flex">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-hover font-mono text-[11px] uppercase tracking-[0.22em]"
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+
+          <a href="#skills" className="label-mono flex items-center gap-3 hover:text-foreground">
+            SCROLL
+            <span className="block h-8 w-px bg-gradient-to-b from-foreground to-transparent" />
+          </a>
+        </div>
+      </motion.div>
     </section>
   );
-};
-
-export default Hero;
+}

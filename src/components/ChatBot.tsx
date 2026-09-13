@@ -125,20 +125,21 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="fixed bottom-4 right-4 sm:right-8 w-[calc(100vw-2rem)] sm:w-96 max-h-[70vh] z-50 flex flex-col rounded-2xl border border-border bg-card shadow-2xl overflow-hidden"
-          style={{
-            boxShadow: "var(--shadow-glow), 0 0 0 1px var(--glass-border)",
-          }}
+          className="fixed bottom-4 right-4 sm:right-8 w-[calc(100vw-2rem)] sm:w-96 max-h-[70vh] z-50 flex flex-col border-[1.5px] border-rule bg-card overflow-hidden"
+          style={{ boxShadow: "6px 6px 0 hsl(var(--rule))" }}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-primary/10 border-b border-border">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-              <span className="font-semibold text-sm text-foreground">Gaurav's Bot</span>
+          {/* Header — knocked out of solid ink */}
+          <div className="flex items-center justify-between px-4 py-3 bg-foreground text-background border-b-[1.5px] border-rule">
+            <div className="flex items-center gap-2.5">
+              <div className="w-2.5 h-2.5 bg-background animate-pulse" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em]">
+                Gaurav&apos;s Bot
+              </span>
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+              aria-label="Close chat"
+              className="p-1 text-background/70 hover:text-background transition-colors"
             >
               <X size={16} />
             </button>
@@ -155,10 +156,10 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed ${
+                  className={`max-w-[80%] px-3 py-2 text-sm whitespace-pre-wrap leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
-                      : "bg-secondary text-foreground rounded-bl-sm"
+                      ? "bg-primary text-primary-foreground "
+                      : "bg-secondary text-foreground "
                   }`}
                 >
                   {msg.text}
@@ -171,7 +172,7 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                 animate={{ opacity: 1 }}
                 className="flex justify-start"
               >
-                <div className="bg-secondary px-3 py-2 rounded-2xl rounded-bl-sm">
+                <div className="bg-secondary px-3 py-2 ">
                   <Loader2 className="w-4 h-4 animate-spin text-primary" />
                 </div>
               </motion.div>
@@ -185,13 +186,13 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
               <div className="flex gap-2">
                 <button
                   onClick={handleRestart}
-                  className="flex-1 py-2 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="flex-1 py-2 px-4 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   Submit another project 🔄
                 </button>
                 <a
                   href={`mailto:deorigaurav1400@gmail.com?subject=Project Request from ${formData.name}&body=Name: ${formData.name}%0AEmail: ${formData.email}%0AProject: ${formData.project}%0ABudget: ${formData.budget}%0ATimeline: ${formData.timeline}`}
-                  className="py-2 px-4 rounded-xl bg-secondary text-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="py-2 px-4 bg-secondary text-foreground text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   Send via Email 📧
                 </a>
@@ -211,7 +212,7 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your answer..."
                   maxLength={500}
-                  className="flex-1 bg-secondary rounded-xl px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                  className="flex-1 bg-secondary px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
                   disabled={isSending}
                 />
                 <motion.button
@@ -219,7 +220,7 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                   disabled={!input.trim() || isSending}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-2 rounded-xl bg-primary text-primary-foreground disabled:opacity-40 transition-opacity"
+                  className="p-2 bg-primary text-primary-foreground disabled:opacity-40 transition-opacity"
                 >
                   <Send size={16} />
                 </motion.button>

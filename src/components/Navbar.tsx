@@ -1,108 +1,141 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import profileData from "../data/profile.json";
+import { navItems, system } from "../data/system";
 import ThemeToggle from "./ThemeToggle";
 
-const navLinks = [
-  { href: "#projects", label: "Work" },
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
-];
-
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Navbar() {
+  const [compact, setCompact] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setCompact(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "bg-background/85 backdrop-blur-xl border-b border-border"
-            : "bg-transparent"
+      <header
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${
+          compact
+            ? "border-border bg-background/80 py-3 backdrop-blur-xl"
+            : "border-transparent py-6"
         }`}
       >
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Wordmark */}
-            <a
-              href="#"
-              className="font-display font-extrabold uppercase tracking-tight text-base"
-            >
-              Gaurav
-            </a>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="link-hover text-sm font-medium"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <ThemeToggle />
-            </div>
-
-            {/* Mobile controls */}
-            <div className="flex md:hidden items-center gap-2">
-              <ThemeToggle />
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-foreground rounded-lg hover:bg-secondary transition-colors"
-                aria-label="Toggle menu"
+        <nav className="mx-auto flex max-w-frame items-center justify-between px-6 md:px-10">
+          {/* Wordmark collapses to initials once scrolled */}
+          <a
+            href="#home"
+            className="group inline-flex items-center gap-2.5 font-display text-lg font-bold uppercase tracking-[0.2em] text-foreground"
+          >
+            <span className="h-2 w-2 bg-foreground transition-transform duration-300 group-hover:rotate-45" />
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={compact ? "short" : "full"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
               >
-                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                {compact ? system.shortName : profileData.name}
+              </motion.span>
+            </AnimatePresence>
+          </a>
+
+          {/* Numbered links; ink floods up from below on hover */}
+          <ul className="hidden items-center gap-1 lg:flex">
+            {navItems.map((item, i) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  className="group relative block overflow-hidden px-3 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 hover:text-background"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 origin-bottom scale-y-0 bg-foreground transition-transform duration-300 ease-brut group-hover:scale-y-100"
+                  />
+                  <span className="relative">
+                    <span className="opacity-50">0{i + 1} </span>
+                    {item.label}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-4">
+            <span className="label-mono hidden items-center gap-2 xl:flex">
+              <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-foreground" />
+              SYSTEM ONLINE
+            </span>
+            <ThemeToggle />
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              className="flex h-9 w-9 items-center justify-center border border-border-strong text-foreground transition-colors hover:bg-foreground hover:text-background lg:hidden"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+            className="tech-grid fixed inset-0 z-[60] flex flex-col bg-background lg:hidden"
+          >
+            <div className="flex items-center justify-between border-b border-border px-6 py-6">
+              <span className="label-mono">NAVIGATION</span>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                className="flex h-9 w-9 items-center justify-center border border-border-strong"
+              >
+                <X className="h-4 w-4" />
               </button>
             </div>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background pt-20 md:hidden"
-          >
-            <div className="container mx-auto px-6">
-              <div className="flex flex-col py-8">
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="text-2xl font-semibold hover:text-primary transition-colors py-4 border-b border-border"
+            <ul className="flex flex-1 flex-col justify-center px-6">
+              {navItems.map((item, i) => (
+                <motion.li
+                  key={item.label}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.08 * i + 0.15 }}
+                  className="border-b border-border"
+                >
+                  <a
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="invert-row display-xl flex items-baseline gap-4 px-2 py-4 text-4xl text-foreground"
                   >
-                    {link.label}
-                  </motion.a>
-                ))}
-              </div>
+                    <span className="label-mono">0{i + 1}</span>
+                    {item.label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+            <div className="label-mono flex justify-between px-6 py-8">
+              <span>● SYSTEM ONLINE</span>
+              <span>{system.location}</span>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
   );
-};
-
-export default Navbar;
+}

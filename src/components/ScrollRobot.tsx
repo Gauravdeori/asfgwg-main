@@ -119,11 +119,12 @@ const ScrollRobot = () => {
           {/* Speech bubble */}
           <motion.div
             key={message}
-            className="absolute right-full mr-3 top-2 whitespace-nowrap rounded-2xl rounded-br-sm px-3 py-1.5 text-xs font-medium shadow-lg"
+            className="absolute right-full mr-3 top-2 whitespace-nowrap px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em]"
             style={{
-              background: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
+              background: "hsl(var(--background))",
+              border: "1.5px solid hsl(var(--rule))",
               color: "hsl(var(--foreground))",
+              boxShadow: "3px 3px 0 hsl(var(--rule))",
             }}
             initial={{ opacity: 0, scale: 0.9, x: 6 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -134,53 +135,46 @@ const ScrollRobot = () => {
 
           {/* Antenna */}
           <motion.div
-            className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 rounded-full"
-            style={{ background: "hsl(var(--border))" }}
+            className="absolute -top-3 left-1/2 -translate-x-1/2 w-[2px] h-3"
+            style={{ background: "hsl(var(--rule))" }}
           />
           <motion.div
-            className="absolute -top-[18px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-primary"
+            className="absolute -top-[18px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-foreground"
             animate={{
               scale: scrollState === "veryfast" ? [1, 1.5, 1] : [1, 1.25, 1],
-              opacity: [0.6, 1, 0.6],
-              boxShadow: [
-                "0 0 0px hsl(var(--primary) / 0.6)",
-                "0 0 12px hsl(var(--primary) / 0.9)",
-                "0 0 0px hsl(var(--primary) / 0.6)",
-              ],
+              rotate: [0, 45, 0],
+              opacity: [0.5, 1, 0.5],
             }}
             transition={{ duration: scrollState === "veryfast" ? 0.4 : 1.4, repeat: Infinity }}
           />
 
           {/* Robot head */}
           <motion.div
-            className="w-16 h-16 sm:w-[74px] sm:h-[74px] rounded-[20px] border p-2.5 shadow-xl"
-            style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
+            className="w-16 h-16 sm:w-[74px] sm:h-[74px] border-[1.5px] p-2"
+            style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--rule))" }}
             animate={{
-              borderColor:
-                scrollState === "veryfast" ? "hsl(var(--primary))" : "hsl(var(--border))",
               boxShadow:
                 scrollState === "veryfast"
-                  ? "0 0 24px hsl(var(--primary) / 0.35)"
-                  : "0 12px 28px -12px hsl(220 25% 12% / 0.4)",
+                  ? "5px 5px 0 hsl(var(--rule))"
+                  : "3px 3px 0 hsl(var(--rule))",
             }}
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.94 }}
           >
-            {/* Dark face screen */}
+            {/* Ink face screen — eyes knock out of it */}
             <div
-              className="w-full h-full rounded-xl flex flex-col items-center justify-center gap-1.5 relative overflow-hidden"
-              style={{ background: "linear-gradient(160deg, #10192b, #0a0f1a)" }}
+              className="w-full h-full flex flex-col items-center justify-center gap-1.5 relative overflow-hidden"
+              style={{ background: "hsl(var(--foreground))" }}
             >
               {/* Eyes */}
               <div className="flex gap-2.5">
                 {[0, 1].map((i) => (
                   <div
                     key={i}
-                    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
+                    className="w-2.5 h-2.5 flex items-center justify-center"
                   >
                     <motion.div
-                      className="w-2.5 h-2.5 rounded-full bg-primary"
-                      style={{ boxShadow: "0 0 8px hsl(var(--primary) / 0.9)" }}
+                      className="w-2.5 h-2.5 bg-background"
                       animate={{
                         x: eyeOffset.x,
                         y: eyeOffset.y,
@@ -193,20 +187,19 @@ const ScrollRobot = () => {
               </div>
               {/* Mouth */}
               <motion.div
-                className="rounded-full bg-primary/70"
+                className="bg-background/80"
                 animate={{
                   width: isWaving ? 8 : scrollState === "veryfast" ? 6 : 12,
                   height: isWaving ? 8 : 3,
-                  borderRadius: isWaving ? "50%" : "9999px",
                 }}
                 transition={{ duration: 0.2 }}
               />
-              {/* Screen sheen */}
+              {/* Scanline sheen */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(120deg, transparent 40%, hsl(0 0% 100% / 0.06) 50%, transparent 60%)",
+                    "linear-gradient(120deg, transparent 40%, hsl(var(--background) / 0.1) 50%, transparent 60%)",
                 }}
               />
             </div>
@@ -214,8 +207,8 @@ const ScrollRobot = () => {
 
           {/* Little base */}
           <div
-            className="w-9 h-2 rounded-b-lg mx-auto border-x border-b"
-            style={{ background: "hsl(var(--muted))", borderColor: "hsl(var(--border))" }}
+            className="w-9 h-2 mx-auto border-x-[1.5px] border-b-[1.5px]"
+            style={{ background: "hsl(var(--muted))", borderColor: "hsl(var(--rule))" }}
           />
         </motion.div>
       </motion.div>

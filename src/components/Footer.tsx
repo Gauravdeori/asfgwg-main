@@ -1,47 +1,62 @@
-import { Github, Instagram, Linkedin, Mail } from "lucide-react";
+import { Github, Instagram, Linkedin, Mail, ArrowUp, type LucideIcon } from "lucide-react";
+import profileData from "../data/profile.json";
+import { system } from "../data/system";
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/Gauravdeori", label: "GitHub" },
-  { icon: Instagram, href: "https://www.instagram.com/_gauravdeori__/?utm_source=ig_web_button_share_sheet", label: "Instagram" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/gaurav-deori-759214304", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:deorigaurav1400@gmail.com", label: "Email" },
-];
+const icons: Record<string, LucideIcon> = { Github, Instagram, Linkedin, Mail };
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="border-t border-border overflow-hidden">
-      <div className="container mx-auto px-6 py-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Social Links */}
-          <div className="flex gap-6">
-            {socialLinks.map((social) => (
+    <footer className="relative overflow-hidden border-t border-border">
+      <div className="mx-auto max-w-frame px-6 pt-14 md:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <div>
+            <div className="font-display text-2xl uppercase tracking-[0.2em] text-foreground">
+              {profileData.name}
+            </div>
+            <p className="label-mono mt-3">{system.statement}</p>
+          </div>
+          <a href="#home" className="label-mono inline-flex items-center gap-2 hover:text-foreground">
+            BACK TO TOP <ArrowUp className="h-3 w-3" />
+          </a>
+        </div>
+
+        {/* Social rows — each floods with ink on hover */}
+        <div className="mt-12 grid gap-px border-y border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          {profileData.socials.map((social) => {
+            const Icon = icons[social.icon] ?? ArrowUp;
+            return (
               <a
                 key={social.label}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={social.label}
+                className="invert-row flex items-center justify-between gap-4 bg-background px-4 py-6"
               >
-                <social.icon size={18} />
+                <span className="flex items-center gap-3">
+                  <Icon className="h-4 w-4" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.2em]">{social.label}</span>
+                </span>
+                <ArrowUp className="h-3.5 w-3.5 rotate-45" aria-hidden="true" />
               </a>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
-          {/* Copyright */}
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            © {new Date().getFullYear()} Gaurav Deori
-          </p>
+        <div className="flex flex-wrap items-center justify-between gap-4 py-6">
+          <span className="label-mono">SYSTEM SHUTDOWN — SESSION END</span>
+          <span className="label-mono">
+            © {new Date().getFullYear()} {profileData.name}
+          </span>
         </div>
       </div>
 
-      {/* Giant name marquee strip */}
-      <div className="relative select-none pointer-events-none" aria-hidden="true">
+      {/* Giant name strip, clipped by the footer edge */}
+      <div className="pointer-events-none relative select-none border-t border-border" aria-hidden="true">
         <div className="flex whitespace-nowrap animate-marquee">
           {[0, 1].map((copy) => (
             <span
               key={copy}
-              className="display-md text-[18vw] leading-[0.8] text-foreground/[0.09] pr-[0.5em]"
+              className="display-xl pr-[0.4em] pt-4 text-[19vw] leading-[0.78] text-foreground/[0.07]"
             >
               GAURAV DEORI&nbsp;GAURAV DEORI&nbsp;
             </span>
@@ -50,6 +65,4 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

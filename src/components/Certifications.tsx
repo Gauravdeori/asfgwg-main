@@ -1,8 +1,8 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import udemyCertificate from "@/assets/udemy-certificate.png";
-import FlipText from "./FlipText";
+import SectionHeading from "./ui-kit/SectionHeading";
+import MagneticButton from "./ui-kit/MagneticButton";
 
 const certifications = [
   {
@@ -17,73 +17,65 @@ const certifications = [
 ];
 
 const Certifications = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="certifications" className="py-24 md:py-32 scroll-mt-24" ref={ref}>
-      <div className="container mx-auto px-6">
-        <motion.p
-          className="section-label mb-4"
-          initial={{ opacity: 0, y: 15 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          Certifications
-        </motion.p>
-        <h2 className="script-sub mb-16">
-          <FlipText text="proof I put in the hours" />
-        </h2>
+    <section id="certifications" className="relative scroll-mt-24 border-t border-border py-28 md:py-40">
+      <div className="mx-auto max-w-frame px-6 md:px-10">
+        <SectionHeading
+          index="09 / CERTIFICATIONS"
+          title={"VERIFIED\nHOURS"}
+          subtitle="Proof I put in the hours."
+          status="● VERIFIED"
+        />
 
-        {certifications.map((cert, index) => (
+        {certifications.map((cert) => (
           <motion.div
-            key={index}
-            className="glass-card p-6 md:p-10 max-w-4xl"
+            key={cert.title}
+            className="hud-panel hud-corners grid gap-8 p-6 md:p-10 lg:grid-cols-2 lg:gap-14"
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="flex flex-col lg:flex-row gap-8">
-              {/* Certificate Image */}
-              <div className="lg:w-1/2">
-                <div className="rounded-2xl overflow-hidden border border-border">
-                  <img
-                    src={cert.image}
-                    alt={`${cert.title} Certificate`}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
+            <a
+              href={cert.credentialUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="VERIFY"
+              className="group relative block overflow-hidden border border-border"
+            >
+              <img
+                src={cert.image}
+                alt={`${cert.title} Certificate`}
+                loading="lazy"
+                className="duotone h-auto w-full object-cover transition-all duration-700 group-hover:scale-[1.03] group-hover:[filter:none]"
+              />
+              <div className="scanlines pointer-events-none absolute inset-0" />
+            </a>
+
+            <div className="flex flex-col justify-center">
+              <div className="label-mono mb-4 flex items-center gap-3">
+                <span className="h-1 w-1 bg-foreground" />
+                {cert.issuer}
               </div>
 
-              {/* Certificate Details */}
-              <div className="lg:w-1/2 flex flex-col justify-center">
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                  {cert.issuer}
-                </span>
+              <h3 className="display-xl mb-6 text-3xl leading-[0.95] text-foreground md:text-4xl">{cert.title}</h3>
 
-                <h3 className="text-xl md:text-2xl font-bold mb-3 leading-tight">
-                  {cert.title}
-                </h3>
-
-                <p className="text-muted-foreground mb-5">
-                  Instructor: <span className="text-foreground">{cert.instructor}</span>
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  <span className="work-tag">Completed {cert.date}</span>
-                  <span className="work-tag">{cert.duration}</span>
-                </div>
-
-                <a
-                  href={cert.credentialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline gap-2 w-fit"
-                >
-                  View Credential
-                  <ArrowUpRight size={15} />
-                </a>
+              <div className="mb-8 divide-y divide-border border-y border-border">
+                {[
+                  { k: "INSTRUCTOR", v: cert.instructor },
+                  { k: "COMPLETED", v: cert.date },
+                  { k: "DURATION", v: cert.duration },
+                ].map((row) => (
+                  <div key={row.k} className="flex items-center justify-between gap-4 py-3">
+                    <span className="label-mono">{row.k}</span>
+                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-foreground">{row.v}</span>
+                  </div>
+                ))}
               </div>
+
+              <MagneticButton href={cert.credentialUrl} external className="self-start">
+                VIEW CREDENTIAL <ArrowUpRight className="h-3.5 w-3.5" />
+              </MagneticButton>
             </div>
           </motion.div>
         ))}

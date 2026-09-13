@@ -1,147 +1,175 @@
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Send, ArrowUpRight } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import profileData from "../data/profile.json";
+import { system } from "../data/system";
+import MagneticButton from "./ui-kit/MagneticButton";
+
+const email =
+  profileData.socials.find((s) => s.label === "Email")?.href.replace("mailto:", "") ||
+  "deorigaurav1400@gmail.com";
+
+const socials = profileData.socials.filter((s) => s.label !== "Email");
 
 const rotatingWords = ["design", "build", "create"];
 
-const Contact = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+export default function Contact() {
+  const [sent, setSent] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(
-      () => setWordIndex((i) => (i + 1) % rotatingWords.length),
-      2000
-    );
-    return () => clearInterval(interval);
+    const id = setInterval(() => setWordIndex((i) => (i + 1) % rotatingWords.length), 2000);
+    return () => clearInterval(id);
   }, []);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Message from ${formData.name}`);
-    const body = encodeURIComponent(`From: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.location.href = `mailto:deorigaurav1400@gmail.com?subject=${subject}&body=${body}`;
+    const data = new FormData(e.currentTarget);
+    const subject = encodeURIComponent(`Message from ${data.get("name")}`);
+    const body = encodeURIComponent(
+      `From: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`,
+    );
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    setSent(true);
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 scroll-mt-24" ref={ref}>
-      <div className="container mx-auto px-6">
-        {/* Big CTA */}
-        <motion.div
+    <section id="contact" className="relative scroll-mt-24 border-t border-border py-28 md:py-40">
+      <div className="scanlines absolute inset-0 opacity-30" />
+      <div className="relative mx-auto max-w-frame px-6 md:px-10">
+        <div className="label-mono mb-8 flex items-center gap-4">
+          <span>10 / TERMINAL</span>
+          <span className="h-px flex-1 bg-border" />
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-foreground" />
+            CHANNEL OPEN
+          </span>
+        </div>
+
+        <motion.h2
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-20"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="display-xl text-glow text-[13vw] leading-[0.85] text-foreground lg:text-[9rem]"
         >
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-            lets{" "}
-            <span className="relative inline-block align-baseline w-[3.2em]">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={rotatingWords[wordIndex]}
-                  className="font-script text-primary absolute left-0"
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -14 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {rotatingWords[wordIndex]}
-                </motion.span>
-              </AnimatePresence>
-              <span className="invisible font-script">create</span>
-            </span>
-            <br />
-            incredible work together.
-          </h2>
-
-          <div className="mt-10 flex flex-col md:flex-row md:items-center gap-4 md:gap-12">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
-                Email
-              </p>
-              <a
-                href="mailto:deorigaurav1400@gmail.com"
-                className="text-lg md:text-xl font-semibold hover:text-primary transition-colors inline-flex items-center gap-2 group"
+          <span className="block">LET&apos;S</span>
+          {/* the verb cycles in a clipped slot so the line never reflows */}
+          <span className="relative block h-[0.9em] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                className="text-stroke absolute left-0 top-0 whitespace-nowrap [text-shadow:none]"
+                initial={{ y: "100%" }}
+                animate={{ y: "0%" }}
+                exit={{ y: "-100%" }}
+                transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
               >
-                deorigaurav1400@gmail.com
-                <ArrowUpRight
-                  size={18}
-                  className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
-                />
-              </a>
-            </div>
-          </div>
-        </motion.div>
+                {rotatingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+          <span className="block">SOMETHING.</span>
+        </motion.h2>
 
-        {/* Contact Form */}
-        <motion.form
-          onSubmit={handleSubmit}
-          className="max-w-2xl space-y-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="contact-name" className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground block mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                id="contact-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300 rounded-none"
-                placeholder="Your name"
-              />
-            </div>
-            <div>
-              <label htmlFor="contact-email" className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground block mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="contact-email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300 rounded-none"
-                placeholder="your@email.com"
-              />
-            </div>
-          </div>
+        <p className="mt-8 max-w-xl text-sm text-muted-foreground md:text-base">
+          Have an idea, project, collaboration or opportunity?
+        </p>
 
+        <div className="mt-14 grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <div>
-            <label htmlFor="contact-message" className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground block mb-2">
-              Message
-            </label>
-            <textarea
-              id="contact-message"
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-              rows={4}
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300 resize-none rounded-none"
-              placeholder="Tell me about your project..."
-            />
+            <p className="label-mono mb-3">DIRECT LINE</p>
+            <a
+              href={`mailto:${email}`}
+              className="group inline-flex items-center gap-3 break-all font-mono text-lg text-foreground md:text-2xl"
+            >
+              <span className="border-b border-foreground px-0.5 transition-colors group-hover:border-transparent group-hover:bg-foreground group-hover:text-background">
+                {email}
+              </span>
+              <ArrowUpRight className="h-5 w-5 shrink-0 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+            </a>
+
+            <div className="mt-10 flex flex-wrap gap-3">
+              <MagneticButton href={`mailto:${email}`} variant="solid">
+                GET IN TOUCH
+              </MagneticButton>
+              {socials.map((s) => (
+                <MagneticButton key={s.label} href={s.href} external>
+                  {s.label}
+                </MagneticButton>
+              ))}
+            </div>
+
+            <div className="mt-10 divide-y divide-border border-y border-border">
+              {[
+                { k: "EMAIL", v: email },
+                { k: "LOCATION", v: system.location },
+                { k: "STATUS", v: "Open to work" },
+                { k: "RESPONSE", v: "Usually within a day" },
+              ].map((row) => (
+                <div key={row.k} className="flex items-center justify-between gap-4 py-3">
+                  <span className="label-mono">{row.k}</span>
+                  <span className="break-all text-right font-mono text-xs uppercase tracking-[0.12em] text-foreground">
+                    {row.v}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <button type="submit" className="btn-primary gap-2">
-            <Send size={16} />
-            Send Message
-          </button>
-        </motion.form>
+          <form onSubmit={onSubmit} className="hud-panel hud-corners space-y-6 p-6 md:p-8">
+            <div className="label-mono flex items-center justify-between">
+              <span>TRANSMISSION FORM</span>
+              <span className="animate-pulse-dot text-foreground">_</span>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              {[
+                { id: "name", label: "NAME", type: "text", placeholder: "Your name" },
+                { id: "email", label: "EMAIL", type: "email", placeholder: "your@email.com" },
+              ].map((f) => (
+                <div key={f.id}>
+                  <label htmlFor={`contact-${f.id}`} className="label-mono">
+                    {f.label}
+                  </label>
+                  <input
+                    id={`contact-${f.id}`}
+                    name={f.id}
+                    type={f.type}
+                    required
+                    placeholder={f.placeholder}
+                    className="field placeholder:text-muted-foreground/50"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <label htmlFor="contact-message" className="label-mono">
+                MESSAGE
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                rows={4}
+                required
+                placeholder="Tell me about your project..."
+                className="field resize-none placeholder:text-muted-foreground/50"
+              />
+            </div>
+
+            <MagneticButton type="submit" variant="solid" className="w-full">
+              INITIATE CONNECTION →
+            </MagneticButton>
+
+            {sent && (
+              <p className="label-mono text-foreground">
+                CHANNEL HANDED TO YOUR MAIL CLIENT — SEND TO COMPLETE.
+              </p>
+            )}
+          </form>
+        </div>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}

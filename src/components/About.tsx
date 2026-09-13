@@ -1,88 +1,131 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import profileData from "../data/profile.json";
-import FlipText from "./FlipText";
+import { system } from "../data/system";
+import SectionHeading from "./ui-kit/SectionHeading";
+import portrait from "@/assets/hero-dev.jpg";
 
 const email =
   profileData.socials.find((s) => s.label === "Email")?.href.replace("mailto:", "") ||
   "deorigaurav1400@gmail.com";
 
 const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const rows = [
+    { key: "NAME", value: profileData.name.toUpperCase() },
+    ...system.systemProfile,
+    { key: "LOCATION", value: system.location.toUpperCase() },
+  ];
 
   return (
-    <section id="about" className="py-24 md:py-32 scroll-mt-24 bg-background" ref={ref}>
-      <div className="container mx-auto px-6">
-        <motion.p
-          className="section-label mb-4"
-          initial={{ opacity: 0, y: 15 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          About Me
-        </motion.p>
-        <h2 className="script-sub mb-12">
-          <FlipText text="a little about myself" />
-        </h2>
+    <section id="about" className="relative scroll-mt-24 border-t border-border py-28 md:py-40">
+      <div className="mx-auto max-w-frame px-6 md:px-10">
+        <SectionHeading index="02 / SYSTEM PROFILE" title={"SYSTEM\nPROFILE"} status="● BIO" />
 
-        <div className="grid lg:grid-cols-12 gap-12">
-          {/* Paragraphs + signature */}
-          <motion.div
-            className="lg:col-span-8 space-y-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {profileData.about.paragraphs.map((para, i) => (
-              <p
-                key={i}
-                className="text-lg md:text-xl leading-relaxed text-foreground/85"
-              >
-                {para}
-              </p>
-            ))}
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8 }}
+              className="font-display text-2xl leading-tight text-foreground sm:text-3xl md:text-4xl"
+            >
+              {system.bio}
+            </motion.p>
 
-            <p className="font-script text-5xl pt-6 text-foreground">Gaurav.</p>
-          </motion.div>
+            <motion.div
+              className="mt-10 space-y-6 border-l border-border pl-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+            >
+              {profileData.about.paragraphs.map((para, i) => (
+                <p key={i} className="leading-relaxed text-muted-foreground md:text-lg">
+                  {para}
+                </p>
+              ))}
+            </motion.div>
 
-          {/* Meta */}
-          <motion.div
-            className="lg:col-span-4 space-y-6 lg:border-l lg:border-border lg:pl-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.35 }}
-          >
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
-                Name
-              </p>
-              <p className="font-semibold">{profileData.name}</p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="label-mono mt-10 text-foreground"
+            >
+              {system.motto}
+            </motion.p>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {system.traits.map((t) => (
+                <span key={t} className="chip">
+                  {t}
+                </span>
+              ))}
             </div>
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
-                Location
-              </p>
-              <p className="font-semibold">Assam, India</p>
+
+            <p className="display-xl mt-12 text-5xl text-foreground">Gaurav.</p>
+          </div>
+
+          <div className="hud-panel hud-corners lift self-start p-6 md:p-8">
+            <div className="label-mono mb-6 flex items-center justify-between">
+              <span>PROFILE.DAT</span>
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-foreground" />
+                LIVE
+              </span>
             </div>
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
-                Email
-              </p>
-              <a
-                href={`mailto:${email}`}
-                className="font-semibold hover:text-primary transition-colors break-all"
-              >
-                {email}
-              </a>
+
+            {/* Illustration, colour stripped, scanned into the panel */}
+            <div className="relative mb-6 aspect-[4/3] overflow-hidden border border-border">
+              <img
+                src={portrait}
+                alt="Illustration of Gaurav at work"
+                loading="lazy"
+                className="duotone h-full w-full object-cover object-right transition-transform duration-700 hover:scale-105"
+              />
+              <div className="scanlines pointer-events-none absolute inset-0" />
+              <span className="label-mono absolute bottom-2 left-2 bg-background/80 px-2 py-1 text-[9px]">
+                IMG / GD-01
+              </span>
             </div>
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
-                Availability
-              </p>
-              <p className="font-semibold text-emerald-600">Open to work</p>
+
+            <div className="divide-y divide-border">
+              {rows.map((row, i) => (
+                <motion.div
+                  key={row.key}
+                  initial={{ opacity: 0, x: 16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  className="flex items-center justify-between gap-4 py-3.5"
+                >
+                  <span className="label-mono">{row.key}</span>
+                  <span className="text-right font-mono text-xs tracking-[0.14em] text-foreground">
+                    {row.value}
+                  </span>
+                </motion.div>
+              ))}
+
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <span className="label-mono">EMAIL</span>
+                <a
+                  href={`mailto:${email}`}
+                  className="link-hover break-all text-right font-mono text-xs tracking-[0.06em] text-foreground"
+                >
+                  {email}
+                </a>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <span className="label-mono">STATUS</span>
+                <span className="flex items-center gap-2 font-mono text-xs tracking-[0.14em] text-foreground">
+                  <span className="h-1.5 w-1.5 animate-pulse-dot bg-foreground" />
+                  OPEN TO WORK
+                </span>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

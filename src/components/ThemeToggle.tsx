@@ -3,6 +3,10 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
+/**
+ * Square ink toggle. Both themes are greyscale, so the icon carries no colour —
+ * it inverts against the button fill instead.
+ */
 const ThemeToggle = () => {
   const { setTheme, resolvedTheme } = useTheme();
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -14,75 +18,62 @@ const ThemeToggle = () => {
 
   const handleThemeChange = () => {
     setIsTransitioning(true);
-    
-    setTimeout(() => {
-      setTheme(resolvedTheme === "dark" ? "light" : "dark");
-    }, 200);
-
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 600);
+    setTimeout(() => setTheme(resolvedTheme === "dark" ? "light" : "dark"), 180);
+    setTimeout(() => setIsTransitioning(false), 520);
   };
 
-  if (!mounted) return null;
+  // Reserve the slot before hydration so the navbar doesn't shift
+  if (!mounted) return <span className="w-9 h-9 block" aria-hidden="true" />;
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <>
       <motion.button
         onClick={handleThemeChange}
-        className="relative p-2.5 rounded-full bg-secondary hover:bg-muted border border-border transition-all duration-300"
-        aria-label="Toggle light and dark theme"
+        className="relative w-9 h-9 flex items-center justify-center border-[1.5px] border-rule bg-background text-foreground hover:bg-foreground hover:text-background transition-colors duration-300"
+        aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
         disabled={isTransitioning}
-        whileHover={{ scale: 1.08, rotate: 12 }}
-        whileTap={{ scale: 0.9 }}
+        whileTap={{ scale: 0.92 }}
       >
-        <AnimatePresence mode="wait">
-          {resolvedTheme === "dark" ? (
-            <motion.div
+        <AnimatePresence mode="wait" initial={false}>
+          {isDark ? (
+            <motion.span
               key="moon"
-              initial={{ scale: 0, rotate: -90, opacity: 0 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1 }}
-              exit={{ scale: 0, rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="flex"
             >
-              <Moon size={16} className="text-blue-400" />
-            </motion.div>
+              <Moon size={15} />
+            </motion.span>
           ) : (
-            <motion.div
+            <motion.span
               key="sun"
-              initial={{ scale: 0, rotate: 90, opacity: 0 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1 }}
-              exit={{ scale: 0, rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="flex"
             >
-              <Sun size={16} className="text-amber-500" />
-            </motion.div>
+              <Sun size={15} />
+            </motion.span>
           )}
         </AnimatePresence>
       </motion.button>
 
-      {/* Subtle theme transition overlay */}
+      {/* Hard wipe across the page instead of a coloured glow */}
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
-            className="fixed inset-0 z-[200] pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            <motion.div
-              className="absolute inset-0"
-              style={{
-                background: resolvedTheme === "dark" 
-                  ? "radial-gradient(circle at 50% 0%, hsl(45 100% 95% / 0.3), transparent 60%)" 
-                  : "radial-gradient(circle at 50% 0%, hsl(222 30% 6% / 0.3), transparent 60%)",
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 0.5 }}
-            />
-          </motion.div>
+            className="fixed inset-0 z-[200] pointer-events-none bg-foreground origin-top"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: [0, 1, 1, 0] }}
+            exit={{ scaleY: 0 }}
+            transition={{ duration: 0.5, times: [0, 0.35, 0.6, 1], ease: [0.76, 0, 0.24, 1] }}
+            aria-hidden="true"
+          />
         )}
       </AnimatePresence>
     </>

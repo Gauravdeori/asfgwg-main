@@ -1,21 +1,6 @@
 import { motion, useInView, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-const skills = [
-  { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
-  { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-  { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
-  { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-  { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-  { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-  { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-  { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
-  { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
-];
-
 const statement =
   "I turn ideas into clean, modern, responsive websites — interfaces that feel obvious, code that stays maintainable, and details that quietly do the work.";
 
@@ -23,8 +8,8 @@ const words = statement.split(" ");
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
-/* One word of the pinned statement: fades from faint + blurred to solid black
-   as its slice of the scroll range passes — scrubbed, not one-shot. */
+/* One word of the pinned statement: fades from faint + blurred to solid as its
+   slice of the scroll range passes — scrubbed, not one-shot. */
 const ScrubWord = ({
   children,
   progress,
@@ -37,9 +22,9 @@ const ScrubWord = ({
   const t = clamp01((progress - range[0]) / (range[1] - range[0]));
   return (
     <span
-      className="inline-block mr-[0.28em]"
+      className="mr-[0.28em] inline-block"
       style={{
-        opacity: 0.18 + 0.82 * t,
+        opacity: 0.15 + 0.85 * t,
         filter: t >= 1 ? "none" : `blur(${(4 * (1 - t)).toFixed(2)}px)`,
       }}
     >
@@ -62,7 +47,7 @@ const CountUp = ({ to, suffix, started }: { to: number; suffix: string; started:
   }, [started, to]);
 
   return (
-    <span className="display-md text-6xl md:text-8xl text-gradient-brand">
+    <span className="display-xl text-stroke text-7xl tabular-nums md:text-9xl">
       {value}
       {suffix}
     </span>
@@ -115,13 +100,18 @@ const Skills = () => {
   }, []);
 
   return (
-    <section id="skills" className="scroll-mt-24 bg-background">
+    <section id="skills" className="relative scroll-mt-24 border-t border-border">
       {/* Pinned scroll-scrub statement (tall track, sticky viewport) */}
-      <div ref={scrubRef} className="relative h-[260vh]">
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <div className="container mx-auto px-6">
-            <p className="section-label mb-10">What I Do</p>
-            <h2 className="text-2xl md:text-4xl lg:text-[2.75rem] font-semibold leading-snug max-w-4xl">
+      <div ref={scrubRef} className="relative h-[240vh]">
+        <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+          <div className="tech-grid absolute inset-0 opacity-30" />
+          <div className="relative mx-auto w-full max-w-frame px-6 md:px-10">
+            <div className="mb-10 flex items-center gap-4 md:mb-14">
+              <span className="label-mono">01 / WHAT I DO</span>
+              <span className="h-px flex-1 bg-border" />
+              <span className="label-mono tabular-nums">{String(Math.round(progress * 100)).padStart(3, "0")}%</span>
+            </div>
+            <h2 className="max-w-5xl font-display text-2xl font-medium uppercase leading-[1.22] tracking-[-0.01em] md:text-4xl lg:text-[3.25rem]">
               {words.map((word, i) => {
                 const start = i / (words.length + 4);
                 const end = (i + 4) / (words.length + 4);
@@ -137,43 +127,22 @@ const Skills = () => {
       </div>
 
       {/* Stats */}
-      <div className="container mx-auto px-6 pb-16" ref={statsRef}>
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 border-t border-border pt-12">
+      <div className="mx-auto max-w-frame px-6 pb-24 md:px-10 md:pb-32" ref={statsRef}>
+        <div className="grid gap-px border border-border bg-border md:grid-cols-2">
           {stats.map((stat, i) => (
-            <motion.div
-              key={stat.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={statsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 + i * 0.15 }}
-            >
-              <CountUp to={stat.to} suffix={stat.suffix} started={statsInView} />
-              <p className="text-lg font-semibold mt-3">{stat.title}</p>
-              <p className="text-muted-foreground text-sm mt-1 max-w-xs">{stat.sub}</p>
-            </motion.div>
+            <div key={stat.title} className="bg-background p-8 md:p-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={statsInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.2 + i * 0.15 }}
+              >
+                <span className="label-mono mb-6 block">STAT / 0{i + 1}</span>
+                <CountUp to={stat.to} suffix={stat.suffix} started={statsInView} />
+                <p className="mt-5 font-display text-lg font-bold uppercase tracking-[0.04em]">{stat.title}</p>
+                <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{stat.sub}</p>
+              </motion.div>
+            </div>
           ))}
-        </div>
-      </div>
-
-      {/* Tech stack — infinite right-to-left marquee */}
-      <div className="pb-24 md:pb-32">
-        <div className="container mx-auto px-6 mb-8">
-          <p className="section-label">My Toolbelt</p>
-        </div>
-
-        <div className="marquee-mask group relative flex overflow-hidden">
-          <div className="flex w-max shrink-0 gap-3 pr-3 animate-marquee group-hover:[animation-play-state:paused]">
-            {[...skills, ...skills].map((skill, index) => (
-              <div key={index} className="tech-badge shrink-0" aria-hidden={index >= skills.length}>
-                <img
-                  src={skill.icon}
-                  alt=""
-                  className="w-4 h-4 object-contain"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
-                {skill.name}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

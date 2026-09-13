@@ -1,6 +1,5 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import FlipText from "./FlipText";
+import { motion } from "framer-motion";
+import SectionHeading from "./ui-kit/SectionHeading";
 
 const education = [
   {
@@ -27,44 +26,36 @@ const education = [
 ];
 
 const Education = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="education" className="py-24 md:py-32 scroll-mt-24 bg-background" ref={ref}>
-      <div className="container mx-auto px-6">
-        <motion.p
-          className="section-label mb-4"
-          initial={{ opacity: 0, y: 15 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          Education
-        </motion.p>
-        <h2 className="script-sub mb-16">
-          <FlipText text="where I learned the ropes" />
-        </h2>
+    <section id="education" className="relative scroll-mt-24 border-t border-border py-28 md:py-40">
+      <div className="mx-auto max-w-frame px-6 md:px-10">
+        <SectionHeading
+          index="08 / EDUCATION"
+          title={"THE\nGROUNDWORK"}
+          subtitle="Where I learned the ropes."
+          status={`● ${String(education.length).padStart(2, "0")} RECORDS`}
+        />
 
-        <div className="border-b border-border max-w-4xl">
+        <div className="border-t border-border">
           {education.map((edu, index) => (
             <motion.div
-              key={index}
-              className="border-t border-border py-8 md:py-10 grid md:grid-cols-12 gap-4"
+              key={edu.institution}
+              className="invert-row group grid gap-4 border-b border-border px-3 py-8 md:grid-cols-[70px_220px_1fr] md:items-baseline md:gap-8 md:py-10"
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 + index * 0.12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: index * 0.08, duration: 0.6 }}
             >
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground md:col-span-3 pt-1">
-                {edu.period}
-              </span>
-              <div className="md:col-span-9">
-                <h3 className="text-xl md:text-2xl font-bold mb-1">{edu.degree}</h3>
-                {edu.field && <p className="text-foreground/85 mb-1">{edu.field}</p>}
-                <p className="text-muted-foreground text-sm">{edu.institution}</p>
+              <span className="label-mono">{String(index + 1).padStart(2, "0")}</span>
+              <span className="label-mono">{edu.period}</span>
+              <div>
+                <h3 className="display-xl text-2xl text-foreground transition-transform duration-500 group-hover:translate-x-2 md:text-3xl">
+                  {edu.degree}
+                </h3>
+                {edu.field && <p className="mt-2 font-display text-foreground">{edu.field}</p>}
+                <p className="muted-invert mt-1 text-sm text-muted-foreground">{edu.institution}</p>
                 {edu.focus && (
-                  <p className="text-muted-foreground text-sm mt-2">
-                    Focus: {edu.focus}
-                  </p>
+                  <p className="muted-invert mt-2 text-sm text-muted-foreground">Focus: {edu.focus}</p>
                 )}
               </div>
             </motion.div>

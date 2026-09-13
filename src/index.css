@@ -1,110 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   MONOCHROME ENGINEERING SYSTEM
+   Merged from both designs:
+   - HUD language (tech grid, scanlines, panels with corner brackets, glow,
+     mono readouts) from the engineering design
+   - Brutalist interaction (hard offset drops, ink fills, stroked largetype,
+     tickers) from the brutalist design
+   Strictly greyscale. Dark is the primary look; light is the same system
+   inverted.
+   ========================================================================== */
+
 @layer base {
   :root {
-    /* Sanjay-style minimal white palette */
     --background: 0 0% 100%;
-    --foreground: 0 0% 12%;
+    --foreground: 0 0% 4%;
 
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 12%;
+    /* layered surfaces for panels and hover states */
+    --surface: 0 0% 97%;
+    --surface-2: 0 0% 93%;
 
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
+    --popover-foreground: 0 0% 4%;
 
-    /* Accent blue #0099FF */
-    --primary: 204 100% 50%;
+    --primary: 0 0% 4%;
     --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 38%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 0% 25%;
+    --destructive-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 98%;
-    --secondary-foreground: 0 0% 12%;
+    --border: 0 0% 86%;
+    --border-strong: 0 0% 64%;
+    --input: 0 0% 82%;
+    --ring: 0 0% 4%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 240 0% 50%;
+    --radius: 0rem;
 
-    --accent: 204 100% 50%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 0 85% 97%;
-
-    --border: 0 0% 92%;
-    --input: 0 0% 92%;
-    --ring: 204 100% 50%;
-
-    --radius: 1.5rem;
-
-    /* Ink used for solid buttons: bg + its text color */
-    --ink: 0 0% 12%;
+    /* colour of hard offset drops */
+    --rule: 0 0% 4%;
+    --ink: 0 0% 4%;
     --ink-foreground: 0 0% 100%;
-    /* Hero readability wash is driven by the page background so it flips with theme */
     --wash: 0 0% 100%;
 
-    --chart-1: 204 100% 50%;
-    --chart-2: 204 89% 45%;
-    --chart-3: 0 0% 12%;
-    --chart-4: 240 0% 50%;
-    --chart-5: 0 0% 92%;
-    --sidebar: 0 0% 98%;
-    --sidebar-foreground: 0 0% 12%;
-    --sidebar-primary: 204 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 12%;
-    --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 204 100% 50%;
+    /* HUD effects, tuned per theme */
+    --grid-line: 0 0% 0% / 0.06;
+    --scanline: 0 0% 0% / 0.035;
+    --glow: 0 0% 0% / 0;
+    --panel-top: 0 0% 0% / 0.025;
+    --panel-bottom: 0 0% 0% / 0.005;
 
-    --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Zalando Sans Expanded', 'Inter Tight', ui-sans-serif, sans-serif;
-    --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    --font-script: 'Caveat', cursive;
+    --chart-1: 0 0% 4%;
+    --chart-2: 0 0% 28%;
+    --chart-3: 0 0% 48%;
+    --chart-4: 0 0% 68%;
+    --chart-5: 0 0% 86%;
+
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 0 0% 4%;
+    --sidebar-primary: 0 0% 4%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 4%;
+    --sidebar-border: 0 0% 86%;
+    --sidebar-ring: 0 0% 4%;
+
+    --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
-  /* Dark theme — deep navy-charcoal with the same electric blue accent */
   .dark {
-    --background: 222 24% 8%;
-    --foreground: 0 0% 96%;
+    color-scheme: dark;
 
-    --card: 222 20% 12%;
-    --card-foreground: 0 0% 96%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --popover: 222 22% 11%;
-    --popover-foreground: 0 0% 96%;
+    --surface: 0 0% 4%;
+    --surface-2: 0 0% 9%;
 
-    --primary: 204 100% 55%;
-    --primary-foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 100%;
 
-    --secondary: 222 18% 15%;
-    --secondary-foreground: 0 0% 96%;
-
-    --muted: 222 16% 16%;
-    --muted-foreground: 220 12% 62%;
-
-    --accent: 204 100% 55%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 0% 16%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 0 0% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 14% 20%;
-    --input: 220 14% 20%;
-    --ring: 204 100% 55%;
+    --border: 0 0% 14%;
+    --border-strong: 0 0% 30%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 100%;
 
-    /* light "ink" button on dark bg */
-    --ink: 0 0% 96%;
-    --ink-foreground: 222 24% 8%;
-    /* wash flips to the dark background so the hero scrim darkens */
-    --wash: 222 24% 8%;
+    --rule: 0 0% 100%;
+    --ink: 0 0% 100%;
+    --ink-foreground: 0 0% 0%;
+    --wash: 0 0% 0%;
 
-    --sidebar: 222 22% 10%;
-    --sidebar-foreground: 0 0% 96%;
-    --sidebar-accent: 222 18% 15%;
-    --sidebar-accent-foreground: 0 0% 96%;
-    --sidebar-border: 220 14% 20%;
+    --grid-line: 0 0% 100% / 0.05;
+    --scanline: 0 0% 100% / 0.03;
+    --glow: 0 0% 100% / 0.35;
+    --panel-top: 0 0% 100% / 0.04;
+    --panel-bottom: 0 0% 100% / 0.01;
+
+    --chart-1: 0 0% 100%;
+    --chart-2: 0 0% 76%;
+    --chart-3: 0 0% 56%;
+    --chart-4: 0 0% 36%;
+    --chart-5: 0 0% 20%;
+
+    --sidebar: 0 0% 4%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 11%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 0 0% 100%;
   }
 }
 
@@ -115,192 +145,158 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
     font-family: var(--font-sans);
-    font-feature-settings: "ss01";
-    /* clip (not hidden) so descendants' position:sticky keeps working */
     overflow-x: clip;
   }
 
   ::selection {
-    background: hsl(var(--primary) / 0.2);
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-strong));
+  }
+
+  /* The custom cursor replaces the native one on fine pointers */
+  @media (pointer: fine) {
+    html.has-custom-cursor,
+    html.has-custom-cursor a,
+    html.has-custom-cursor button,
+    html.has-custom-cursor [data-cursor] {
+      cursor: none;
+    }
   }
 }
 
 @layer components {
-  /* ===== Typography system (matching the reference) ===== */
+  /* ===== Typography ===================================================== */
 
-  /* Mono uppercase section label: "SELECTED WORK", "ABOUT ME" */
-  .section-label {
+  /* Mono readout label — the voice of every piece of metadata */
+  .label-mono {
     font-family: var(--font-mono);
-    @apply text-xs md:text-sm uppercase tracking-[0.25em] text-muted-foreground font-medium inline-flex items-center gap-2;
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
   }
 
-  .section-label::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, hsl(204 100% 50%), hsl(262 83% 58%));
-    box-shadow: 0 0 10px hsl(204 100% 50% / 0.5);
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    text-transform: uppercase;
   }
 
-  /* Brand gradient text (blue → purple) */
-  .text-gradient-brand {
-    background-image: linear-gradient(100deg, hsl(204 100% 50%) 0%, hsl(262 83% 58%) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
+  /* Outlined cut of the display face: two-tone type without any hue.
+     Declared after .display-xl because they share elements. */
+  .text-stroke {
     color: transparent;
+    -webkit-text-stroke: 0.022em hsl(var(--foreground));
   }
 
-  /* Handwritten script subheading: "check out some of my work" */
-  .script-sub {
-    font-family: var(--font-script);
-    @apply text-3xl md:text-5xl font-semibold text-foreground leading-tight;
+  .text-glow {
+    text-shadow: 0 0 30px hsl(var(--glow));
   }
 
-  /* Giant expanded display type: "FULL STACK DEVELOPER" */
-  .display-giant {
-    font-family: var(--font-display);
-    @apply font-black uppercase leading-[0.95] tracking-tight text-foreground;
-    font-size: clamp(1.9rem, 6.5vw, 5.75rem);
-  }
+  /* ===== HUD surfaces =================================================== */
 
-  .display-md {
-    font-family: var(--font-display);
-    @apply font-extrabold uppercase leading-none tracking-tight text-foreground;
-  }
-
-  /* Kept for backwards compatibility with existing components */
-  .section-heading {
-    font-family: var(--font-mono);
-    @apply text-xs md:text-sm uppercase tracking-[0.25em] text-muted-foreground font-medium mb-4 inline-flex items-center;
-  }
-
-  .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
-  }
-
-  .text-gradient {
-    color: hsl(var(--primary));
-  }
-
-  /* ===== Cards ===== */
-
-  /* Flat minimal card (name kept so existing components pick it up) */
-  .glass-card {
-    @apply relative overflow-hidden;
-    border-radius: 24px;
-    background: hsl(0 0% 98%);
+  .hud-panel {
+    position: relative;
+    background: linear-gradient(180deg, hsl(var(--panel-top)), hsl(var(--panel-bottom)));
     border: 1px solid hsl(var(--border));
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(6px);
   }
 
-  .glass-card:hover {
-    border-color: hsl(0 0% 80%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  /* Corner brackets: top-left and bottom-right */
+  .hud-corners::before,
+  .hud-corners::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
   }
 
-  /* ===== Buttons: pill-shaped, ink or outlined ===== */
-
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-7 py-3 rounded-full font-medium text-sm transition-all duration-300;
-    background: hsl(var(--ink));
-    color: hsl(var(--ink-foreground));
+  .hud-corners::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid hsl(var(--border-strong));
+    border-left: 1px solid hsl(var(--border-strong));
   }
 
-  .btn-primary:hover {
-    background: linear-gradient(100deg, hsl(204 100% 50%), hsl(262 83% 58%));
-    color: hsl(0 0% 100%);
-    box-shadow: 0 8px 24px -8px hsl(204 100% 50% / 0.5);
-    transform: translateY(-2px);
+  .hud-corners::after {
+    right: -1px;
+    bottom: -1px;
+    border-right: 1px solid hsl(var(--border-strong));
+    border-bottom: 1px solid hsl(var(--border-strong));
   }
 
-  .btn-outline {
-    @apply inline-flex items-center justify-center px-7 py-3 rounded-full font-medium text-sm transition-all duration-300;
-    background: transparent;
-    color: hsl(var(--ink));
-    box-shadow: inset 0 0 0 1px hsl(var(--ink));
+  /* Brutalist lift: panel steps up-left onto a hard offset drop */
+  .lift {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease;
   }
 
-  .btn-outline:hover {
-    background: hsl(var(--ink));
-    color: hsl(0 0% 100%);
+  .lift:hover {
+    transform: translate(-4px, -4px);
+    border-color: hsl(var(--border-strong));
+    box-shadow: 6px 6px 0 hsl(var(--rule));
   }
 
-  /* ===== Sticky stacking work cards (reference: sticky top + upward shadow) ===== */
+  /* ===== Tags & chips =================================================== */
 
-  .stack-card {
-    /* per-card accent set inline as an HSL triplet, e.g. --accent: 204 100% 50% */
-    --accent: 204 100% 50%;
-    @apply sticky p-7 md:p-10 overflow-hidden;
-    border-radius: 24px;
-    /* translucent tint layered over the card surface so stacked cards stay opaque */
-    background:
-      linear-gradient(135deg, hsl(var(--accent) / 0.09) 0%, transparent 55%),
-      hsl(var(--card));
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--foreground) / 0.8);
     border: 1px solid hsl(var(--border));
-    border-top: 3px solid hsl(var(--accent));
-    box-shadow: 0 -4px 24px -4px #4e6e8040;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 0.5rem 0.75rem;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   }
 
-  .stack-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 -4px 24px -4px #4e6e8040, 0 20px 40px -20px hsl(var(--accent) / 0.3);
+  .chip:hover {
+    color: hsl(var(--background));
+    background: hsl(var(--foreground));
+    border-color: hsl(var(--foreground));
   }
 
-  .stack-card .work-num {
-    color: hsl(var(--accent));
-    font-weight: 600;
-  }
-
-  .stack-card .work-tag {
-    border-color: hsl(var(--accent) / 0.35);
-    color: hsl(var(--accent));
-    background: hsl(var(--accent) / 0.07);
-  }
-
-  .stack-card h3 {
-    transition: color 0.3s ease;
-  }
-
-  .stack-card:hover h3 {
-    color: hsl(var(--accent));
-  }
-
-  .stack-card .btn-primary:hover {
-    background: hsl(var(--accent));
-  }
-
-  /* ===== Selected-work rows ===== */
-
-  .work-row {
-    @apply relative border-t border-border py-10 md:py-14 grid gap-6;
-    grid-template-columns: 1fr;
-  }
-
-  @screen md {
-    .work-row {
-      grid-template-columns: 5rem 1fr auto;
-    }
-  }
-
-  .work-num {
+  .tech-badge {
     font-family: var(--font-mono);
-    @apply text-sm text-muted-foreground;
+    @apply inline-flex items-center gap-2.5 px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] text-foreground;
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
   }
 
-  .work-tag {
-    font-family: var(--font-mono);
-    @apply text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full border border-border text-muted-foreground bg-card;
+  /* Devicon logos lose their colour to stay inside the palette */
+  .mono-icon {
+    filter: grayscale(1) contrast(1.15);
+    opacity: 0.85;
   }
 
-  /* ===== Misc ===== */
+  .dark .mono-icon {
+    filter: grayscale(1) contrast(1.15) invert(1) brightness(1.6);
+  }
+
+  /* ===== Rows & links =================================================== */
 
   .link-hover {
     @apply relative inline-block text-muted-foreground transition-colors duration-300;
@@ -308,7 +304,9 @@
 
   .link-hover::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-px bg-foreground origin-left scale-x-0 transition-transform duration-300;
+    @apply absolute -bottom-0.5 left-0 w-full origin-left scale-x-0 transition-transform duration-300;
+    height: 1px;
+    background: hsl(var(--foreground));
   }
 
   .link-hover:hover {
@@ -319,78 +317,110 @@
     @apply scale-x-100;
   }
 
-  .skill-pill {
-    @apply px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-card text-foreground;
-    border: 1px solid hsl(var(--border));
+  /* Row that floods with ink from the bottom on hover */
+  .invert-row {
+    @apply relative overflow-hidden transition-colors duration-300;
+    z-index: 0;
   }
 
-  .skill-pill:hover {
-    border-color: hsl(var(--ink));
+  .invert-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: hsl(var(--foreground));
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: -1;
   }
 
-  .tech-badge {
-    @apply flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-card;
-    border: 1px solid hsl(var(--border));
-    transition: all 0.25s ease;
+  .invert-row:hover {
+    color: hsl(var(--background));
   }
 
-  .tech-badge:hover {
-    border-color: hsl(var(--primary) / 0.5);
-    box-shadow: 0 8px 20px -8px hsl(var(--primary) / 0.35);
-    transform: translateY(-3px);
+  .invert-row:hover::before {
+    transform: scaleY(1);
   }
 
-  .hero-gradient {
-    background: hsl(var(--background));
+  .invert-row:hover .label-mono,
+  .invert-row:hover .muted-invert {
+    color: hsl(var(--background) / 0.7);
   }
 
-  /* Soft halo so hero copy stays legible over the visible illustration */
-  .hero-legible {
-    text-shadow:
-      0 1px 2px hsl(var(--wash) / 0.7),
-      0 0 24px hsl(var(--wash) / 0.55);
+  .invert-row:hover .text-foreground {
+    color: hsl(var(--background));
+  }
+
+  /* ===== Form fields ==================================================== */
+
+  .field {
+    @apply mt-2 w-full bg-transparent py-3 font-mono text-sm text-foreground outline-none transition-colors;
+    border-bottom: 1px solid hsl(var(--input));
+  }
+
+  .field:focus {
+    border-color: hsl(var(--foreground));
   }
 }
 
 @layer utilities {
-  .animate-fade-up {
-    animation: fadeUp 0.6s ease-out forwards;
+  .tech-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--grid-line)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--grid-line)) 1px, transparent 1px);
+    background-size: 72px 72px;
   }
 
-  .animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      hsl(var(--scanline)) 0px,
+      hsl(var(--scanline)) 1px,
+      transparent 1px,
+      transparent 4px
+    );
   }
 
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Print-like grain across the whole page, near-invisible */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  .duotone {
+    filter: grayscale(1) contrast(1.12);
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+  .dark .duotone {
+    filter: grayscale(1) contrast(1.18) brightness(0.8);
   }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
   }
 
-  /* Slow marquee for the giant footer name strip */
+  .animate-pulse-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 24s linear infinite;
+  }
+
+  .animate-spin-slow-reverse {
+    animation: spin-slow 36s linear infinite reverse;
+  }
+
   @keyframes marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -400,23 +430,23 @@
     animation: marquee 28s linear infinite;
   }
 
-  /* Fade the marquee edges so badges dissolve in/out at the sides */
+  .animate-marquee-reverse {
+    animation: marquee 28s linear infinite reverse;
+  }
+
   .marquee-mask {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
 
-  /* Respect users who prefer less motion */
   @media (prefers-reduced-motion: reduce) {
-    .animate-marquee,
-    .animate-float,
-    .animate-fade-up,
-    .animate-fade-in {
-      animation: none !important;
-    }
-
-    html {
-      scroll-behavior: auto;
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }
