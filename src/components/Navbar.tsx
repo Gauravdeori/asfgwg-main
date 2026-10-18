@@ -38,16 +38,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="w-full h-full object-cover pixelated"
             />
           </div>
-          <span className="font-pixel text-[13px] tracking-wider text-text font-bold">
+          <span className="font-pixel text-[12px] sm:text-[13px] tracking-wider text-text font-bold whitespace-nowrap">
             {portfolioData.profile.name}
           </span>
-          <span className="font-mono text-xs text-text-muted">
+          <span className="font-mono text-xs text-text-muted hidden min-[400px]:inline">
             &gt;<span className="cursor-blink text-highlight">_</span>
           </span>
         </button>
 
         {/* Center: Section-Wise Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6">
+        <nav className="hidden lg:flex items-center gap-3 xl:gap-6">
           {portfolioData.navigation.map((item) => {
             const isActive = viewMode === 'section' && currentSection === item.id;
             return (
@@ -81,34 +81,44 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right side: Theme Toggle + Let's Talk CTA */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
           <ThemeToggle />
 
-          <a
-            href="mailto:deorigaurav1400@gmail.com"
-            className="pixel-btn-primary px-3 py-1.5 text-[11.5px] font-mono font-bold tracking-wider hidden sm:inline-flex"
-            id="nav-talk-btn"
-          >
-            <span>&lt;/&gt;</span>
-            <span>LET&apos;S TALK</span>
-          </a>
+          {/* Wrapper carries the visibility: .pixel-btn-primary sets display and would override `hidden` */}
+          <span className="hidden sm:inline-flex">
+            <a
+              href="mailto:deorigaurav1400@gmail.com"
+              className="pixel-btn-primary px-3 py-1.5 text-[11.5px] font-mono font-bold tracking-wider whitespace-nowrap"
+              id="nav-talk-btn"
+            >
+              <span>&lt;/&gt;</span>
+              <span>LET&apos;S TALK</span>
+            </a>
+          </span>
 
           {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
-            className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1 border border-border bg-surface text-text hover:bg-surface-2"
+            aria-expanded={isMobileMenuOpen}
+            className="lg:hidden w-8 h-8 flex flex-col items-center justify-center gap-1 border border-border bg-surface text-text hover:bg-surface-2"
           >
-            <span className="w-4 h-[2px] bg-currentColor" />
-            <span className="w-4 h-[2px] bg-currentColor" />
-            <span className="w-4 h-[2px] bg-currentColor" />
+            {isMobileMenuOpen ? (
+              <span className="font-mono text-sm leading-none">✕</span>
+            ) : (
+              <>
+                <span className="w-4 h-[2px] bg-current" />
+                <span className="w-4 h-[2px] bg-current" />
+                <span className="w-4 h-[2px] bg-current" />
+              </>
+            )}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden max-w-[1200px] mx-auto mt-1 bg-surface border border-border p-4 shadow-lg flex flex-col gap-2.5">
+        <div className="lg:hidden absolute left-4 right-4 sm:left-6 sm:right-6 top-full -mt-1 bg-surface border border-border p-3 shadow-pixel-lg flex flex-col gap-1.5 animate-in fade-in slide-in-from-top-1 duration-150">
           {portfolioData.navigation.map((item) => (
             <button
               key={item.id}

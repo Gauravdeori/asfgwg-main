@@ -9,12 +9,12 @@ export const About: React.FC = () => {
     <div className="flex flex-col justify-between">
       <div>
         {/* Eyebrow & Sub-tab switcher */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="font-mono text-xs text-text-muted tracking-wider">
+        <div className="flex flex-col items-start gap-2.5 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-2">
+          <div className="font-mono text-xs text-text-muted tracking-wider whitespace-nowrap">
             {about.eyebrow}
           </div>
 
-          <div className="flex items-center border border-border bg-surface text-[10px] font-mono overflow-x-auto">
+          <div className="flex items-center border border-border bg-surface text-[10px] font-mono overflow-x-auto no-scrollbar max-w-full">
             <button
               onClick={() => setSubTab('bio')}
               className={`px-2 py-1 select-none transition-colors whitespace-nowrap ${
@@ -59,7 +59,7 @@ export const About: React.FC = () => {
         </div>
 
         {/* Section Title */}
-        <h2 className="font-pixel text-[26px] sm:text-[32px] lg:text-[36px] font-bold text-text uppercase tracking-wide mb-6 sm:mb-8">
+        <h2 className="font-pixel text-[26px] sm:text-[32px] lg:text-[36px] font-bold text-text uppercase tracking-wide mb-5 sm:mb-8">
           {subTab === 'bio'
             ? about.title
             : subTab === 'story'
@@ -113,7 +113,7 @@ export const About: React.FC = () => {
                 ))}
               </div>
 
-              <div className="mt-6 sm:mt-8 flex items-center gap-3">
+              <div className="mt-5 sm:mt-8 flex flex-wrap items-center gap-3">
                 <a
                   href={about.buttonUrl}
                   className="pixel-btn-primary px-5 py-2.5 text-xs font-mono font-bold tracking-wider"
@@ -186,7 +186,7 @@ export const About: React.FC = () => {
                 key={edu.institution}
                 className="border border-border bg-surface p-3.5 hover:border-border-strong transition-colors"
               >
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                   <span className="font-mono text-xs font-bold text-text">
                     {edu.degree}
                   </span>

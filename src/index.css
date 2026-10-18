@@ -233,6 +233,24 @@
   border-right: 2px solid var(--border-strong);
 }
 
+/* iOS Safari zooms the page when focusing inputs under 16px; bump only there */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Hide scrollbars on horizontally scrolling chip/tab rows */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Marquee Ticker Animations */
 @keyframes marquee {
   from { transform: translateX(0); }

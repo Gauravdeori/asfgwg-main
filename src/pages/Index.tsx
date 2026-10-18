@@ -67,10 +67,10 @@ export const Index: React.FC = () => {
       <main className="flex-grow">
         {/* VIEW MODE 1: SECTION-WISE VIEW (TAP AND IT SHOWS THAT PART) */}
         {viewMode === 'section' ? (
-          <div key={currentSection} className="animate-in fade-in slide-in-from-bottom-2 duration-250 py-4">
+          <div key={currentSection} className="animate-in fade-in slide-in-from-bottom-2 duration-250 pt-2 sm:pt-4">
             {/* Section 1: Home */}
             {currentSection === 'home' && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <Hero />
                 <Ticker
                   items={[
@@ -88,24 +88,20 @@ export const Index: React.FC = () => {
 
             {/* Section 2: About */}
             {currentSection === 'about' && (
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8 pb-12">
-                <div className="border border-border bg-surface/50 p-6 sm:p-10">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+                <div className="border border-border bg-surface/50 p-4 sm:p-8 lg:p-10">
                   <About />
                 </div>
               </div>
             )}
 
             {/* Section 3: Projects */}
-            {currentSection === 'projects' && (
-              <div className="pt-2 pb-12">
-                <Projects />
-              </div>
-            )}
+            {currentSection === 'projects' && <Projects />}
 
             {/* Section 4: Experience & Skills */}
             {currentSection === 'experience' && (
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8 pb-12">
-                <div className="border border-border bg-surface/50 p-6 sm:p-10">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+                <div className="border border-border bg-surface/50 p-4 sm:p-8 lg:p-10">
                   <TechStack />
                 </div>
               </div>
@@ -113,7 +109,7 @@ export const Index: React.FC = () => {
 
             {/* Section 5: Contact */}
             {currentSection === 'contact' && (
-              <div className="pt-4 pb-12 space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <Ticker
                   items={[
                     "LET'S BUILD SOMETHING AMAZING",
@@ -127,24 +123,11 @@ export const Index: React.FC = () => {
               </div>
             )}
 
-            {/* Section-Wise Pager Bar */}
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6">
-              <div className="border border-border bg-surface/80 p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
-                <div>
-                  {prevSection ? (
-                    <button
-                      onClick={() => handleSelectSection(prevSection)}
-                      className="pixel-btn-outline px-3 py-1.5 font-bold tracking-wider hover:border-border-strong cursor-pointer"
-                    >
-                      ← PREV: [0{SECTION_IDS.indexOf(prevSection) + 1}] {prevSection.toUpperCase()}
-                    </button>
-                  ) : (
-                    <span className="text-text-muted/50 px-3 py-1.5">— FIRST SECTION —</span>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-text-muted">SECTION:</span>
+            {/* Section-Wise Pager Bar: indicator on its own row below lg, prev/next side by side below */}
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6 sm:mt-8">
+              <div className="border border-border bg-surface/80 p-3 sm:p-4 grid grid-cols-2 gap-2.5 lg:flex lg:items-center lg:justify-between lg:gap-3 text-xs font-mono">
+                <div className="col-span-2 lg:order-2 flex items-center justify-center gap-2 whitespace-nowrap">
+                  <span className="text-text-muted hidden sm:inline">SECTION:</span>
                   <span className="font-bold text-accent">
                     [0{currentIndex + 1}] {currentSection.toUpperCase()}
                   </span>
@@ -154,22 +137,35 @@ export const Index: React.FC = () => {
                     onClick={handleToggleViewMode}
                     className="text-text-muted hover:text-text underline cursor-pointer"
                   >
-                    VIEW ALL AT ONCE
+                    VIEW ALL<span className="hidden sm:inline"> AT ONCE</span>
                   </button>
                 </div>
 
-                <div>
+                <div className="lg:order-1 flex">
+                  {prevSection ? (
+                    <button
+                      onClick={() => handleSelectSection(prevSection)}
+                      className="pixel-btn-outline w-full lg:w-auto px-3 py-2 sm:py-1.5 font-bold tracking-wider hover:border-border-strong cursor-pointer whitespace-nowrap"
+                    >
+                      ← <span className="hidden sm:inline">PREV: </span>[0{SECTION_IDS.indexOf(prevSection) + 1}] {prevSection.toUpperCase()}
+                    </button>
+                  ) : (
+                    <span className="w-full text-center lg:text-left text-text-muted/50 px-3 py-2 sm:py-1.5 whitespace-nowrap">— FIRST SECTION —</span>
+                  )}
+                </div>
+
+                <div className="lg:order-3 flex justify-end">
                   {nextSection ? (
                     <button
                       onClick={() => handleSelectSection(nextSection)}
-                      className="pixel-btn-primary px-3 py-1.5 font-bold tracking-wider cursor-pointer"
+                      className="pixel-btn-primary w-full lg:w-auto px-3 py-2 sm:py-1.5 font-bold tracking-wider cursor-pointer whitespace-nowrap"
                     >
-                      NEXT: [0{SECTION_IDS.indexOf(nextSection) + 1}] {nextSection.toUpperCase()} →
+                      <span className="hidden sm:inline">NEXT: </span>[0{SECTION_IDS.indexOf(nextSection) + 1}] {nextSection.toUpperCase()} →
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSelectSection('home')}
-                      className="pixel-btn-primary px-3 py-1.5 font-bold tracking-wider cursor-pointer"
+                      className="pixel-btn-primary w-full lg:w-auto px-3 py-2 sm:py-1.5 font-bold tracking-wider cursor-pointer whitespace-nowrap"
                     >
                       ↺ BACK TO HOME
                     </button>
@@ -180,7 +176,7 @@ export const Index: React.FC = () => {
           </div>
         ) : (
           /* VIEW MODE 2: CONTINUOUS ALL SECTIONS (AS IN SCREENSHOT) */
-          <div className="animate-in fade-in duration-200 space-y-12">
+          <div className="animate-in fade-in duration-200 pt-2 sm:pt-4 space-y-8 sm:space-y-12">
             {/* 2. Hero */}
             <Hero />
 
@@ -216,7 +212,7 @@ export const Index: React.FC = () => {
             />
 
             {/* 5. About + Tech Stack (Two columns matching reference layout) */}
-            <section id="about" className="pt-4 pb-4 px-4 sm:px-6">
+            <section id="about" className="px-4 sm:px-6">
               <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start">
                 <div className="lg:col-span-6">
                   <About />

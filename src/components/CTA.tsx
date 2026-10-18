@@ -27,8 +27,8 @@ export const CTA: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="pt-12 sm:pt-16 pb-8 px-4 sm:px-6">
-      <div className="max-w-[1200px] mx-auto space-y-6">
+    <section id="contact" className="px-4 sm:px-6">
+      <div className="max-w-[1200px] mx-auto space-y-4 sm:space-y-6">
         {/* Landscape Banner from Screenshot */}
         <div className="border border-border relative overflow-hidden bg-surface-2 min-h-[105px] sm:min-h-[115px] flex items-center">
           {/* Background Pixel-art landscape */}
@@ -68,11 +68,11 @@ export const CTA: React.FC = () => {
         </div>
 
         {/* Supplementary Terminal Contact Console (from previous codebase) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 border border-border bg-surface/60 p-6 sm:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 border border-border bg-surface/60 p-4 sm:p-8">
           {/* Left Column: Direct info & Coordinates */}
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div>
-              <div className="font-mono text-[11px] text-text-muted uppercase tracking-wider mb-2 flex items-center justify-between">
+              <div className="font-mono text-[11px] text-text-muted uppercase tracking-wider mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <span>// 10 / TERMINAL TRANSMISSION</span>
                 <span className="flex items-center gap-1.5 text-emerald-500 font-bold">
                   <span className="w-1.5 h-1.5 bg-emerald-500 rounded-none inline-block animate-pulse" />
@@ -89,16 +89,16 @@ export const CTA: React.FC = () => {
                 SOMETHING.
               </h3>
 
-              <p className="font-mono text-xs text-text-muted leading-relaxed mb-6">
+              <p className="font-mono text-xs text-text-muted leading-relaxed mb-5 sm:mb-6">
                 Have an idea, project, collaboration or opportunity? Drop a message or reach out directly.
               </p>
 
-              <div className="space-y-2 mb-6 border-y border-border/50 py-3 font-mono text-xs">
+              <div className="space-y-2 mb-4 border-y border-border/50 py-3 font-mono text-xs">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-text-muted">DIRECT EMAIL:</span>
+                  <span className="text-text-muted flex-shrink-0">DIRECT EMAIL:</span>
                   <a
                     href={`mailto:${socials.email}`}
-                    className="font-bold text-text hover:underline break-all"
+                    className="font-bold text-text hover:underline break-all text-right"
                   >
                     {socials.email}
                   </a>
@@ -127,7 +127,7 @@ export const CTA: React.FC = () => {
             </div>
 
             {/* Social Buttons */}
-            <div className="flex flex-wrap gap-2 pt-4 border-t border-border/40">
+            <div className="flex flex-wrap gap-2">
               <a
                 href={socials.github}
                 target="_blank"
@@ -214,7 +214,7 @@ export const CTA: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-1">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                 <button
                   type="submit"
                   className="pixel-btn-primary px-5 py-2.5 text-xs font-mono font-bold tracking-wider"

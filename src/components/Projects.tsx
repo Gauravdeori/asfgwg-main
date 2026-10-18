@@ -13,10 +13,10 @@ export const Projects: React.FC = () => {
   });
 
   return (
-    <section id="projects" className="pt-12 sm:pt-16 pb-4 px-4 sm:px-6">
+    <section id="projects" className="px-4 sm:px-6">
       <div className="max-w-[1200px] mx-auto">
         {/* Header Row */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8 pb-4 border-b border-border/40">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6 pb-4 border-b border-border/40">
           <div>
             {/* Eyebrow */}
             <div className="font-mono text-xs text-text-muted tracking-wider mb-2">
@@ -49,7 +49,7 @@ export const Projects: React.FC = () => {
                     : 'text-text-muted hover:text-text'
                 }`}
               >
-                [ FEATURED (6) ]
+                [ FEATURED ({projects.items.filter((p) => p.featured).length}) ]
               </button>
               <button
                 onClick={() => setActiveFilter('all')}
@@ -66,8 +66,8 @@ export const Projects: React.FC = () => {
         </div>
 
         {/* Category Chips Sub-Bar */}
-        <div className="flex items-center gap-2 mb-6 overflow-x-auto no-scrollbar font-mono text-[11px]">
-          <span className="text-text-muted mr-1">FILTER:</span>
+        <div className="flex items-center gap-2 mb-4 sm:mb-6 overflow-x-auto no-scrollbar font-mono text-[11px] -mx-4 px-4 sm:mx-0 sm:px-0">
+          <span className="text-text-muted mr-1 flex-shrink-0">FILTER:</span>
           {(['saas', 'iot', 'ecommerce', 'web', 'game'] as const).map((cat) => (
             <button
               key={cat}

@@ -11,8 +11,8 @@ export const TechStack: React.FC = () => {
     <div className="flex flex-col justify-between">
       <div>
         {/* Eyebrow & View Switcher */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="font-mono text-xs text-text-muted tracking-wider">
+        <div className="flex flex-col items-start gap-2.5 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-2">
+          <div className="font-mono text-xs text-text-muted tracking-wider whitespace-nowrap">
             {activeTab === 'skills'
               ? techStack.eyebrow
               : activeTab === 'roles'
@@ -23,7 +23,7 @@ export const TechStack: React.FC = () => {
           </div>
 
           {/* Quick tab switcher */}
-          <div className="flex items-center border border-border bg-surface text-[10px] font-mono overflow-x-auto">
+          <div className="flex items-center border border-border bg-surface text-[10px] font-mono overflow-x-auto no-scrollbar max-w-full">
             <button
               onClick={() => setActiveTab('skills')}
               className={`px-2 py-1 select-none transition-colors whitespace-nowrap ${
@@ -68,7 +68,7 @@ export const TechStack: React.FC = () => {
         </div>
 
         {/* Section Title with boxed icon */}
-        <div className="flex items-center gap-3 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-5 sm:mb-8">
           <h2 className="font-pixel text-[26px] sm:text-[32px] lg:text-[36px] font-bold text-text uppercase tracking-wide">
             {activeTab === 'skills'
               ? techStack.title
@@ -110,7 +110,7 @@ export const TechStack: React.FC = () => {
                 key={exp.company}
                 className="border border-border bg-surface hover:border-border-strong p-3.5 transition-colors group"
               >
-                <div className="flex items-center justify-between gap-2 mb-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-text-muted text-[11px] font-bold">
                       [{exp.number}]
@@ -136,7 +136,7 @@ export const TechStack: React.FC = () => {
                 {exp.achievements && exp.achievements.length > 0 && (
                   <ul className="mb-2 space-y-0.5">
                     {exp.achievements.map((ach, i) => (
-                      <li key={i} className="text-[10.5px] font-mono text-text-muted/70 flex items-center gap-1.5">
+                      <li key={i} className="text-[10.5px] font-mono text-text-muted/70 flex items-start gap-1.5">
                         <span className="text-highlight">›</span>
                         <span>{ach}</span>
                       </li>

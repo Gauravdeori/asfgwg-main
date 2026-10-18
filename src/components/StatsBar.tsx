@@ -75,15 +75,14 @@ export const StatsBar: React.FC = () => {
   return (
     <section className="relative px-4 sm:px-6 -mt-[1px] z-20">
       <div className="max-w-[1200px] mx-auto border border-border bg-surface">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border">
-          {stats.map((stat, idx) => (
+        {/* gap-px over a border-colored background draws the 1px dividers for any column count */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-border">
+          {stats.map((stat) => (
             <div
               key={stat.id}
-              className={`p-4 sm:p-5 flex items-start gap-3.5 ${
-                idx % 2 === 1 ? 'sm:border-l-0 lg:border-l' : ''
-              } ${idx >= 2 ? 'sm:border-t lg:border-t-0' : ''}`}
+              className="bg-surface p-3.5 sm:p-5 flex flex-col sm:flex-row items-start gap-2 sm:gap-3.5"
             >
-              <div className="p-1 text-text mt-0.5">
+              <div className="sm:p-1 text-text sm:mt-0.5">
                 <StatIcon type={stat.icon} />
               </div>
 

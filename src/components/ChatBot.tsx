@@ -8,8 +8,20 @@ interface Message {
   timestamp: string;
 }
 
+const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+// Keywords per quick prompt (same order as bot.quickPrompts) so typed questions get real answers
+const FAQ_KEYWORDS: string[][] = [
+  ['who is', 'about gaurav', 'about you', 'yourself', 'introduce'],
+  ['project', 'portfolio', 'built', 'work on', 'presentiq', 'posterzz'],
+  ['hackathon', 'win', 'award', 'prize', 'ecobin', 'thigmaminds'],
+  ['hire', 'freelance', 'available', 'work with', 'collab', 'cost', 'price', 'rate'],
+];
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const ChatBot: React.FC = () => {
-  const { bot } = portfolioData;
+  const { bot, socials } = portfolioData;
   const [isOpen, setIsOpen] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [formData, setFormData] = useState<Record<string, string>>({});
@@ -19,8 +31,9 @@ export const ChatBot: React.FC = () => {
   const [robotSpeech, setRobotSpeech] = useState('Chat with me! 💬');
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
 
-  // Mouse cursor tracking for robot pupils
+  // Mouse cursor tracking for robot pupils (only meaningful with a real pointer)
   useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
     const onMouseMove = (e: MouseEvent) => {
       const rx = (e.clientX - (window.innerWidth - 60)) / 120;
       const ry = (e.clientY - (window.innerHeight - 60)) / 120;
@@ -54,15 +67,25 @@ export const ChatBot: React.FC = () => {
   // Auto-scroll to latest message
   useEffect(() => {
     if (isOpen) {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [messages, isOpen, isTyping]);
 
-  // Focus input when opened
+  // Focus input when opened (desktop only: on touch devices this would pop the keyboard over the chat)
+  // and close on Escape
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 200);
-    }
+    if (!isOpen) return;
+    const focusTimer = window.matchMedia('(pointer: fine)').matches
+      ? setTimeout(() => inputRef.current?.focus(), 200)
+      : undefined;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(focusTimer);
+      window.removeEventListener('keydown', onKey);
+    };
   }, [isOpen]);
 
   // Dynamic robot launcher speech bubbles
@@ -82,108 +105,85 @@ export const ChatBot: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const pushBot = (text: string, delay: number) => {
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        { id: `bot-${Date.now()}-${prev.length}`, sender: 'bot', text, timestamp: now() }
+      ]);
+    }, delay);
+  };
+
+  const findFaq = (text: string) => {
+    const lower = text.toLowerCase();
+    const idx = FAQ_KEYWORDS.findIndex((words) => words.some((w) => lower.includes(w)));
+    return idx >= 0 ? bot.quickPrompts[idx] : undefined;
+  };
+
+  // While the brief is in progress, remind the visitor which question is still pending
+  const withPendingQuestion = (answer: string) =>
+    !isComplete && stepIndex < bot.questions.length
+      ? `${answer}\n\n↩ Back to your brief: ${bot.questions[stepIndex].question.replace(/\s*\(.*\)\s*$/, '')}`
+      : answer;
+
   const handleSend = (textToSend?: string) => {
     const text = (textToSend || inputVal).trim();
     if (!text) return;
 
-    const userMsg: Message = {
-      id: `user-${Date.now()}`,
-      sender: 'user',
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { id: `user-${Date.now()}`, sender: 'user', text, timestamp: now() }]);
     setInputVal('');
-    setIsTyping(true);
 
-    // Check if it's one of the questionnaire steps
-    if (!isComplete && stepIndex < bot.questions.length) {
-      const currentField = bot.questions[stepIndex].field;
+    const faq = findFaq(text);
+    const inBrief = !isComplete && stepIndex < bot.questions.length;
+    const currentField = inBrief ? bot.questions[stepIndex].field : '';
+    // A project description may legitimately mention "projects?" - elsewhere an FAQ question isn't an answer
+    const isQuestion = Boolean(faq) && text.endsWith('?') && currentField !== 'project';
+
+    // Questionnaire step (unless they asked one of the FAQ questions instead of answering)
+    if (inBrief && !isQuestion) {
+
+      if (currentField === 'email' && !EMAIL_RE.test(text)) {
+        pushBot("Hmm, that doesn't look like an email address. Could you double-check it? (e.g. name@example.com)", 500);
+        return;
+      }
+
       const updatedForm = { ...formData, [currentField]: text };
       setFormData(updatedForm);
 
       const nextStep = stepIndex + 1;
       setStepIndex(nextStep);
 
-      setTimeout(() => {
-        setIsTyping(false);
-        if (nextStep < bot.questions.length) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `bot-${Date.now()}`,
-              sender: 'bot',
-              text: bot.questions[nextStep].question,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }
-          ]);
-        } else {
-          setIsComplete(true);
-          const summary = `📋 PROJECT BRIEF CONFIRMED:\n\n• Name: ${updatedForm.name}\n• Email: ${updatedForm.email}\n• Project: ${updatedForm.project}\n• Budget: ${updatedForm.budget}\n• Timeline: ${updatedForm.timeline}\n\nGaurav has received your request and will follow up shortly! 🚀`;
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `bot-${Date.now()}`,
-              sender: 'bot',
-              text: summary,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }
-          ]);
-        }
-      }, 700);
+      if (nextStep < bot.questions.length) {
+        pushBot(bot.questions[nextStep].question, 700);
+      } else {
+        setIsComplete(true);
+        pushBot(
+          `📋 PROJECT BRIEF READY:\n\n• Name: ${updatedForm.name}\n• Email: ${updatedForm.email}\n• Project: ${updatedForm.project}\n• Budget: ${updatedForm.budget}\n• Timeline: ${updatedForm.timeline}\n\nTap "Send brief via email" below and Gaurav will get back to you shortly! 🚀`,
+          700
+        );
+      }
       return;
     }
 
-    // Otherwise FAQ check or generic response
-    setTimeout(() => {
-      setIsTyping(false);
-      const lower = text.toLowerCase();
-      let reply = "I've noted that! Feel free to ask about Gaurav's skills, hackathons, projects, or use the email button above to connect.";
-
-      for (const faq of bot.quickPrompts) {
-        if (lower.includes(faq.label.toLowerCase().slice(0, 8))) {
-          reply = faq.answer;
-          break;
-        }
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `bot-${Date.now()}`,
-          sender: 'bot',
-          text: reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-    }, 600);
+    // Otherwise FAQ answer or generic response
+    pushBot(
+      withPendingQuestion(
+        faq
+          ? faq.answer
+          : `Thanks for the message! Ask me about Gaurav's skills, projects or hackathons — or email him directly at ${socials.email}.`
+      ),
+      600
+    );
   };
 
   const handleQuickPrompt = (prompt: { label: string; answer: string }) => {
     setMessages((prev) => [
       ...prev,
-      {
-        id: `user-${Date.now()}`,
-        sender: 'user',
-        text: prompt.label,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
+      { id: `user-${Date.now()}`, sender: 'user', text: prompt.label, timestamp: now() }
     ]);
-    setIsTyping(true);
-
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `bot-${Date.now()}`,
-          sender: 'bot',
-          text: prompt.answer,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-    }, 500);
+    pushBot(withPendingQuestion(prompt.answer), 500);
   };
 
   const handleRestart = () => {
@@ -202,8 +202,12 @@ export const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Floating Retro Robot Launcher Badge */}
-      <div className="fixed bottom-5 right-5 sm:right-7 z-40 flex items-center gap-3">
+      {/* Floating Retro Robot Launcher Badge (hidden on mobile while the full-height panel is open) */}
+      <div
+        className={`fixed bottom-4 right-4 sm:bottom-5 sm:right-7 z-40 items-center gap-3 ${
+          isOpen ? 'hidden sm:flex' : 'flex'
+        }`}
+      >
         {/* Floating Speech Bubble */}
         {!isOpen && (
           <div
@@ -219,9 +223,10 @@ export const ChatBot: React.FC = () => {
         {/* Square Pixel Robot Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          aria-label="Open assistant chat bot"
-          title="Open Gaurav's Assistant Bot"
-          className="w-12 h-12 border-2 border-border-strong bg-surface hover:bg-surface-2 flex items-center justify-center text-text shadow-pixel-lg hover:scale-105 active:scale-95 transition-all cursor-pointer relative group"
+          aria-label={isOpen ? 'Close assistant chat' : 'Open assistant chat bot'}
+          aria-expanded={isOpen}
+          title={isOpen ? 'Close chat' : "Open Gaurav's Assistant Bot"}
+          className="w-11 h-11 sm:w-12 sm:h-12 border-2 border-border-strong bg-surface hover:bg-surface-2 flex items-center justify-center text-text shadow-pixel-lg hover:scale-105 active:scale-95 transition-all cursor-pointer relative group"
         >
           {/* Pixel Robot Icon */}
           <svg
@@ -255,13 +260,15 @@ export const ChatBot: React.FC = () => {
         </button>
       </div>
 
-      {/* Terminal Assistant Modal Window */}
+      {/* Terminal Assistant Modal Window: full-height sheet below the navbar on mobile, floating panel on desktop */}
       {isOpen && (
         <div
-          className="fixed bottom-20 right-4 sm:right-7 w-[calc(100vw-2rem)] sm:w-[410px] max-h-[82vh] z-50 flex flex-col border-2 border-border-strong bg-surface shadow-pixel-lg overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          role="dialog"
+          aria-label={`${bot.name} assistant chat`}
+          className="fixed z-50 inset-x-3 top-[4.5rem] bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-20 sm:right-7 sm:w-[410px] sm:max-h-[min(640px,calc(100dvh-7rem))] flex flex-col border-2 border-border-strong bg-surface shadow-pixel-lg overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Terminal Window Titlebar */}
-          <div className="flex items-center justify-between px-3.5 py-2.5 bg-surface-2 border-b border-border select-none">
+          <div className="flex items-center justify-between px-3.5 py-2.5 bg-surface-2 border-b border-border select-none flex-shrink-0">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 inline-block animate-pulse" />
               <span className="font-pixel text-[11px] font-bold tracking-wider text-text">
@@ -276,14 +283,14 @@ export const ChatBot: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Minimize"
-                className="w-5 h-5 border border-border bg-surface hover:bg-surface-2 text-text text-xs flex items-center justify-center font-mono"
+                className="w-6 h-6 sm:w-5 sm:h-5 border border-border bg-surface hover:bg-surface-2 text-text text-xs flex items-center justify-center font-mono"
               >
                 _
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Close Chat"
-                className="w-5 h-5 border border-border bg-surface hover:bg-highlight hover:text-white text-text text-xs flex items-center justify-center font-mono"
+                className="w-6 h-6 sm:w-5 sm:h-5 border border-border bg-surface hover:bg-highlight hover:text-white text-text text-xs flex items-center justify-center font-mono"
               >
                 ✕
               </button>
@@ -291,17 +298,17 @@ export const ChatBot: React.FC = () => {
           </div>
 
           {/* Chat Messages Log */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[260px] max-h-[380px] bg-bg/50">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-3 sm:p-4 space-y-3 sm:min-h-[260px] sm:max-h-[380px] bg-bg/50">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div className="text-[9px] font-mono text-text-muted mb-0.5 uppercase tracking-wider">
-                  {msg.sender === 'user' ? 'YOU' : 'GAURAV.AI'}
+                  {msg.sender === 'user' ? 'YOU' : bot.name}
                 </div>
                 <div
-                  className={`max-w-[85%] px-3 py-2 text-xs font-mono leading-relaxed whitespace-pre-wrap ${
+                  className={`max-w-[88%] sm:max-w-[85%] px-3 py-2 text-xs font-mono leading-relaxed whitespace-pre-wrap break-words ${
                     msg.sender === 'user'
                       ? 'bg-accent text-accent-ink border border-border font-medium'
                       : 'bg-surface border border-border text-text shadow-sm'
@@ -313,21 +320,26 @@ export const ChatBot: React.FC = () => {
             ))}
 
             {isTyping && (
-              <div className="flex items-center gap-1 bg-surface border border-border px-3 py-1.5 self-start w-fit text-text-muted font-mono text-xs">
-                <span>bot is typing</span>
-                <span className="cursor-blink">...</span>
+              <div className="flex flex-col items-start">
+                <div className="text-[9px] font-mono text-text-muted mb-0.5 uppercase tracking-wider">
+                  {bot.name}
+                </div>
+                <div className="flex items-center gap-1 bg-surface border border-border px-3 py-1.5 w-fit text-text-muted font-mono text-xs">
+                  <span>typing</span>
+                  <span className="cursor-blink">...</span>
+                </div>
               </div>
             )}
             <div ref={chatEndRef} />
           </div>
 
           {/* Quick FAQ Prompts Chips */}
-          <div className="px-3 py-2 border-t border-border bg-surface/90 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <div className="px-3 py-2 border-t border-border bg-surface/90 flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-shrink-0">
             {bot.quickPrompts.map((prompt) => (
               <button
                 key={prompt.label}
                 onClick={() => handleQuickPrompt(prompt)}
-                className="flex-shrink-0 border border-border bg-surface-2 hover:border-border-strong hover:bg-surface text-text font-mono text-[10px] px-2 py-1 select-none transition-colors"
+                className="flex-shrink-0 whitespace-nowrap border border-border bg-surface-2 hover:border-border-strong hover:bg-surface text-text font-mono text-[10px] px-2 py-1.5 sm:py-1 select-none transition-colors"
               >
                 {prompt.label}
               </button>
@@ -335,12 +347,12 @@ export const ChatBot: React.FC = () => {
           </div>
 
           {/* Bottom Actions & Input */}
-          <div className="p-3 border-t border-border bg-surface">
+          <div className="p-3 border-t border-border bg-surface flex-shrink-0">
             {isComplete ? (
               <div className="flex flex-col gap-2">
                 <a
-                  href={`mailto:deorigaurav1400@gmail.com?subject=Project Inquiry from ${encodeURIComponent(
-                    formData.name || 'Client'
+                  href={`mailto:${socials.email}?subject=${encodeURIComponent(
+                    `Project Inquiry from ${formData.name || 'Client'}`
                   )}&body=${encodeURIComponent(
                     `Name: ${formData.name}\nEmail: ${formData.email}\nProject: ${formData.project}\nBudget: ${formData.budget}\nTimeline: ${formData.timeline}`
                   )}`}
@@ -363,7 +375,7 @@ export const ChatBot: React.FC = () => {
                 }}
                 className="flex gap-2"
               >
-                <div className="relative flex-1">
+                <div className="relative flex-1 min-w-0">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 font-mono text-text-muted text-xs select-none">
                     &gt;
                   </span>
@@ -372,8 +384,9 @@ export const ChatBot: React.FC = () => {
                     type="text"
                     value={inputVal}
                     onChange={(e) => setInputVal(e.target.value)}
-                    placeholder="Type response or question..."
+                    placeholder="Type your reply..."
                     maxLength={300}
+                    enterKeyHint="send"
                     className="w-full bg-surface-2 border border-border pl-6 pr-3 py-2 text-xs font-mono text-text placeholder:text-text-muted focus:border-border-strong focus:outline-none"
                   />
                 </div>

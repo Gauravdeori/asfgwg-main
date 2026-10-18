@@ -44,19 +44,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </div>
 
         {/* Title with small icon */}
-        <h3 className="font-mono text-[16px] sm:text-[16.5px] font-bold text-text flex items-center justify-between gap-2 mb-2">
-          <div className="flex items-center gap-2">
+        <h3 className="font-mono text-[15px] sm:text-[16.5px] font-bold text-text flex items-center justify-between gap-2 mb-2">
+          <span className="flex items-center gap-2 min-w-0">
             <span className="text-text-muted text-xs select-none">
               {project.id === 'waste-wise' || project.id === 'poba-express' ? '📍' : project.id === 'qrshield-ai' ? '🛡️' : '✦'}
             </span>
             <span>{project.title}</span>
-          </div>
+          </span>
 
           {/* Expandable Brief Button */}
           {(project.caseStudy || project.longDescription) && (
             <button
               onClick={() => setShowBrief(!showBrief)}
-              className="text-[10px] font-mono border border-border px-1.5 py-0.5 text-text-muted hover:text-text hover:border-border-strong bg-surface-2 transition-colors select-none"
+              aria-expanded={showBrief}
+              className="flex-shrink-0 whitespace-nowrap text-[10px] font-mono border border-border px-1.5 py-0.5 text-text-muted hover:text-text hover:border-border-strong bg-surface-2 transition-colors select-none"
             >
               {showBrief ? '[ CLOSE ]' : '[ CASE STUDY ]'}
             </button>
@@ -64,7 +65,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </h3>
 
         {/* Description */}
-        <p className="font-mono text-[12px] sm:text-[12.5px] text-text-muted leading-relaxed mb-4">
+        <p className="font-mono text-[12px] sm:text-[12.5px] text-text-muted leading-relaxed mb-3 sm:mb-4">
           {project.description}
         </p>
 

@@ -572,7 +572,7 @@ export const portfolioData: PortfolioData = {
     version: "v2.6",
     greeting: "Hey! 👋 I'm Gaurav's Assistant Bot. How can I help you today?",
     questions: [
-      { field: "name", question: "Hey! 👋 I'm Gaurav's assistant bot. What's your name?" },
+      { field: "name", question: "Want to share a project idea? Let's start with your name. (Or tap a quick question below 👇)" },
       { field: "email", question: "Nice to meet you! What's your email so Gaurav can reach you?" },
       { field: "project", question: "Awesome! Tell me about the project or work you have in mind 💡" },
       { field: "budget", question: "Got it! Do you have a budget range in mind? (e.g. ₹5k-15k, flexible, etc.)" },
