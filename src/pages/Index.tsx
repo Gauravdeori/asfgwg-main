@@ -1,61 +1,260 @@
-import { useCallback, useState } from "react";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import Skills from "@/components/Skills";
-import About from "@/components/About";
-import TechStack from "@/components/TechStack";
-import Projects from "@/components/Projects";
-import GithubCalendar from "@/components/GithubCalendar";
-import Experience from "@/components/Experience";
-import BuildLog from "@/components/BuildLog";
-import Education from "@/components/Education";
-import Certifications from "@/components/Certifications";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import ScrollRobot from "@/components/ScrollRobot";
-import ScrollProgress from "@/components/ScrollProgress";
-import CustomCursor from "@/components/CustomCursor";
-import LoadingScreen from "@/components/LoadingScreen";
-import Ticker from "@/components/Ticker";
-import { useMounted } from "@/lib/use-client";
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import StatsBar from '../components/StatsBar';
+import Projects from '../components/Projects';
+import About from '../components/About';
+import TechStack from '../components/TechStack';
+import CTA from '../components/CTA';
+import Footer from '../components/Footer';
+import ChatBot from '../components/ChatBot';
+import Ticker from '../components/Ticker';
+import GithubCommitLog from '../components/GithubCommitLog';
 
-const Index = () => {
-  const mounted = useMounted();
-  const [, setReady] = useState(false);
-  const onLoaded = useCallback(() => setReady(true), []);
+const SECTION_IDS = ['home', 'about', 'projects', 'experience', 'contact'];
+
+export const Index: React.FC = () => {
+  // Support section-wise mode by default, or all-in-one view mode
+  const [currentSection, setCurrentSection] = useState<string>('home');
+  const [viewMode, setViewMode] = useState<'section' | 'all'>('section');
+
+  // Handle URL hash changes
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'all') {
+        setViewMode('all');
+      } else if (SECTION_IDS.includes(hash)) {
+        setCurrentSection(hash);
+        setViewMode('section');
+      }
+    };
+
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  const handleSelectSection = (sectionId: string) => {
+    setCurrentSection(sectionId);
+    setViewMode('section');
+    window.history.pushState(null, '', `#${sectionId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleToggleViewMode = () => {
+    const nextMode = viewMode === 'all' ? 'section' : 'all';
+    setViewMode(nextMode);
+    window.history.pushState(null, '', nextMode === 'all' ? '#all' : `#${currentSection}`);
+  };
+
+  // Next / Prev section helpers
+  const currentIndex = SECTION_IDS.indexOf(currentSection);
+  const prevSection = currentIndex > 0 ? SECTION_IDS[currentIndex - 1] : null;
+  const nextSection = currentIndex < SECTION_IDS.length - 1 ? SECTION_IDS[currentIndex + 1] : null;
 
   return (
-    <div className="grain relative min-h-screen bg-background text-foreground">
-      {mounted && <LoadingScreen onDone={onLoaded} />}
-      {mounted && <CustomCursor />}
-      <ScrollProgress />
-      <Navbar />
-      <ScrollRobot />
+    <div className="min-h-screen bg-bg text-text selection:bg-accent selection:text-accent-ink flex flex-col relative">
+      {/* 1. Navbar with Section-Wise Controls */}
+      <Navbar
+        currentSection={currentSection}
+        onSelectSection={handleSelectSection}
+        viewMode={viewMode}
+        onToggleViewMode={handleToggleViewMode}
+      />
 
-      <main className="relative z-10">
-        <Hero />
+      {/* Main Content Area */}
+      <main className="flex-grow">
+        {/* VIEW MODE 1: SECTION-WISE VIEW (TAP AND IT SHOWS THAT PART) */}
+        {viewMode === 'section' ? (
+          <div key={currentSection} className="animate-in fade-in slide-in-from-bottom-2 duration-250 py-4">
+            {/* Section 1: Home */}
+            {currentSection === 'home' && (
+              <div className="space-y-6">
+                <Hero />
+                <Ticker
+                  items={[
+                    'FULL STACK DEVELOPER',
+                    'PRODUCT BUILDER',
+                    'REACT & TYPESCRIPT',
+                    'AI / ML & IOT',
+                    'FOUNDER OF PRESENTIQ & THEPOSTERZZ',
+                    'OPEN TO WORK',
+                  ]}
+                />
+                <StatsBar />
+              </div>
+            )}
 
-        <Ticker items={["Full Stack Developer", "Builder", "React", "Node", "AI / ML", "Open to work"]} />
+            {/* Section 2: About */}
+            {currentSection === 'about' && (
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8 pb-12">
+                <div className="border border-border bg-surface/50 p-6 sm:p-10">
+                  <About />
+                </div>
+              </div>
+            )}
 
-        <Skills />
-        <About />
-        <TechStack />
+            {/* Section 3: Projects */}
+            {currentSection === 'projects' && (
+              <div className="pt-2 pb-12">
+                <Projects />
+              </div>
+            )}
 
-        <Ticker items={["Engineering Log", "Built & shipped", "Idea → System → Product"]} variant="outline" reverse />
+            {/* Section 4: Experience & Skills */}
+            {currentSection === 'experience' && (
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8 pb-12">
+                <div className="border border-border bg-surface/50 p-6 sm:p-10">
+                  <TechStack />
+                </div>
+              </div>
+            )}
 
-        <Projects />
-        <GithubCalendar />
-        <Experience />
-        <BuildLog />
-        <Education />
-        <Certifications />
+            {/* Section 5: Contact */}
+            {currentSection === 'contact' && (
+              <div className="pt-4 pb-12 space-y-6">
+                <Ticker
+                  items={[
+                    "LET'S BUILD SOMETHING AMAZING",
+                    'DIRECT TERMINAL OPEN',
+                    'DIBRUGARH, ASSAM',
+                    'INITIATE TRANSMISSION',
+                  ]}
+                  variant="outline"
+                />
+                <CTA />
+              </div>
+            )}
 
-        <Ticker items={["Let's build something", "Channel open"]} size="lg" />
+            {/* Section-Wise Pager Bar */}
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6">
+              <div className="border border-border bg-surface/80 p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+                <div>
+                  {prevSection ? (
+                    <button
+                      onClick={() => handleSelectSection(prevSection)}
+                      className="pixel-btn-outline px-3 py-1.5 font-bold tracking-wider hover:border-border-strong cursor-pointer"
+                    >
+                      ← PREV: [0{SECTION_IDS.indexOf(prevSection) + 1}] {prevSection.toUpperCase()}
+                    </button>
+                  ) : (
+                    <span className="text-text-muted/50 px-3 py-1.5">— FIRST SECTION —</span>
+                  )}
+                </div>
 
-        <Contact />
+                <div className="flex items-center gap-2">
+                  <span className="text-text-muted">SECTION:</span>
+                  <span className="font-bold text-accent">
+                    [0{currentIndex + 1}] {currentSection.toUpperCase()}
+                  </span>
+                  <span className="text-text-muted/60">/ 05</span>
+                  <span className="text-border-strong mx-1">|</span>
+                  <button
+                    onClick={handleToggleViewMode}
+                    className="text-text-muted hover:text-text underline cursor-pointer"
+                  >
+                    VIEW ALL AT ONCE
+                  </button>
+                </div>
+
+                <div>
+                  {nextSection ? (
+                    <button
+                      onClick={() => handleSelectSection(nextSection)}
+                      className="pixel-btn-primary px-3 py-1.5 font-bold tracking-wider cursor-pointer"
+                    >
+                      NEXT: [0{SECTION_IDS.indexOf(nextSection) + 1}] {nextSection.toUpperCase()} →
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleSelectSection('home')}
+                      className="pixel-btn-primary px-3 py-1.5 font-bold tracking-wider cursor-pointer"
+                    >
+                      ↺ BACK TO HOME
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* VIEW MODE 2: CONTINUOUS ALL SECTIONS (AS IN SCREENSHOT) */
+          <div className="animate-in fade-in duration-200 space-y-12">
+            {/* 2. Hero */}
+            <Hero />
+
+            {/* Marquee Ticker 1 */}
+            <Ticker
+              items={[
+                'FULL STACK DEVELOPER',
+                'PRODUCT BUILDER',
+                'REACT & TYPESCRIPT',
+                'AI / ML & IOT',
+                'FOUNDER OF PRESENTIQ & THEPOSTERZZ',
+                'OPEN TO WORK',
+              ]}
+            />
+
+            {/* 3. Stats Bar */}
+            <StatsBar />
+
+            {/* 4. Featured & All Projects */}
+            <Projects />
+
+            {/* Marquee Ticker 2 */}
+            <Ticker
+              items={[
+                'ENGINEERING LOG',
+                '10+ PROJECTS SHIPPED',
+                'IDEA → SYSTEM → PRODUCT',
+                '1ST PLACE THIGMAMINDS HACKATHON',
+                'LIVE IN PRODUCTION',
+              ]}
+              variant="outline"
+              reverse
+            />
+
+            {/* 5. About + Tech Stack (Two columns matching reference layout) */}
+            <section id="about" className="pt-4 pb-4 px-4 sm:px-6">
+              <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start">
+                <div className="lg:col-span-6">
+                  <About />
+                </div>
+                <div id="experience" className="lg:col-span-6">
+                  <TechStack />
+                </div>
+              </div>
+            </section>
+
+            {/* 6. Live GitHub Contributions Stream */}
+            <section className="px-4 sm:px-6">
+              <div className="max-w-[1200px] mx-auto">
+                <GithubCommitLog />
+              </div>
+            </section>
+
+            {/* Marquee Ticker 3 */}
+            <Ticker
+              items={[
+                "LET'S BUILD SOMETHING AMAZING",
+                'CHANNEL OPEN',
+                'DIBRUGARH, ASSAM',
+                'INITIATE TRANSMISSION',
+              ]}
+            />
+
+            {/* 7. CTA Banner & Direct Terminal Transmission */}
+            <CTA />
+          </div>
+        )}
       </main>
 
+      {/* 8. Footer */}
       <Footer />
+
+      {/* 9. Refined Assistant Bot (Persistent in Bottom Right) */}
+      <ChatBot />
     </div>
   );
 };

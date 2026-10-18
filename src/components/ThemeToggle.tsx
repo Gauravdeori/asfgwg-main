@@ -1,82 +1,80 @@
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 
-/**
- * Square ink toggle. Both themes are greyscale, so the icon carries no colour —
- * it inverts against the button fill instead.
- */
-const ThemeToggle = () => {
-  const { setTheme, resolvedTheme } = useTheme();
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [mounted, setMounted] = useState(false);
+export const ThemeToggle: React.FC = () => {
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    setMounted(true);
+    const current = document.documentElement.getAttribute('data-theme') as 'dark' | 'light' | null;
+    if (current) {
+      setTheme(current);
+    }
   }, []);
 
-  const handleThemeChange = () => {
-    setIsTransitioning(true);
-    setTimeout(() => setTheme(resolvedTheme === "dark" ? "light" : "dark"), 180);
-    setTimeout(() => setIsTransitioning(false), 520);
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    if (nextTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    try {
+      localStorage.setItem('portfolio-theme', nextTheme);
+    } catch {
+      // ignore
+    }
   };
 
-  // Reserve the slot before hydration so the navbar doesn't shift
-  if (!mounted) return <span className="w-9 h-9 block" aria-hidden="true" />;
-
-  const isDark = resolvedTheme === "dark";
-
   return (
-    <>
-      <motion.button
-        onClick={handleThemeChange}
-        className="relative w-9 h-9 flex items-center justify-center border-[1.5px] border-rule bg-background text-foreground hover:bg-foreground hover:text-background transition-colors duration-300"
-        aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-        disabled={isTransitioning}
-        whileTap={{ scale: 0.92 }}
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          {isDark ? (
-            <motion.span
-              key="moon"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="flex"
-            >
-              <Moon size={15} />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="sun"
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="flex"
-            >
-              <Sun size={15} />
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
-
-      {/* Hard wipe across the page instead of a coloured glow */}
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            className="fixed inset-0 z-[200] pointer-events-none bg-foreground origin-top"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: [0, 1, 1, 0] }}
-            exit={{ scaleY: 0 }}
-            transition={{ duration: 0.5, times: [0, 0.35, 0.6, 1], ease: [0.76, 0, 0.24, 1] }}
-            aria-hidden="true"
+    <button
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      className="w-8 h-8 flex items-center justify-center border border-border bg-surface hover:border-border-strong hover:bg-surface-2 transition-colors cursor-pointer select-none text-text"
+      id="theme-toggle-btn"
+    >
+      {theme === 'dark' ? (
+        // Pixel Sun Icon (crisp SVG)
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="pixelated text-text"
+        >
+          <rect x="6" y="6" width="4" height="4" fill="currentColor" />
+          <rect x="7" y="2" width="2" height="2" fill="currentColor" />
+          <rect x="7" y="12" width="2" height="2" fill="currentColor" />
+          <rect x="2" y="7" width="2" height="2" fill="currentColor" />
+          <rect x="12" y="7" width="2" height="2" fill="currentColor" />
+          <rect x="4" y="4" width="1" height="1" fill="currentColor" />
+          <rect x="11" y="4" width="1" height="1" fill="currentColor" />
+          <rect x="4" y="11" width="1" height="1" fill="currentColor" />
+          <rect x="11" y="11" width="1" height="1" fill="currentColor" />
+        </svg>
+      ) : (
+        // Pixel Moon Icon (crisp SVG)
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="pixelated text-text"
+        >
+          <path
+            d="M6 3H9V5H10V7H11V9H10V11H9V13H6V11H5V5H6V3Z"
+            fill="currentColor"
           />
-        )}
-      </AnimatePresence>
-    </>
+          <path
+            d="M8 5H9V7H10V9H9V11H8V5Z"
+            fill="var(--surface)"
+          />
+        </svg>
+      )}
+    </button>
   );
 };
 

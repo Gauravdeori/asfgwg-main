@@ -1,37 +1,32 @@
+import React from 'react';
+
 interface TickerProps {
-  /** Phrases repeated across the strip, separated by a hard glyph */
   items: string[];
-  /** Solid ink bar with knocked-out type (default) or outlined on paper */
-  variant?: "solid" | "outline";
-  /** Scroll the strip right-to-left (default) or left-to-right */
+  variant?: 'solid' | 'outline';
+  speed?: 'normal' | 'fast';
   reverse?: boolean;
-  /** Type scale of the strip */
-  size?: "sm" | "lg";
 }
 
-/**
- * Full-bleed marquee strip — the brutalist divider that sits between sections.
- * The content is duplicated once so the -50% translate loops seamlessly; the
- * second copy is hidden from assistive tech.
- */
-const Ticker = ({ items, variant = "solid", reverse = false, size = "sm" }: TickerProps) => {
-  const solid = variant === "solid";
+export const Ticker: React.FC<TickerProps> = ({
+  items,
+  variant = 'solid',
+  speed = 'normal',
+  reverse = false,
+}) => {
+  const isSolid = variant === 'solid';
 
   return (
     <div
-      className={[
-        "relative w-full overflow-hidden select-none",
-        solid
-          ? "bg-foreground text-background"
-          : "bg-background text-foreground border-y-[1.5px] border-rule",
-        size === "lg" ? "py-5 md:py-7" : "py-3 md:py-4",
-      ].join(" ")}
+      className={`relative w-full overflow-hidden select-none border-y border-border py-2.5 sm:py-3 transition-colors ${
+        isSolid
+          ? 'bg-surface-2 text-text'
+          : 'bg-surface text-text-muted hover:text-text'
+      }`}
     >
       <div
-        className={[
-          "flex w-max",
-          reverse ? "animate-marquee-reverse" : "animate-marquee",
-        ].join(" ")}
+        className={`flex w-max ${
+          reverse ? 'animate-marquee-reverse' : 'animate-marquee'
+        } ${speed === 'fast' ? '[animation-duration:18s]' : '[animation-duration:32s]'}`}
       >
         {[0, 1].map((copy) => (
           <div
@@ -41,23 +36,11 @@ const Ticker = ({ items, variant = "solid", reverse = false, size = "sm" }: Tick
           >
             {items.map((item, i) => (
               <span key={`${copy}-${i}`} className="flex items-center">
-                <span
-                  className={[
-                    "font-mono uppercase whitespace-nowrap",
-                    size === "lg"
-                      ? "text-lg md:text-3xl font-semibold tracking-[0.12em]"
-                      : "text-[11px] md:text-xs font-medium tracking-[0.3em]",
-                  ].join(" ")}
-                >
+                <span className="font-mono text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase whitespace-nowrap px-3 sm:px-4">
                   {item}
                 </span>
-                {/* hard separator glyph */}
                 <span
-                  className={[
-                    "inline-block shrink-0",
-                    size === "lg" ? "mx-6 md:mx-10 w-3 h-3" : "mx-5 md:mx-7 w-1.5 h-1.5",
-                    solid ? "bg-background" : "bg-foreground",
-                  ].join(" ")}
+                  className="w-1.5 h-1.5 bg-highlight inline-block shrink-0 select-none"
                   aria-hidden="true"
                 />
               </span>

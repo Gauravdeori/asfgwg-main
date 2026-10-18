@@ -1,41 +1,55 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" class="dark">
   <head>
-    <link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/favicon.png" />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#0a0c12" />
+    <link rel="icon" type="image/png" href="/images/avatar.png" />
+
+    <!-- Google Fonts: Silkscreen, Pixelify Sans, JetBrains Mono, IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Pixelify+Sans:wght@400;600;700&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-    <!-- Primary SEO -->
-    <title>Gaurav Deori | Web Developer & Founder – Theposterzz</title>
+    <!-- Theme initialization script (runs before first paint to prevent flash) -->
+    <script>
+      (function () {
+        try {
+          const stored = localStorage.getItem('portfolio-theme');
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored ? stored : (systemDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <!-- SEO & Metadata -->
+    <title>GAURAV DEORI // DEVELOPER · BUILDER · STUDENT</title>
     <meta
       name="description"
-      content="Gaurav Deori is a Web Developer and Founder of Theposterzz, building clean, modern, user-friendly websites through real-world projects and creative leadership."
+      content="Gaurav Deori - Computer Science Engineering Student at Dibrugarh University Institute of Engineering and Technology (DUIET). Developer, Builder, Student."
     />
     <meta name="author" content="Gaurav Deori" />
 
-    <!-- Open Graph / WhatsApp / LinkedIn -->
-    <meta property="og:title" content="Gaurav Deori | Web Developer & Founder – Theposterzz" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="GAURAV DEORI // Developer Portfolio" />
     <meta
       property="og:description"
-      content="Web Developer & Founder of Theposterzz. I build clean, modern, user-friendly websites."
+      content="Building products, exploring ideas and turning coffee into code. DUIET B.Tech CSE."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://gauravdeori.in" />
-    <meta property="og:image" content="https://gauravdeori.in/og-image.png" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Gaurav Deori | Web Developer & Founder – Theposterzz" />
-    <meta
-      name="twitter:description"
-      content="Web Developer & Founder of Theposterzz. I build clean, modern websites."
-    />
-    <meta name="twitter:image" content="https://gauravdeori.in/og-image.png" />
+    <meta property="og:image" content="/images/hero-dark.png" />
   </head>
 
   <body>
