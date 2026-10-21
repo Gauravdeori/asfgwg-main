@@ -16,6 +16,7 @@ export default {
         accent: "var(--accent)",
         "accent-ink": "var(--accent-ink)",
         highlight: "var(--highlight)",
+        skill: "var(--skill)",
       },
       fontFamily: {
         pixel: ["'Silkscreen'", "'Pixelify Sans'", "monospace"],

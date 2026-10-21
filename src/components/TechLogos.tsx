@@ -18,8 +18,18 @@ export const TechLogo: React.FC<{ iconId: string; className?: string }> = ({
       return (
         <svg className={className} viewBox="0 0 100 100">
           <rect width="100" height="100" fill="#3178c6" />
-          <path d="M54 44h-24v9h7.5v28h9.5v-28H54z" fill="#ffffff" />
-          <path d="M74.5 44h-17v37h15.5c4.7 0 8.5-1.5 11.2-4.5 2.7-3 4-7.2 4-12.5 0-5.7-1.4-10-4.2-13.2-2.8-3.2-6.6-4.8-9.5-6.8zm2.5 28.5h-8.5v-20h8.5c2.5 0 4.5.9 6 2.7 1.5 1.8 2.2 4.4 2.2 7.7 0 3.1-.7 5.5-2.2 7.2-1.5 1.6-3.5 2.4-6 2.4z" fill="#ffffff" />
+          <text
+            x="92"
+            y="88"
+            textAnchor="end"
+            fill="#ffffff"
+            fontFamily="Arial, Helvetica, sans-serif"
+            fontWeight="700"
+            fontSize="50"
+            letterSpacing="-2"
+          >
+            TS
+          </text>
         </svg>
       );
     case 'firebase':
@@ -32,10 +42,25 @@ export const TechLogo: React.FC<{ iconId: string; className?: string }> = ({
       );
     case 'nodejs':
       return (
-        <svg className={className} viewBox="0 0 32 32">
-          <path d="M16 2l13.5 7.8v15.6L16 33.2 2.5 25.4V9.8L16 2z" fill="#539e43" />
-          <path d="M16 5.5L4.5 12.1v13.3L16 32l11.5-6.6V12.1L16 5.5z" fill="#333333" />
-          <path d="M16 11l7 4v8l-7 4-7-4v-8l7-4z" fill="#539e43" />
+        <svg className={className} viewBox="0 0 24 24">
+          <path
+            d="M12 1.6 21 6.8v10.4l-9 5.2-9-5.2V6.8z"
+            fill="none"
+            stroke="#539e43"
+            strokeWidth="1.7"
+            strokeLinejoin="round"
+          />
+          <text
+            x="12"
+            y="15.4"
+            textAnchor="middle"
+            fill="#8cc84b"
+            fontFamily="Arial, Helvetica, sans-serif"
+            fontWeight="700"
+            fontSize="8.5"
+          >
+            JS
+          </text>
         </svg>
       );
     case 'python':
@@ -54,14 +79,7 @@ export const TechLogo: React.FC<{ iconId: string; className?: string }> = ({
         </svg>
       );
     case 'java':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none">
-          <path d="M9.5 19.5c3.5.5 8-.5 8-2.5 0-2-4.5-2.5-8-2-3.5.5-3.5 2 0 4.5z" stroke="#5382a1" strokeWidth="1.5" />
-          <path d="M8 16c4 .5 10 0 10-2s-5-2-10-1.5c-4 .5-4 2 0 3.5z" stroke="#e76f00" strokeWidth="1.5" />
-          <path d="M12 2c-2 2 1 4-1 6" stroke="#e76f00" strokeWidth="1.5" strokeLinecap="round" />
-          <path d="M15 3c-2 2 1 4-1 6" stroke="#e76f00" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      );
+      return <img src="/images/tech/java.svg" alt="" className={className} loading="lazy" />;
     case 'tailwind':
       return (
         <svg className={className} viewBox="0 0 24 24" fill="#06b6d4">
@@ -75,11 +93,7 @@ export const TechLogo: React.FC<{ iconId: string; className?: string }> = ({
         </svg>
       );
     case 'mysql':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="#00758f">
-          <path d="M18.8 6.6c-.7-.8-1.8-1.4-3-1.6 0 0 .1-.5-.2-.7-.4-.3-1.1-.3-1.6 0-.3.2-.5.5-.6.8-1.2-.2-2.5 0-3.6.5-2.2 1-3.7 3.2-3.8 5.6 0 .5.1 1.1.2 1.6-1.5.5-2.8 1.6-3.5 3-.7 1.4-.7 3.1 0 4.5.3.6.7 1.2 1.2 1.6.4.4.9.7 1.5.8 1.1.4 2.3.2 3.4-.3 1.2-.5 2.2-1.4 2.9-2.5 1.5-.2 2.9-.8 4-1.8 1.8-1.6 2.6-4 2.2-6.3-.1-1.8-.8-3.5-1.9-4.8z" />
-        </svg>
-      );
+      return <img src="/images/tech/mysql.svg" alt="" className={`tech-logo-mysql ${className}`} loading="lazy" />;
     case 'esp32':
       return (
         <svg className={className} viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.8">

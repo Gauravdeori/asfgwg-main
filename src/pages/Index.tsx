@@ -218,7 +218,7 @@ export const Index: React.FC = () => {
                   <About />
                 </div>
                 <div id="experience" className="lg:col-span-6">
-                  <TechStack />
+                  <TechStack compact />
                 </div>
               </div>
             </section>

@@ -37,6 +37,10 @@ export interface TechItem {
   iconId: string;
   category?: string;
   note?: string;
+  /** Proficiency out of 7 (halves allowed, e.g. 4.5) */
+  level?: number;
+  /** Official site, opened from the card's arrow button */
+  url?: string;
 }
 
 export interface ExperienceItem {
@@ -130,6 +134,7 @@ export interface PortfolioData {
   techStack: {
     eyebrow: string;
     title: string;
+    subtitle?: string;
     items: TechItem[];
   };
   buildLog: BuildLogEntry[];
@@ -410,24 +415,25 @@ export const portfolioData: PortfolioData = {
     ]
   },
   techStack: {
-    eyebrow: "// SKILLS",
+    eyebrow: "// SKILLS & TOOLKIT",
     title: "TECH STACK",
+    subtitle: "Technologies I work with to build real-world projects, from ideas to deployment.",
     items: [
-      { name: "React", iconId: "react", category: "Frontend", note: "Component-driven interfaces" },
-      { name: "TypeScript", iconId: "typescript", category: "Language", note: "Typed JavaScript for larger codebases" },
-      { name: "Firebase", iconId: "firebase", category: "Backend", note: "Auth, Firestore & Hosting" },
-      { name: "Node.js", iconId: "nodejs", category: "Backend", note: "Server-side JavaScript APIs" },
-      { name: "Python", iconId: "python", category: "Language", note: "Scripting, Data & AI work" },
-      { name: "C / C++", iconId: "cpp", category: "Systems", note: "Systems fundamentals & DSA" },
-      { name: "Java", iconId: "java", category: "OOP", note: "Object-oriented programming" },
-      { name: "Tailwind CSS", iconId: "tailwind", category: "Styling", note: "Utility-first design systems" },
-      { name: "MongoDB", iconId: "mongodb", category: "Database", note: "NoSQL document store" },
-      { name: "MySQL", iconId: "mysql", category: "Database", note: "Relational database management" },
-      { name: "ESP32 / IoT", iconId: "esp32", category: "Hardware", note: "Embedded sensors & ThingSpeak telemetry" },
-      { name: "Git", iconId: "git", category: "Tools", note: "Version control discipline" },
-      { name: "Figma", iconId: "figma", category: "Design", note: "UI/UX wireframes & design assets" },
-      { name: "Vercel", iconId: "vercel", category: "Deployment", note: "Edge deployment & CI/CD" },
-      { name: "Linux", iconId: "linux", category: "OS", note: "Shell scripting & server environments" }
+      { name: "React", iconId: "react", category: "Frontend", level: 5, url: "https://react.dev", note: "Component-driven interfaces" },
+      { name: "TypeScript", iconId: "typescript", category: "Language", level: 5, url: "https://www.typescriptlang.org", note: "Typed JavaScript for larger codebases" },
+      { name: "Firebase", iconId: "firebase", category: "Backend / BaaS", level: 4.5, url: "https://firebase.google.com", note: "Auth, Firestore & Hosting" },
+      { name: "Node.js", iconId: "nodejs", category: "Backend", level: 5, url: "https://nodejs.org", note: "Server-side JavaScript APIs" },
+      { name: "Python", iconId: "python", category: "Language", level: 5, url: "https://www.python.org", note: "Scripting, Data & AI work" },
+      { name: "C / C++", iconId: "cpp", category: "Language", level: 5, url: "https://isocpp.org", note: "Systems fundamentals & DSA" },
+      { name: "Java", iconId: "java", category: "Language", level: 5, url: "https://dev.java", note: "Object-oriented programming" },
+      { name: "Tailwind CSS", iconId: "tailwind", category: "Frontend", level: 5, url: "https://tailwindcss.com", note: "Utility-first design systems" },
+      { name: "MongoDB", iconId: "mongodb", category: "Database", level: 5, url: "https://www.mongodb.com", note: "NoSQL document store" },
+      { name: "MySQL", iconId: "mysql", category: "Database", level: 4, url: "https://www.mysql.com", note: "Relational database management" },
+      { name: "ESP32 / IoT", iconId: "esp32", category: "Hardware / IoT", level: 4, url: "https://www.espressif.com/en/products/socs/esp32", note: "Embedded sensors & ThingSpeak telemetry" },
+      { name: "Git", iconId: "git", category: "Tools", level: 5, url: "https://git-scm.com", note: "Version control discipline" },
+      { name: "Figma", iconId: "figma", category: "Design", level: 4, url: "https://www.figma.com", note: "UI/UX wireframes & design assets" },
+      { name: "Vercel", iconId: "vercel", category: "Deployment", level: 4, url: "https://vercel.com", note: "Edge deployment & CI/CD" },
+      { name: "Linux", iconId: "linux", category: "OS", level: 4, url: "https://www.kernel.org", note: "Shell scripting & server environments" }
     ]
   },
   buildLog: [

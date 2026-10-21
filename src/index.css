@@ -17,6 +17,7 @@
     --accent: #ffffff;
     --accent-ink: #0a0c12;
     --highlight: #e53935;
+    --skill: #22d3ee;
     --shadow-ink: rgba(0, 0, 0, 0.85);
   }
 
@@ -33,6 +34,7 @@
     --accent: #121418;
     --accent-ink: #fbf9f3;
     --highlight: #d32f2f;
+    --skill: #0e7490;
     --shadow-ink: rgba(18, 20, 24, 0.9);
   }
 
@@ -164,6 +166,58 @@
 .pixel-card:hover {
   transform: translateY(-2px);
   border-color: var(--border-strong);
+}
+
+/* Tech stack card: cyan corner brackets + glow on hover/focus */
+.tech-card {
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.tech-card::before {
+  --c: var(--skill);
+  --l: 12px;
+  --t: 3px;
+  content: '';
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  background:
+    linear-gradient(var(--c), var(--c)) top left / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) top left / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) top right / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) top right / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--t) var(--l);
+  background-repeat: no-repeat;
+}
+
+.tech-card:hover,
+.tech-card:focus-within {
+  border-color: color-mix(in srgb, var(--skill) 65%, transparent);
+  background-color: color-mix(in srgb, var(--skill) 5%, var(--surface));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--skill) 18%, transparent);
+}
+
+.tech-card:hover::before,
+.tech-card:focus-within::before {
+  opacity: 1;
+}
+
+.tech-card:hover .tech-card-arrow {
+  border-color: color-mix(in srgb, var(--skill) 65%, transparent);
+  color: var(--text);
+}
+
+/* MySQL's official dark-blue dolphin vanishes on the dark surface; lift it there only */
+[data-theme="dark"] .tech-logo-mysql {
+  filter: brightness(1.9) saturate(1.1);
 }
 
 /* Arrow button invert on card hover */
