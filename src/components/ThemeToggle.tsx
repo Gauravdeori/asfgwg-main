@@ -1,80 +1,92 @@
 import React, { useEffect, useState } from 'react';
+import { playClick } from '../lib/sfx';
 
+type Theme = 'dark' | 'light';
+
+const applyTheme = (theme: Theme) => {
+  const root = document.documentElement;
+  root.setAttribute('data-theme', theme);
+  root.classList.toggle('dark', theme === 'dark');
+  try {
+    localStorage.setItem('portfolio-theme', theme);
+  } catch {
+    // storage blocked — theme still applies for this visit
+  }
+};
+
+/**
+ * A house switchboard rocker. Lights ON = light theme, OFF = dark theme.
+ * As in Indian/UK wiring, the switch is ON when the bottom half is pressed.
+ * Flipping it plays a "clack" and a tube-light flicker across the room.
+ */
 export const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [flicker, setFlicker] = useState<null | 'on' | 'off'>(null);
 
   useEffect(() => {
-    const current = document.documentElement.getAttribute('data-theme') as 'dark' | 'light' | null;
-    if (current) {
-      setTheme(current);
-    }
+    const current = document.documentElement.getAttribute('data-theme') as Theme | null;
+    if (current) setTheme(current);
   }, []);
 
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    document.documentElement.setAttribute('data-theme', nextTheme);
-    if (nextTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+  const lightsOn = theme === 'light';
+
+  const flip = () => {
+    if (flicker) return;
+    playClick('switch');
+    const next: Theme = lightsOn ? 'dark' : 'light';
+    setTheme(next);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      applyTheme(next);
+      return;
     }
-    try {
-      localStorage.setItem('portfolio-theme', nextTheme);
-    } catch {
-      // ignore
-    }
+    setFlicker(lightsOn ? 'off' : 'on');
+    setTimeout(() => applyTheme(next), 150);
+    setTimeout(() => setFlicker(null), 620);
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      className="w-8 h-8 flex items-center justify-center border border-border bg-surface hover:border-border-strong hover:bg-surface-2 transition-colors cursor-pointer select-none text-text"
-      id="theme-toggle-btn"
-    >
-      {theme === 'dark' ? (
-        // Pixel Sun Icon (crisp SVG)
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="pixelated text-text"
-        >
-          <rect x="6" y="6" width="4" height="4" fill="currentColor" />
-          <rect x="7" y="2" width="2" height="2" fill="currentColor" />
-          <rect x="7" y="12" width="2" height="2" fill="currentColor" />
-          <rect x="2" y="7" width="2" height="2" fill="currentColor" />
-          <rect x="12" y="7" width="2" height="2" fill="currentColor" />
-          <rect x="4" y="4" width="1" height="1" fill="currentColor" />
-          <rect x="11" y="4" width="1" height="1" fill="currentColor" />
-          <rect x="4" y="11" width="1" height="1" fill="currentColor" />
-          <rect x="11" y="11" width="1" height="1" fill="currentColor" />
-        </svg>
-      ) : (
-        // Pixel Moon Icon (crisp SVG)
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="pixelated text-text"
-        >
-          <path
-            d="M6 3H9V5H10V7H11V9H10V11H9V13H6V11H5V5H6V3Z"
-            fill="currentColor"
-          />
-          <path
-            d="M8 5H9V7H10V9H9V11H8V5Z"
-            fill="var(--surface)"
-          />
-        </svg>
+    <>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={lightsOn}
+        aria-label="Room lights (light theme)"
+        title={lightsOn ? 'Lights off' : 'Lights on'}
+        onClick={flip}
+        className="switch-plate"
+        id="theme-toggle-btn"
+      >
+        <span className="switch-screw top-[3px]" aria-hidden="true" />
+        <span className="switch-screw bottom-[3px]" aria-hidden="true" />
+
+        <span className="rocker" aria-hidden="true">
+          <span className="rocker-half" data-down={!lightsOn} />
+          <span className="rocker-half" data-down={lightsOn} />
+        </span>
+
+        {/* indicator lamp: red when on, glow-in-the-dark locator when off */}
+        <span
+          aria-hidden="true"
+          className="absolute right-[3px] top-1/2 h-[6px] w-[4px] -translate-y-1/2 border border-ink"
+          style={
+            lightsOn
+              ? { background: 'var(--led)', boxShadow: '0 0 6px var(--led)' }
+              : { background: 'color-mix(in srgb, var(--phosphor) 60%, transparent)', boxShadow: '0 0 6px var(--phosphor)' }
+          }
+        />
+      </button>
+
+      {flicker && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[200]"
+          style={{
+            background: flicker === 'off' ? '#000' : '#fffbea',
+            animation: `${flicker === 'off' ? 'lights-off' : 'lights-on'} 600ms linear forwards`,
+          }}
+        />
       )}
-    </button>
+    </>
   );
 };
 

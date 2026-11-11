@@ -10,6 +10,8 @@ import Footer from '../components/Footer';
 import ChatBot from '../components/ChatBot';
 import Ticker from '../components/Ticker';
 import GithubCommitLog from '../components/GithubCommitLog';
+import RetroFx from '../components/retro/RetroFx';
+import { TitleBar } from '../components/retro/Window';
 
 const SECTION_IDS = ['home', 'about', 'projects', 'experience', 'contact'];
 
@@ -55,6 +57,8 @@ export const Index: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-bg text-text selection:bg-accent selection:text-accent-ink flex flex-col relative">
+      <RetroFx />
+
       {/* 1. Navbar with Section-Wise Controls */}
       <Navbar
         currentSection={currentSection}
@@ -89,8 +93,11 @@ export const Index: React.FC = () => {
             {/* Section 2: About */}
             {currentSection === 'about' && (
               <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-                <div className="border border-border bg-surface/50 p-4 sm:p-8 lg:p-10">
-                  <About />
+                <div className="win">
+                  <TitleBar title="ABOUT_ME.TXT" icon="file" />
+                  <div className="p-4 sm:p-8 lg:p-10">
+                    <About />
+                  </div>
                 </div>
               </div>
             )}
@@ -101,8 +108,11 @@ export const Index: React.FC = () => {
             {/* Section 4: Experience & Skills */}
             {currentSection === 'experience' && (
               <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-                <div className="border border-border bg-surface/50 p-4 sm:p-8 lg:p-10">
-                  <TechStack />
+                <div className="win">
+                  <TitleBar title="EXPERIENCE.LOG" icon="folder" />
+                  <div className="p-4 sm:p-8 lg:p-10">
+                    <TechStack />
+                  </div>
                 </div>
               </div>
             )}
@@ -125,7 +135,7 @@ export const Index: React.FC = () => {
 
             {/* Section-Wise Pager Bar: indicator on its own row below lg, prev/next side by side below */}
             <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6 sm:mt-8">
-              <div className="border border-border bg-surface/80 p-3 sm:p-4 grid grid-cols-2 gap-2.5 lg:flex lg:items-center lg:justify-between lg:gap-3 text-xs font-mono">
+              <div className="win p-3 sm:p-4 grid grid-cols-2 gap-2.5 lg:flex lg:items-center lg:justify-between lg:gap-3 text-xs font-mono">
                 <div className="col-span-2 lg:order-2 flex items-center justify-center gap-2 whitespace-nowrap">
                   <span className="text-text-muted hidden sm:inline">SECTION:</span>
                   <span className="font-bold text-accent">
@@ -214,11 +224,17 @@ export const Index: React.FC = () => {
             {/* 5. About + Tech Stack (Two columns matching reference layout) */}
             <section id="about" className="px-4 sm:px-6">
               <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start">
-                <div className="lg:col-span-6">
-                  <About />
+                <div className="lg:col-span-6 win">
+                  <TitleBar title="ABOUT_ME.TXT" icon="file" />
+                  <div className="p-4 sm:p-6">
+                    <About />
+                  </div>
                 </div>
-                <div id="experience" className="lg:col-span-6">
-                  <TechStack compact />
+                <div id="experience" className="lg:col-span-6 win">
+                  <TitleBar title="EXPERIENCE.LOG" icon="folder" />
+                  <div className="p-4 sm:p-6">
+                    <TechStack compact />
+                  </div>
                 </div>
               </div>
             </section>

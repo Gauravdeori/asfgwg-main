@@ -14,7 +14,7 @@ export const About: React.FC = () => {
             {about.eyebrow}
           </div>
 
-          <div className="flex items-center border border-border bg-surface text-[10px] font-mono overflow-x-auto no-scrollbar max-w-full">
+          <div className="sunken flex items-center p-1 gap-1 text-[10px] font-pixel overflow-x-auto no-scrollbar max-w-full">
             <button
               onClick={() => setSubTab('bio')}
               className={`px-2 py-1 select-none transition-colors whitespace-nowrap ${
@@ -59,7 +59,7 @@ export const About: React.FC = () => {
         </div>
 
         {/* Section Title */}
-        <h2 className="font-pixel text-[26px] sm:text-[32px] lg:text-[36px] font-bold text-text uppercase tracking-wide mb-5 sm:mb-8">
+        <h2 className="font-display text-[30px] sm:text-[38px] lg:text-[42px] font-bold text-text uppercase tracking-wide mb-5 sm:mb-8 [text-shadow:0.05em_0.05em_0_var(--accent)]">
           {subTab === 'bio'
             ? about.title
             : subTab === 'story'

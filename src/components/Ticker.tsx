@@ -17,7 +17,7 @@ export const Ticker: React.FC<TickerProps> = ({
 
   return (
     <div
-      className={`relative w-full overflow-hidden select-none border-y border-border py-2.5 sm:py-3 transition-colors ${
+      className={`relative w-full overflow-hidden select-none border-y-2 border-ink py-2.5 sm:py-3 transition-colors ${
         isSolid
           ? 'bg-surface-2 text-text'
           : 'bg-surface text-text-muted hover:text-text'
@@ -36,7 +36,7 @@ export const Ticker: React.FC<TickerProps> = ({
           >
             {items.map((item, i) => (
               <span key={`${copy}-${i}`} className="flex items-center">
-                <span className="font-mono text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase whitespace-nowrap px-3 sm:px-4">
+                <span className="font-pixel text-[10px] sm:text-[11px] tracking-[0.15em] uppercase whitespace-nowrap px-3 sm:px-4">
                   {item}
                 </span>
                 <span

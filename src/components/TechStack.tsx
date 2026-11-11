@@ -88,7 +88,7 @@ export const TechStack: React.FC<TechStackProps> = ({ compact = false }) => {
 
         {/* Section Title with boxed icon */}
         <div className={`flex items-center gap-3 ${activeTab === 'skills' && techStack.subtitle ? 'mb-2 sm:mb-3' : 'mb-5 sm:mb-8'}`}>
-          <h2 className="font-pixel text-[26px] sm:text-[32px] lg:text-[36px] font-bold text-text uppercase tracking-wide">
+          <h2 className="font-display text-[30px] sm:text-[38px] lg:text-[42px] font-bold text-text uppercase tracking-wide [text-shadow:0.05em_0.05em_0_var(--accent)]">
             {activeTab === 'skills'
               ? techStack.title
               : activeTab === 'roles'

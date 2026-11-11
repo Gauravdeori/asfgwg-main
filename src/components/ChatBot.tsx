@@ -265,16 +265,16 @@ export const ChatBot: React.FC = () => {
         <div
           role="dialog"
           aria-label={`${bot.name} assistant chat`}
-          className="fixed z-50 inset-x-3 top-[4.5rem] bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-20 sm:right-7 sm:w-[410px] sm:max-h-[min(640px,calc(100dvh-7rem))] flex flex-col border-2 border-border-strong bg-surface shadow-pixel-lg overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className="fixed z-50 inset-x-3 top-[4.5rem] bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-20 sm:right-7 sm:w-[410px] sm:max-h-[min(640px,calc(100dvh-7rem))] flex flex-col win overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Terminal Window Titlebar */}
-          <div className="flex items-center justify-between px-3.5 py-2.5 bg-surface-2 border-b border-border select-none flex-shrink-0">
+          <div className="win-title !min-h-[2.2rem] justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 inline-block animate-pulse" />
-              <span className="font-pixel text-[11px] font-bold tracking-wider text-text">
+              <span className="font-pixel text-[11px] tracking-wider">
                 {bot.name}
               </span>
-              <span className="font-mono text-[9.5px] text-text-muted">
+              <span className="font-mono text-sm opacity-75 normal-case">
                 [{bot.version}]
               </span>
             </div>
@@ -283,14 +283,14 @@ export const ChatBot: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Minimize"
-                className="w-6 h-6 sm:w-5 sm:h-5 border border-border bg-surface hover:bg-surface-2 text-text text-xs flex items-center justify-center font-mono"
+                className="win-btn !w-6 !h-6 sm:!w-5 sm:!h-5 text-xs font-mono"
               >
                 _
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Close Chat"
-                className="w-6 h-6 sm:w-5 sm:h-5 border border-border bg-surface hover:bg-highlight hover:text-white text-text text-xs flex items-center justify-center font-mono"
+                className="win-btn !w-6 !h-6 sm:!w-5 sm:!h-5 hover:!bg-highlight hover:!text-white text-xs font-mono"
               >
                 ✕
               </button>

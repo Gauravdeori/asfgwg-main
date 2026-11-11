@@ -1,13 +1,16 @@
 import React from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
 import { portfolioData } from '../data/portfolio';
+import { TitleBar } from './retro/Window';
 
 export const GithubCommitLog: React.FC = () => {
   const { socials } = portfolioData;
   const username = socials.github.split('/').pop() || 'Gauravdeori';
 
   return (
-    <div className="border border-border bg-surface p-4 sm:p-6 transition-colors">
+    <div className="win">
+      <TitleBar title={`@${username} — CONTRIBUTIONS.DAT`} icon="github" />
+      <div className="p-4 sm:p-6">
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-border/40">
         <div className="flex items-center gap-2">
@@ -38,7 +41,7 @@ export const GithubCommitLog: React.FC = () => {
       </div>
 
       {/* GitHub Calendar Container */}
-      <div className="overflow-x-auto py-2 font-mono flex justify-center text-xs">
+      <div className="sunken overflow-x-auto p-3 sm:p-4 font-mono flex justify-center text-base">
         <GitHubCalendar
           username={username}
           blockSize={12}
@@ -46,8 +49,8 @@ export const GithubCommitLog: React.FC = () => {
           blockRadius={0}
           fontSize={11}
           theme={{
-            light: ['#eceee9', '#c5cac0', '#8d9685', '#485242', '#141812'],
-            dark: ['#1c1c1c', '#2c3328', '#3e5236', '#597d4c', '#a3e635'],
+            light: ['#e7e0cf', '#a9d49b', '#5fb04f', '#2f8a3a', '#1c5224'],
+            dark: ['#1d1b2b', '#1f4d33', '#2e8a4e', '#4fd17a', '#93ffb6'],
           }}
         />
       </div>
@@ -66,6 +69,7 @@ export const GithubCommitLog: React.FC = () => {
           <span>ACTIVITY: </span>
           <span className="text-text font-bold">PERSISTENT SHIPPER</span>
         </div>
+      </div>
       </div>
     </div>
   );

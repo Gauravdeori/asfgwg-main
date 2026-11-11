@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { ProjectItem } from '../data/portfolio';
+import { TitleBar } from './retro/Window';
+
+const fileName = (title: string) =>
+  title.toUpperCase().replace(/\(.*?\)/g, '').replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 14) + '.EXE';
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -9,10 +13,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [showBrief, setShowBrief] = useState(false);
 
   return (
-    <div className="pixel-card p-3 sm:p-4 flex flex-col justify-between group">
+    <div className="pixel-card flex flex-col group">
+      <TitleBar title={fileName(project.title)} icon={project.featured ? 'folder' : 'file'} inactive />
+      <div className="p-3 sm:p-4 flex flex-1 flex-col justify-between">
       <div>
         {/* Framed Thumbnail with Overlapping Arrow Button */}
-        <div className="relative border border-border/80 bg-surface-2 overflow-hidden mb-3.5">
+        <div className="sunken relative p-[3px] overflow-hidden mb-3.5">
           <img
             src={project.imageDark}
             alt={project.title}
@@ -37,14 +43,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             target="_blank"
             rel="noreferrer"
             aria-label={`Open project ${project.title}`}
-            className="project-arrow-btn absolute bottom-0 right-0 w-7 h-7 bg-surface border-t border-l border-border flex items-center justify-center text-text text-[13px] font-mono font-bold transition-colors select-none"
+            className="project-arrow-btn absolute bottom-[3px] right-[3px] w-8 h-8 bg-surface border-t-2 border-l-2 border-ink flex items-center justify-center text-text text-[13px] font-mono font-bold transition-colors select-none"
           >
             ↗
           </a>
         </div>
 
         {/* Title with small icon */}
-        <h3 className="font-mono text-[15px] sm:text-[16.5px] font-bold text-text flex items-center justify-between gap-2 mb-2">
+        <h3 className="font-display text-[19px] sm:text-[21px] font-bold text-text group-hover:text-accent flex items-center justify-between gap-2 mb-2">
           <span className="flex items-center gap-2 min-w-0">
             <span className="text-text-muted text-xs select-none">
               {project.id === 'waste-wise' || project.id === 'poba-express' ? '📍' : project.id === 'qrshield-ai' ? '🛡️' : '✦'}
@@ -57,7 +63,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <button
               onClick={() => setShowBrief(!showBrief)}
               aria-expanded={showBrief}
-              className="flex-shrink-0 whitespace-nowrap text-[10px] font-mono border border-border px-1.5 py-0.5 text-text-muted hover:text-text hover:border-border-strong bg-surface-2 transition-colors select-none"
+              className="pixel-btn-outline !mb-1 flex-shrink-0 whitespace-nowrap text-[9px] px-1.5 py-1"
             >
               {showBrief ? '[ CLOSE ]' : '[ CASE STUDY ]'}
             </button>
@@ -71,7 +77,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
         {/* Expandable Case Study Details (from old system.ts) */}
         {showBrief && (
-          <div className="mb-4 p-3 border border-border bg-surface-2/80 space-y-2.5 animate-in fade-in duration-150">
+          <div className="sunken mb-4 p-3 space-y-2.5 animate-in fade-in duration-150">
             {project.caseStudy?.problem && (
               <div>
                 <span className="font-mono text-[10px] text-highlight font-bold uppercase block">
@@ -138,11 +144,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="border border-border/80 bg-surface-2 px-2.5 py-1 text-[10.5px] sm:text-[11px] font-mono text-text/90 tracking-wide select-none"
+            className="border-2 border-ink bg-surface-2 px-2 py-0.5 text-[9.5px] font-pixel uppercase text-text tracking-wide select-none"
           >
             {tag}
           </span>
         ))}
+      </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { portfolioData, StatItem } from '../data/portfolio';
+import { TitleBar } from './retro/Window';
 
 const StatIcon: React.FC<{ type: StatItem['icon'] }> = ({ type }) => {
   switch (type) {
@@ -74,9 +75,10 @@ export const StatsBar: React.FC = () => {
 
   return (
     <section className="relative px-4 sm:px-6 -mt-[1px] z-20">
-      <div className="max-w-[1200px] mx-auto border border-border bg-surface">
+      <div className="win max-w-[1200px] mx-auto">
+        <TitleBar title="SYSTEM.STATS" icon="sparkle" inactive />
         {/* gap-px over a border-colored background draws the 1px dividers for any column count */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-border">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[2px] bg-ink m-[2px] mt-0">
           {stats.map((stat) => (
             <div
               key={stat.id}
@@ -87,7 +89,7 @@ export const StatsBar: React.FC = () => {
               </div>
 
               <div className="min-w-0">
-                <div className="font-pixel text-[17px] sm:text-[19px] font-bold text-text leading-tight tracking-wide">
+                <div className="font-display text-[22px] sm:text-[26px] font-bold text-accent leading-tight tracking-wide">
                   {stat.value}
                 </div>
                 <div className="font-mono text-[11px] sm:text-[11.5px] text-text-muted mt-1 leading-snug">

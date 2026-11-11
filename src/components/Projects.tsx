@@ -25,7 +25,7 @@ export const Projects: React.FC = () => {
 
             {/* Title with boxed > icon */}
             <div className="flex items-center gap-3">
-              <h2 className="font-pixel text-[28px] sm:text-[34px] lg:text-[36px] font-bold text-text uppercase tracking-wide">
+              <h2 className="font-display text-[32px] sm:text-[40px] lg:text-[46px] font-bold text-text uppercase tracking-wide [text-shadow:0.05em_0.05em_0_var(--accent)]">
                 {projects.title}
               </h2>
               <div className="w-6 h-6 border border-border flex items-center justify-center font-mono text-xs text-text-muted select-none">
@@ -40,7 +40,7 @@ export const Projects: React.FC = () => {
             </p>
 
             {/* Filter Toggle */}
-            <div className="flex items-center gap-1 border border-border bg-surface p-1 text-[11px] font-mono">
+            <div className="sunken flex items-center gap-1 p-1 text-[10px] font-pixel">
               <button
                 onClick={() => setActiveFilter('featured')}
                 className={`px-2.5 py-1 transition-colors select-none ${

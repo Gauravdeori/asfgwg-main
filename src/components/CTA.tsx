@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { portfolioData } from '../data/portfolio';
+import { TitleBar } from './retro/Window';
 
 export const CTA: React.FC = () => {
   const { cta, socials, profile } = portfolioData;
@@ -30,7 +31,7 @@ export const CTA: React.FC = () => {
     <section id="contact" className="px-4 sm:px-6">
       <div className="max-w-[1200px] mx-auto space-y-4 sm:space-y-6">
         {/* Landscape Banner from Screenshot */}
-        <div className="border border-border relative overflow-hidden bg-surface-2 min-h-[105px] sm:min-h-[115px] flex items-center">
+        <div className="win relative overflow-hidden min-h-[105px] sm:min-h-[115px] flex items-center">
           {/* Background Pixel-art landscape */}
           <div className="absolute inset-0 z-0">
             <img
@@ -48,11 +49,11 @@ export const CTA: React.FC = () => {
           {/* Overlay Content */}
           <div className="relative z-10 w-full p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Centered Terminal-style bordered box */}
-            <div className="border border-border/80 bg-surface/90 backdrop-blur-sm px-4 py-2.5 max-w-full">
-              <span className="font-mono text-xs sm:text-[13px] text-text font-medium tracking-wide">
+            <div className="crt border-2 border-ink px-4 py-2.5 max-w-full">
+              <span className="relative z-[4] font-mono text-base sm:text-lg tracking-wide">
                 {cta.terminalText}
               </span>
-              <span className="cursor-blink text-text ml-1 text-xs select-none">█</span>
+              <span className="relative z-[4] cursor-blink ml-1 select-none">█</span>
             </div>
 
             {/* Right: Filled Button */}
@@ -68,7 +69,9 @@ export const CTA: React.FC = () => {
         </div>
 
         {/* Supplementary Terminal Contact Console (from previous codebase) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 border border-border bg-surface/60 p-4 sm:p-8">
+        <div className="win">
+        <TitleBar title="TRANSMIT.EML" icon="mail" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-8">
           {/* Left Column: Direct info & Coordinates */}
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div>
@@ -81,7 +84,7 @@ export const CTA: React.FC = () => {
               </div>
 
               {/* Big Animated Rotating Headline from old Contact.tsx */}
-              <h3 className="font-pixel text-2xl sm:text-3xl lg:text-[34px] font-bold text-text leading-tight mb-3">
+              <h3 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-text leading-tight mb-3 [text-shadow:0.05em_0.05em_0_var(--accent)]">
                 LET&apos;S{' '}
                 <span className="text-highlight underline decoration-2 underline-offset-4 transition-all duration-300">
                   {verbs[wordIdx]}
@@ -164,7 +167,7 @@ export const CTA: React.FC = () => {
           </div>
 
           {/* Right Column: Direct Quick Message Form */}
-          <div className="lg:col-span-7 border-t lg:border-t-0 lg:border-l border-border pt-6 lg:pt-0 lg:pl-8">
+          <div className="lg:col-span-7 border-t-2 border-dashed lg:border-t-0 lg:border-l-2 border-border pt-6 lg:pt-0 lg:pl-8">
             <div className="font-mono text-[11px] text-text-muted uppercase tracking-wider mb-4">
               // SEND QUICK MESSAGE
             </div>
@@ -230,6 +233,7 @@ export const CTA: React.FC = () => {
               </div>
             </form>
           </div>
+        </div>
         </div>
       </div>
     </section>
