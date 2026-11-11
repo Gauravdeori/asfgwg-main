@@ -2,57 +2,62 @@
 <html lang="en" data-theme="dark" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0c12" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#09090e" />
     <link rel="icon" type="image/png" href="/images/avatar.png" />
 
-    <!-- Google Fonts: Silkscreen, Pixelify Sans, JetBrains Mono, IBM Plex Mono -->
+    <title>Gaurav Deori | Portfolio</title>
+    <meta
+      name="description"
+      content="Gaurav Deori — developer, builder and B.Tech CSE student at DUIET, Dibrugarh University. Explore projects like EcoBin, Present IQ and Webro Studios in GauravOS, a portfolio that works like a desktop OS."
+    />
+    <meta name="author" content="Gaurav Deori" />
+    <link rel="canonical" href="https://gauravdeori.in/" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GauravOS" />
+    <meta property="og:title" content="Gaurav Deori | Portfolio" />
+    <meta property="og:description" content="Developer · Builder · B.Tech CSE student. A portfolio that works like a desktop OS." />
+    <meta property="og:url" content="https://gauravdeori.in/" />
+    <meta property="og:image" content="https://gauravdeori.in/images/hero-dark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Gaurav Deori | Portfolio" />
+    <meta name="twitter:description" content="Developer · Builder · B.Tech CSE student. A portfolio that works like a desktop OS." />
+    <meta name="twitter:image" content="https://gauravdeori.in/images/hero-dark.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Pixelify+Sans:wght@400;600;700&family=Silkscreen:wght@400;700&family=VT323&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Theme initialization script (runs before first paint to prevent flash) -->
+    <!-- Apply saved theme + accent before first paint (no flash) -->
     <script>
       (function () {
+        var accents = { indigo: '99 102 241', blue: '59 130 246', teal: '20 184 166', rose: '244 63 94', amber: '245 158 11', violet: '139 92 246' };
+        var theme = 'dark', accent = 'indigo';
         try {
-          const stored = localStorage.getItem('portfolio-theme');
-          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const theme = stored ? stored : (systemDark ? 'dark' : 'light');
-          document.documentElement.setAttribute('data-theme', theme);
-          if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          document.documentElement.classList.add('dark');
-        }
+          var s = JSON.parse(localStorage.getItem('gauravos-settings') || '{}').state || {};
+          if (s.theme === 'light') theme = 'light';
+          if (accents[s.accent]) accent = s.accent;
+        } catch (e) {}
+        var root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+        root.classList.toggle('dark', theme === 'dark');
+        root.style.setProperty('--accent', accents[accent]);
       })();
     </script>
-
-    <!-- SEO & Metadata -->
-    <title>GAURAV DEORI // DEVELOPER · BUILDER · STUDENT</title>
-    <meta
-      name="description"
-      content="Gaurav Deori - Computer Science Engineering Student at Dibrugarh University Institute of Engineering and Technology (DUIET). Developer, Builder, Student."
-    />
-    <meta name="author" content="Gaurav Deori" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="GAURAV DEORI // Developer Portfolio" />
-    <meta
-      property="og:description"
-      content="Building products, exploring ideas and turning coffee into code. DUIET B.Tech CSE."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/hero-dark.png" />
   </head>
 
   <body>
+    <noscript>
+      <p style="padding:24px;font-family:system-ui">
+        Gaurav Deori — developer, builder and B.Tech CSE student at DUIET, Dibrugarh University.
+        Email: deorigaurav1400@gmail.com · GitHub: github.com/Gauravdeori
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
