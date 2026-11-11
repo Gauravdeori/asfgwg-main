@@ -12,6 +12,7 @@ import Ticker from '../components/Ticker';
 import GithubCommitLog from '../components/GithubCommitLog';
 import RetroFx from '../components/retro/RetroFx';
 import { TitleBar } from '../components/retro/Window';
+import DesktopIcons from '../components/retro/DesktopIcons';
 
 const SECTION_IDS = ['home', 'about', 'projects', 'experience', 'contact'];
 
@@ -56,7 +57,7 @@ export const Index: React.FC = () => {
   const nextSection = currentIndex < SECTION_IDS.length - 1 ? SECTION_IDS[currentIndex + 1] : null;
 
   return (
-    <div className="min-h-screen bg-bg text-text selection:bg-accent selection:text-accent-ink flex flex-col relative">
+    <div className="min-h-screen bg-bg text-text selection:bg-accent selection:text-accent-ink flex flex-col relative pb-[54px]">
       <RetroFx />
 
       {/* 1. Navbar with Section-Wise Controls */}
@@ -71,10 +72,11 @@ export const Index: React.FC = () => {
       <main className="flex-grow">
         {/* VIEW MODE 1: SECTION-WISE VIEW (TAP AND IT SHOWS THAT PART) */}
         {viewMode === 'section' ? (
-          <div key={currentSection} className="animate-in fade-in slide-in-from-bottom-2 duration-250 pt-2 sm:pt-4">
+          <div key={currentSection} className="animate-in fade-in slide-in-from-bottom-2 duration-250 pt-4 sm:pt-6">
             {/* Section 1: Home */}
             {currentSection === 'home' && (
               <div className="space-y-4 sm:space-y-6">
+                <DesktopIcons onOpenSection={handleSelectSection} />
                 <Hero />
                 <Ticker
                   items={[
@@ -103,7 +105,16 @@ export const Index: React.FC = () => {
             )}
 
             {/* Section 3: Projects */}
-            {currentSection === 'projects' && <Projects />}
+            {currentSection === 'projects' && (
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+                <div className="win">
+                  <TitleBar title="C:\GD\PROJECTS" icon="folder" />
+                  <div className="py-4 sm:py-6">
+                    <Projects />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Section 4: Experience & Skills */}
             {currentSection === 'experience' && (
@@ -135,7 +146,9 @@ export const Index: React.FC = () => {
 
             {/* Section-Wise Pager Bar: indicator on its own row below lg, prev/next side by side below */}
             <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6 sm:mt-8">
-              <div className="win p-3 sm:p-4 grid grid-cols-2 gap-2.5 lg:flex lg:items-center lg:justify-between lg:gap-3 text-xs font-mono">
+              <div className="win">
+              <TitleBar title="Portfolio Tour" icon="sparkle" />
+              <div className="p-3 sm:p-4 grid grid-cols-2 gap-2.5 lg:flex lg:items-center lg:justify-between lg:gap-3 text-xs font-mono">
                 <div className="col-span-2 lg:order-2 flex items-center justify-center gap-2 whitespace-nowrap">
                   <span className="text-text-muted hidden sm:inline">SECTION:</span>
                   <span className="font-bold text-accent">
@@ -157,7 +170,7 @@ export const Index: React.FC = () => {
                       onClick={() => handleSelectSection(prevSection)}
                       className="pixel-btn-outline w-full lg:w-auto px-3 py-2 sm:py-1.5 font-bold tracking-wider hover:border-border-strong cursor-pointer whitespace-nowrap"
                     >
-                      ← <span className="hidden sm:inline">PREV: </span>[0{SECTION_IDS.indexOf(prevSection) + 1}] {prevSection.toUpperCase()}
+                      &lt; Back<span className="hidden sm:inline">: {prevSection.toUpperCase()}</span>
                     </button>
                   ) : (
                     <span className="w-full text-center lg:text-left text-text-muted/50 px-3 py-2 sm:py-1.5 whitespace-nowrap">— FIRST SECTION —</span>
@@ -170,7 +183,7 @@ export const Index: React.FC = () => {
                       onClick={() => handleSelectSection(nextSection)}
                       className="pixel-btn-primary w-full lg:w-auto px-3 py-2 sm:py-1.5 font-bold tracking-wider cursor-pointer whitespace-nowrap"
                     >
-                      <span className="hidden sm:inline">NEXT: </span>[0{SECTION_IDS.indexOf(nextSection) + 1}] {nextSection.toUpperCase()} →
+                      Next<span className="hidden sm:inline">: {nextSection.toUpperCase()}</span> &gt;
                     </button>
                   ) : (
                     <button
@@ -182,11 +195,14 @@ export const Index: React.FC = () => {
                   )}
                 </div>
               </div>
+              </div>
             </div>
           </div>
         ) : (
           /* VIEW MODE 2: CONTINUOUS ALL SECTIONS (AS IN SCREENSHOT) */
-          <div className="animate-in fade-in duration-200 pt-2 sm:pt-4 space-y-8 sm:space-y-12">
+          <div className="animate-in fade-in duration-200 pt-4 sm:pt-6 space-y-8 sm:space-y-12">
+            <DesktopIcons onOpenSection={handleSelectSection} />
+
             {/* 2. Hero */}
             <Hero />
 
@@ -206,7 +222,14 @@ export const Index: React.FC = () => {
             <StatsBar />
 
             {/* 4. Featured & All Projects */}
-            <Projects />
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+              <div className="win">
+                <TitleBar title="C:\GD\PROJECTS" icon="folder" />
+                <div className="py-4 sm:py-6">
+                  <Projects />
+                </div>
+              </div>
+            </div>
 
             {/* Marquee Ticker 2 */}
             <Ticker

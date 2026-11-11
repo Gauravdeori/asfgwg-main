@@ -204,7 +204,7 @@ export const ChatBot: React.FC = () => {
     <>
       {/* Floating Retro Robot Launcher Badge (hidden on mobile while the full-height panel is open) */}
       <div
-        className={`fixed bottom-4 right-4 sm:bottom-5 sm:right-7 z-40 items-center gap-3 ${
+        className={`fixed bottom-[66px] right-4 sm:bottom-[68px] sm:right-7 z-40 items-center gap-3 ${
           isOpen ? 'hidden sm:flex' : 'flex'
         }`}
       >
@@ -265,7 +265,7 @@ export const ChatBot: React.FC = () => {
         <div
           role="dialog"
           aria-label={`${bot.name} assistant chat`}
-          className="fixed z-50 inset-x-3 top-[4.5rem] bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-20 sm:right-7 sm:w-[410px] sm:max-h-[min(640px,calc(100dvh-7rem))] flex flex-col win overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className="fixed z-50 inset-x-3 top-3 bottom-[62px] sm:inset-x-auto sm:top-auto sm:bottom-[128px] sm:right-7 sm:w-[410px] sm:max-h-[min(640px,calc(100dvh-10rem))] flex flex-col win overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Terminal Window Titlebar */}
           <div className="win-title !min-h-[2.2rem] justify-between flex-shrink-0">

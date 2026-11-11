@@ -3,249 +3,649 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   GauravOS design tokens. Colours are "R G B" channels so Tailwind's
-   opacity modifiers work (bg-glass/70, border-line/10 …).
-   --accent is set at runtime from Settings.
+   GD-OS retro PC theme
+   Light = beige-box daylight desk.  Dark = night-time CRT.
+   Token names are shared with every component, so restyling happens here.
    ========================================================================== */
 
 @layer base {
   :root,
-  [data-theme='dark'] {
+  [data-theme="dark"] {
     color-scheme: dark;
-    --bg: 9 9 14;
-    --fg: 244 244 248;
-    --muted: 161 161 178;
-    --glass: 22 22 30;
-    --glass-2: 38 38 50;
-    --line: 255 255 255;
-    --shadow: 0 0 0;
-    --accent: 99 102 241;
+    --bg: #0f0e17;
+    --desk-dot: #181626;
+    --surface: #1d1b2b;
+    --surface-2: #15131f;
+    --border: #36324f;
+    --border-strong: #5f5a8a;
+    --ink: #000000;
+    --text: #ece7da;
+    --text-muted: #a8a3be;
+    --accent: #9a85ff;
+    --accent-ink: #0f0e17;
+    --highlight: #ff5c8a;
+    --skill: #5ce0f0;
+    --shadow-ink: #2c2654;
+    --title-a: #2a1f7a;
+    --title-b: #8a74ff;
+    --title-ink: #ffffff;
+    --title-off-b: #4a4568;
+    --desk-ink: #ece7da;
+
+    --bevel-hi: #3f3b5e;
+    --bevel-lo: #08070d;
+    --field: #121120;
+    --title-off: #3a3655;
+    --title-off-ink: #a8a3be;
+    --plate: #2e2b42;
+    --plate-shade: #191726;
+    --screen: #07060c;
+    --phosphor: #5cff9d;
+    --led: #ff4d3d;
+    --ok: #5ce08a;
   }
 
-  [data-theme='light'] {
+  [data-theme="light"] {
     color-scheme: light;
-    --bg: 238 239 244;
-    --fg: 17 17 24;
-    --muted: 86 86 104;
-    --glass: 250 250 253;
-    --glass-2: 255 255 255;
-    --line: 15 15 30;
-    --shadow: 30 30 60;
+    /* classic teal desktop + silver windows */
+    --bg: #008080;
+    --desk-dot: #007676;
+    --surface: #c3c3c3;
+    --surface-2: #b4b4b4;
+    --border: #808080;
+    --border-strong: #000000;
+    --ink: #000000;
+    --text: #000000;
+    --text-muted: #3d3d3d;
+    --accent: #000080;
+    --accent-ink: #ffffff;
+    --highlight: #b00000;
+    --skill: #006c6c;
+    --shadow-ink: rgba(0, 0, 0, 0.45);
+    --title-a: #000080;
+    --title-b: #1084d0;
+    --title-ink: #ffffff;
+    --title-off-b: #b5b5b5;
+
+    --bevel-hi: #ffffff;
+    --bevel-lo: #808080;
+    --field: #ffffff;
+    --title-off: #808080;
+    --title-off-ink: #d4d4d4;
+    --plate: #f1eee6;
+    --plate-shade: #a9a59b;
+    --screen: #0b0a12;
+    --phosphor: #5cff9d;
+    --led: #e8291c;
+    --ok: #008000;
+    --desk-ink: #ffffff;
   }
 
-  html,
-  body {
-    height: 100%;
+  :root {
+    --font-pixel: 'Silkscreen', 'Pixelify Sans', monospace;
+    --font-display: 'Pixelify Sans', 'Silkscreen', monospace;
+    --font-term: 'VT323', 'JetBrains Mono', monospace;
+  }
+
+  * {
+    border-radius: 0 !important;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    background: rgb(var(--bg));
-    color: rgb(var(--fg));
-    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-    font-size: 14px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-term);
+    /* VT323 has a tiny x-height: scale it so the small text sizes stay readable */
+    font-size-adjust: ex-height 0.53;
+    font-size: 13.5px;
     line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* 2px checkerboard dither, like an old desktop wallpaper */
+    background-image: repeating-conic-gradient(var(--desk-dot) 0 25%, transparent 0 50%);
+    background-size: 4px 4px;
+    overflow-x: hidden;
+  }
+
+  .font-pixel,
+  .font-display {
+    font-size-adjust: none;
   }
 
   ::selection {
-    background: rgb(var(--accent) / 0.35);
+    background: var(--accent);
+    color: var(--accent-ink);
   }
 
+  /* Accessible focus outline */
   :focus-visible {
-    outline: 2px solid rgb(var(--accent));
-    outline-offset: 2px;
+    outline: 2px dashed var(--accent) !important;
+    outline-offset: 3px !important;
   }
 
-  /* Thin, unobtrusive scrollbars inside windows */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(var(--line) / 0.2) transparent;
+  /* Sunken retro text fields everywhere */
+  input[type='text'],
+  input[type='email'],
+  input:not([type]),
+  textarea {
+    border: 2px solid var(--border-strong) !important;
+    background-color: var(--field) !important;
+    box-shadow: inset 2px 2px 0 var(--bevel-lo), inset -2px -2px 0 var(--bevel-hi);
+    caret-color: var(--accent);
+    font-size: 15px !important;
   }
+  input:focus,
+  textarea:focus {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Chunky pixel scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--surface-2);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--line) / 0.18);
-    border-radius: 999px;
-    border: 3px solid transparent;
-    background-clip: content-box;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    box-shadow: inset 2px 2px 0 var(--bevel-hi), inset -2px -2px 0 var(--bevel-lo);
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--line) / 0.3);
-    background-clip: content-box;
+
+  /* Pixel cursors are injected as CSS variables by <RetroFx /> */
+  html.px-cursor,
+  html.px-cursor body {
+    cursor: var(--cur-arrow), auto;
   }
+  html.px-cursor a,
+  html.px-cursor button,
+  html.px-cursor [role='button'],
+  html.px-cursor label[for],
+  html.px-cursor summary {
+    cursor: var(--cur-hand), pointer !important;
+  }
+  html.px-cursor input,
+  html.px-cursor textarea {
+    cursor: text;
+  }
+}
+
+/* Pure CSS theme image display switching */
+[data-theme="dark"] .light-only {
+  display: none !important;
+}
+[data-theme="dark"] .dark-only {
+  display: block !important;
+}
+[data-theme="light"] .dark-only {
+  display: none !important;
+}
+[data-theme="light"] .light-only {
+  display: block !important;
+}
+
+/* Pixel Art utilities */
+.pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.pixel-corners {
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+}
+
+.pixel-corners-subtle {
+  clip-path: polygon(
+    0 2px, 2px 2px, 2px 0,
+    calc(100% - 2px) 0, calc(100% - 2px) 2px, 100% 2px,
+    100% calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) 100%,
+    2px 100%, 2px calc(100% - 2px), 0 calc(100% - 2px)
+  );
 }
 
 @layer components {
-  /* Frosted panels */
-  .glass {
-    background: rgb(var(--glass) / 0.72);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border: 1px solid rgb(var(--line) / 0.1);
-  }
-  .glass-strong {
-    background: rgb(var(--glass) / 0.88);
-    backdrop-filter: blur(30px) saturate(170%);
-    -webkit-backdrop-filter: blur(30px) saturate(170%);
-    border: 1px solid rgb(var(--line) / 0.1);
-  }
+/* ---------- Windows ---------- */
+.win {
+  position: relative;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--bevel-lo),
+    5px 5px 0 var(--shadow-ink);
+}
 
-  .shadow-window {
-    box-shadow:
-      0 30px 70px -20px rgb(var(--shadow) / 0.55),
-      0 12px 24px -12px rgb(var(--shadow) / 0.35);
-  }
-  [data-theme='light'] .shadow-window {
-    box-shadow:
-      0 30px 70px -24px rgb(var(--shadow) / 0.3),
-      0 10px 24px -12px rgb(var(--shadow) / 0.18);
-  }
+.win-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.9rem;
+  margin: 2px 2px 0;
+  padding: 0 0.25rem 0 0.5rem;
+  background: linear-gradient(90deg, var(--title-a), var(--title-b));
+  color: var(--title-ink);
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-pixel);
+  font-size-adjust: none;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.win-title[data-off] {
+  background: linear-gradient(90deg, var(--title-off), var(--title-off-b));
+  color: var(--title-off-ink);
+}
+.group:hover .win-title[data-off],
+.group:focus-within .win-title[data-off] {
+  background: linear-gradient(90deg, var(--title-a), var(--title-b));
+  color: var(--title-ink);
+}
 
-  /* Surfaces inside windows */
-  .card {
-    background: rgb(var(--line) / 0.04);
-    border: 1px solid rgb(var(--line) / 0.08);
-    border-radius: 14px;
-  }
+.win-grip {
+  flex: 1;
+  min-width: 1rem;
+  height: 10px;
+  /* classic title bars are plain; the grip just pushes buttons right */
+}
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    height: 2.25rem;
-    padding: 0 0.95rem;
-    border-radius: 10px;
-    font-weight: 500;
-    font-size: 13px;
-    white-space: nowrap;
-    transition: background-color 150ms, transform 150ms, box-shadow 150ms, color 150ms;
-    background: rgb(var(--line) / 0.07);
-    border: 1px solid rgb(var(--line) / 0.1);
-    color: rgb(var(--fg));
-  }
-  .btn:hover {
-    background: rgb(var(--line) / 0.12);
-  }
-  .btn:active {
-    transform: scale(0.97);
-  }
-  .btn:disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  .btn-primary {
-    background: rgb(var(--accent));
-    border-color: transparent;
-    color: white;
-    box-shadow: 0 6px 18px -6px rgb(var(--accent) / 0.7);
-  }
-  .btn-primary:hover {
-    background: rgb(var(--accent) / 0.88);
-  }
+.win-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--ink);
+  box-shadow: inset 1px 1px 0 var(--bevel-hi), inset -1px -1px 0 var(--bevel-lo);
+}
+button.win-btn:active {
+  box-shadow: inset 1px 1px 0 var(--bevel-lo), inset -1px -1px 0 var(--bevel-hi);
+  transform: translate(1px, 1px);
+}
 
-  .input {
-    width: 100%;
-    height: 2.5rem;
-    padding: 0 0.85rem;
-    border-radius: 10px;
-    background: rgb(var(--line) / 0.05);
-    border: 1px solid rgb(var(--line) / 0.12);
-    color: rgb(var(--fg));
-    transition: border-color 150ms, box-shadow 150ms;
-  }
-  textarea.input {
-    height: auto;
-    padding: 0.65rem 0.85rem;
-    resize: vertical;
-  }
-  .input::placeholder {
-    color: rgb(var(--muted) / 0.8);
-  }
-  .input:focus {
-    outline: none;
-    border-color: rgb(var(--accent) / 0.8);
-    box-shadow: 0 0 0 3px rgb(var(--accent) / 0.25);
-  }
+.win-status {
+  display: flex;
+  gap: 4px;
+  margin: 0 2px 2px;
+  padding: 4px;
+  border-top: 2px solid var(--ink);
+  font-family: var(--font-term);
+  font-size: 15px;
+  line-height: 1;
+  color: var(--text-muted);
+}
+.win-status > * {
+  padding: 3px 8px;
+  box-shadow: inset 1px 1px 0 var(--bevel-lo), inset -1px -1px 0 var(--bevel-hi);
+}
 
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    height: 1.6rem;
-    padding: 0 0.6rem;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 500;
-    background: rgb(var(--line) / 0.06);
-    border: 1px solid rgb(var(--line) / 0.1);
-    color: rgb(var(--fg) / 0.9);
-  }
-  .chip-accent {
-    background: rgb(var(--accent) / 0.15);
-    border-color: rgb(var(--accent) / 0.3);
-    color: rgb(var(--fg));
-  }
+.sunken {
+  background: var(--field);
+  border: 2px solid var(--ink);
+  box-shadow: inset 2px 2px 0 var(--bevel-lo), inset -2px -2px 0 var(--bevel-hi);
+}
 
-  .eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgb(var(--muted));
-  }
+.raised {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow: inset 2px 2px 0 var(--bevel-hi), inset -2px -2px 0 var(--bevel-lo);
+}
 
-  /* Window geometry animates on maximize/snap, but never while dragging */
-  .win-geometry {
-    transition: left 220ms cubic-bezier(0.2, 0.8, 0.2, 1), top 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      width 220ms cubic-bezier(0.2, 0.8, 0.2, 1), height 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+/* ---------- Keys: every button presses down like a switchboard switch ---------- */
+.pixel-btn-primary,
+.pixel-btn-outline {
+  --k-face: var(--surface);
+  --k-ink: var(--text);
+  --k-hi: var(--bevel-hi);
+  --k-lo: var(--bevel-lo);
+  --k-depth: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--k-ink);
+  background-color: var(--k-face);
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--k-hi),
+    inset -2px -2px 0 var(--k-lo),
+    0 var(--k-depth) 0 var(--ink);
+  margin-bottom: var(--k-depth);
+  font-family: var(--font-pixel);
+  font-size-adjust: none;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 70ms steps(2), box-shadow 70ms steps(2), filter 120ms;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pixel-btn-primary {
+  --k-face: var(--accent);
+  --k-ink: var(--accent-ink);
+  --k-hi: rgba(255, 255, 255, 0.4);
+  --k-lo: rgba(0, 0, 0, 0.3);
+}
+
+/* indicator lamp on primary keys */
+.pixel-btn-primary::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--led) 30%, transparent);
+  border: 2px solid var(--ink);
+  transition: background-color 80ms steps(1), box-shadow 80ms steps(1);
+}
+.pixel-btn-primary:hover::before,
+.pixel-btn-primary:focus-visible::before,
+.pixel-btn-primary:active::before {
+  background: var(--led);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--led) 70%, transparent);
+}
+
+.pixel-btn-primary:hover,
+.pixel-btn-outline:hover {
+  filter: brightness(1.06);
+}
+
+.pixel-btn-primary:active,
+.pixel-btn-outline:active {
+  transform: translateY(calc(var(--k-depth) - 1px));
+  box-shadow:
+    inset 2px 2px 0 var(--k-lo),
+    inset -2px -2px 0 var(--k-hi),
+    0 1px 0 var(--ink);
+}
+
+.pixel-btn-primary:disabled,
+.pixel-btn-outline:disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ---------- Cards ---------- */
+.pixel-card {
+  background-color: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--bevel-lo),
+    5px 5px 0 var(--shadow-ink);
+  transition: transform 120ms steps(2), box-shadow 120ms steps(2);
+}
+.pixel-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--bevel-lo),
+    8px 8px 0 var(--shadow-ink);
+}
+
+.pixel-card:hover .project-arrow-btn {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Tech stack card: raised tile with skill-colored pixel brackets on hover */
+.tech-card {
+  position: relative;
+  background-color: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--bevel-lo),
+    3px 3px 0 var(--shadow-ink);
+  transition: transform 100ms steps(2), box-shadow 100ms steps(2);
+}
+
+.tech-card::before {
+  --c: var(--skill);
+  --l: 12px;
+  --t: 4px;
+  content: '';
+  position: absolute;
+  inset: -7px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 80ms steps(1);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) top left / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) top right / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) top right / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--t) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--t),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--t) var(--l);
+  background-repeat: no-repeat;
+}
+
+.tech-card:hover,
+.tech-card:focus-within {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--bevel-lo),
+    5px 5px 0 var(--shadow-ink);
+}
+
+.tech-card:hover::before,
+.tech-card:focus-within::before {
+  opacity: 1;
+}
+
+.tech-card:hover .tech-card-arrow {
+  background: var(--skill);
+  color: var(--bg);
+}
+
+/* MySQL's official dark-blue dolphin vanishes on the dark surface; lift it there only */
+[data-theme="dark"] .tech-logo-mysql {
+  filter: brightness(1.9) saturate(1.1);
+}
+
+/* Stepped corner frame becomes a sunken photo frame */
+.stepped-frame {
+  position: relative;
+  background-color: var(--field);
+  border: 2px solid var(--ink);
+  box-shadow: inset 2px 2px 0 var(--bevel-lo), inset -2px -2px 0 var(--bevel-hi), 4px 4px 0 var(--shadow-ink);
+  padding: 6px;
+}
+
+/* ---------- CRT screen ---------- */
+.crt {
+  position: relative;
+  overflow: hidden;
+  background: var(--screen);
+  color: var(--phosphor);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--phosphor) 55%, transparent);
+}
+.crt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.28) 0 1px, transparent 1px 3px);
+}
+.crt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ---------- Indicator lamp ---------- */
+.led {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  display: inline-block;
+  background: var(--ok);
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--ok) 70%, transparent);
+}
+
+/* ---------- Switchboard plate (theme toggle) ---------- */
+.switch-plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 44px;
+  background: var(--plate);
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-hi),
+    inset -2px -2px 0 var(--plate-shade),
+    3px 3px 0 var(--shadow-ink);
+}
+.switch-screw {
+  position: absolute;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background: var(--plate-shade);
+  border: 1px solid var(--ink);
+}
+.switch-screw::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1px;
+  height: 2px;
+  background: var(--ink);
+  opacity: 0.7;
+}
+.rocker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 18px;
+  height: 24px;
+  border: 2px solid var(--ink);
+  background: var(--plate-shade);
+}
+.rocker-half {
+  flex: 1;
+  background: var(--plate);
+  transition: background-color 60ms steps(1), box-shadow 60ms steps(1);
+}
+/* pressed half sinks into the plate, the other one sticks out */
+.rocker-half[data-down='true'] {
+  background: var(--plate-shade);
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+.rocker-half[data-down='false'] {
+  box-shadow: inset 2px 2px 0 var(--bevel-hi), inset -2px -2px 0 var(--plate-shade);
+}
+}
+
+/* Blinking cursors */
+@keyframes pixel-blink {
+  0%, 49.9% {
+    opacity: 1;
   }
-  .win-geometry[data-dragging] {
-    transition: none;
+  50%, 100% {
+    opacity: 0;
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.cursor-blink {
+  animation: pixel-blink 1s steps(1) infinite;
+}
+
+/* Twinkle stars (stepped, like sprite frames) */
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.2;
   }
-  .no-scrollbar {
-    scrollbar-width: none;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  50% {
+    opacity: 1;
   }
 }
 
-@keyframes caret-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-.caret-blink {
-  animation: caret-blink 1s steps(1) infinite;
+.twinkle-star {
+  animation: star-twinkle 2.5s steps(3) infinite;
 }
 
-/* Print only the resume document (Resume app → "Save as PDF") */
-@media print {
-  body * {
-    visibility: hidden !important;
-  }
-  #resume-doc,
-  #resume-doc * {
-    visibility: visible !important;
-  }
-  #resume-doc {
-    position: absolute !important;
-    inset: 0 auto auto 0 !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    transform: none !important;
+/* Tube-light flicker used by the wall switch */
+@keyframes lights-off {
+  0% { opacity: 0; }
+  25% { opacity: 0.92; }
+  45% { opacity: 0.35; }
+  60% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+@keyframes lights-on {
+  0% { opacity: 0; }
+  20% { opacity: 0.9; }
+  35% { opacity: 0.15; }
+  55% { opacity: 0.75; }
+  70% { opacity: 0.1; }
+  100% { opacity: 0; }
+}
+
+/* iOS Safari zooms the page when focusing inputs under 16px; bump only there */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
   }
 }
 
+/* Hide scrollbars on horizontally scrolling chip/tab rows */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Marquee Ticker Animations */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee 28s linear infinite reverse;
+}
+
+/* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
